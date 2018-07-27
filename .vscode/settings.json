@@ -1,0 +1,13 @@
+// 将设置放入此文件中以覆盖默认设置
+{
+    "window.zoomLevel": 0,
+    "git.confirmSync": false,
+    "files.associations": {
+        "*.ejs": "html"
+    },
+    "editor.wordWrap": "on",
+    "git.enableSmartCommit": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "workbench.iconTheme": "material-icon-theme",
+}
