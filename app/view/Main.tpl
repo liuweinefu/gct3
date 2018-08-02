@@ -21,7 +21,7 @@
 
     <!-- <script type="text/javascript" src="./dropify/js/dropify.min.js"></script> -->
     <script type="text/javascript" src="/public/mainPanel.js"></script>
-    <!-- <script type="text/javascript" src="./page.js"></script> -->
+    <script type="text/javascript" src="/public/page.js"></script>
 
 
 </head>
@@ -30,8 +30,7 @@
 
 <body>
 
-
-    <!-- <script>
+    <script>
         //void function () {
         var mainDiv = null;
         var tabDiv = null;
@@ -196,7 +195,9 @@
 
         };
         var buildMain = function () {
-            $.post('/home/getMenu')
+
+
+            $.post('/getMenu')
                 .done(init)
                 .fail(setLogin);
         };
@@ -204,7 +205,7 @@
         buildMain();
         //}();
 
-    </script> -->
+    </script>
 
 </body>
 
