@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = app => {
-    const { STRING, INTEGER, DATE } = app.Sequelize;
+    const { STRING, INTEGER, DECIMAL } = app.Sequelize;
 
-    const Menu = app.model.define('Menu', {
+    const EmployeeWage = app.model.define('EmployeeWage', {
         // id: {
         //     type: UUID,
         //     primaryKey: true,
@@ -15,31 +15,39 @@ module.exports = app => {
             autoIncrement: true,
             //defaultValue: UUIDV1,
         },
-        name: {
-            type: STRING(16),
+        wage: {
+            type: DECIMAL(10, 4),
             allowNull: false,
-            unique: true
+            defaultValue: 0.0,
         },
-        router: {
+        bonus: {
+            type: DECIMAL(10, 4),
+            allowNull: false,
+            defaultValue: 0.0,
+        },
+        remark: {
             type: STRING(255)
-        },
-        sn: {
-            type: INTEGER,
-            allowNull: false,
-            //unique: true
         }
     }, {
             timestamps: true,
             underscored: true,
             freezeTableName: true,
-            tableName: 'menu',
+            tableName: 'employee_wage',
         });
 
-
-    Menu.associate = function () {
+    EmployeeWage.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { Menu, UserType } = app.model;
-        Menu.belongsToMany(UserType, { through: 'user_type_menu' });
+        const { EmployeeWage, Consumption, Employee, User } = app.model;
+
+        EmployeeWage.hasMany(Consumption);
+        EmployeeWage.belongsTo(Employee);
+        EmployeeWage.belongsTo(User);
+
+        // app.model.User.belongsTo(app.model.UserType);
+        // app.model.User.hasMany(app.model.CardRecharge);
+        // app.model.User.hasMany(app.model.CommodityWarehousing);
+        // app.model.User.hasMany(app.model.Consumption);
+        // app.model.User.hasMany(app.model.EmployeeWage);
     };
 
     // User.findByLogin = function* (login) {
@@ -64,5 +72,5 @@ module.exports = app => {
 
     // };
 
-    return Menu;
+    return EmployeeWage;
 };

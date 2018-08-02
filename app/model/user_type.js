@@ -3,7 +3,7 @@
 module.exports = app => {
     const { STRING, INTEGER, DATE } = app.Sequelize;
 
-    const UserType = app.model.define('userType', {
+    const UserType = app.model.define('UserType', {
         // id: {
         //     type: UUID,
         //     primaryKey: true,
@@ -35,9 +35,10 @@ module.exports = app => {
             tableName: 'user_type',
         });
 
-    UserType.prototype.associate = function () {
-        app.model.UserType.hasMany(app.model.User);
-        app.model.UserType.belongsToMany(app.model.Menu, { through: 'user_type_menu' });
+    UserType.associate = function () {
+        const { User, UserType, Menu } = app.model;
+        UserType.hasMany(User);
+        UserType.belongsToMany(Menu, { through: 'user_type_menu' });
     };
 
     // User.findByLogin = function* (login) {

@@ -3,7 +3,7 @@
 module.exports = app => {
     const { STRING, INTEGER, DATE } = app.Sequelize;
 
-    const User = app.model.define('user', {
+    const User = app.model.define('User', {
         // id: {
         //     type: UUID,
         //     primaryKey: true,
@@ -26,6 +26,11 @@ module.exports = app => {
             allowNull: false,
             //defaultValue: md5('888888'),
         },
+        location: {
+            type: STRING(32),
+            allowNull: false,
+            //defaultValue: md5('888888'),
+        },
         remark: {
             type: STRING(255)
         },
@@ -41,21 +46,28 @@ module.exports = app => {
             timestamps: true,
             underscored: true,
             freezeTableName: true,
-            //tableName: 'user',
+            tableName: 'user',
         });
 
     User.prototype.logSignin = async () => {
         await this.update({ last_sign_in_at: new Date() });
     }
 
-    User.prototype.associate = function () {
+    User.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
+        const { User, UserType, CardRecharge, CommodityWarehousing, Consumption, EmployeeWage } = app.model;
 
-        app.model.User.belongsTo(app.model.UserType);
-        app.model.User.hasMany(app.model.CardRecharge);
-        app.model.User.hasMany(app.model.CommodityWarehousing);
-        app.model.User.hasMany(app.model.Consumption);
-        app.model.User.hasMany(app.model.EmployeeWage);
+        User.belongsTo(UserType);
+        User.hasMany(CardRecharge);
+        User.hasMany(CommodityWarehousing);
+        User.hasMany(Consumption);
+        User.hasMany(EmployeeWage);
+
+        // app.model.User.belongsTo(app.model.UserType);
+        // app.model.User.hasMany(app.model.CardRecharge);
+        // app.model.User.hasMany(app.model.CommodityWarehousing);
+        // app.model.User.hasMany(app.model.Consumption);
+        // app.model.User.hasMany(app.model.EmployeeWage);
     };
 
     // User.findByLogin = function* (login) {
