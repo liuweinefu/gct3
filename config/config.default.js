@@ -15,10 +15,16 @@ module.exports = appInfo => {
     },
   };
 
+  //增加post发回的数据量
+  //注意：在调整 bodyParser 支持的 body 长度时，如果我们应用前面还有一层反向代理（Nginx），
+  //可能也需要调整它的配置，确保反向代理也支持同样长度的请求 body。
+  config.bodyParser = {
+    jsonLimit: '10mb',
+    formLimit: '10mb',
+  },
 
-
-  // add your config here
-  config.middleware = [];
+    // add your config here
+    config.middleware = [];
 
   //sql Data
   config.sequelize = {

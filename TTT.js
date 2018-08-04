@@ -24,7 +24,15 @@ class second extends first {
     }
 }
 
-var a = 'abc';
-a = a === 'c'
-    ? 'b'
-    : 'm';
+class base {
+    one() {
+        console.log('one');
+    }
+    two() {
+        console.log('two');
+    }
+    call() {
+        this.one();
+        this.two();
+    }
+}

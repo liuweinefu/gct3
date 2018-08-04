@@ -29,7 +29,7 @@
 <!--<body class="easyui-layout">-->
 
 <body>
-    <div id='user'></div>
+    <div id='user' style="height: 600px;"></div>
     <script>
         void function () {
             var anchorDiv = $('#user');

@@ -23,12 +23,12 @@ module.exports = app => {
         },
         pass: {
             type: STRING(32),
-            allowNull: false,
+            //allowNull: false,
             //defaultValue: md5('888888'),
         },
         location: {
             type: STRING(32),
-            allowNull: false,
+            //allowNull: false,
             //defaultValue: md5('888888'),
         },
         remark: {

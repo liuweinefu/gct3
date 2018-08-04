@@ -3,11 +3,11 @@
 const Controller = require('../core/normal_table_controller');
 const controllerName = Symbol(__filename);
 
-class UserController extends Controller {
+class UserTypeController extends Controller {
     constructor(ctx) {
         //填写配置
         ctx.controllerOption = {
-            modelName: 'User',
+            modelName: 'UserType',
             // selectAttributes: [],
             // excludeAttributes: [],
             // updateAttributes: [],
@@ -21,4 +21,4 @@ class UserController extends Controller {
         super(ctx);
     }
 }
-module.exports = UserController;
+module.exports = UserTypeController;

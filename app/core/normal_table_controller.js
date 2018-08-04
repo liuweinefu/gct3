@@ -58,23 +58,18 @@ class NormalTableController extends Controller {
     //获得页面模板
     async getTpl() {
         const { ctx } = this;
-        const options = {};
+        let options = {};
         await ctx.render(ctx.controllerOption.tplName, options);
         //ctx.body = 'Hello ' + this.ctx.ctlOption.modelName + ':' + this.ctx.ctlOption.modelTpl;
         //ctx.body = await ctx.service.normalTable.selectCondition();
-
-
-
-
     }
 
     //查询数据
-    async select() {
+    async findAll() {
         const { ctx } = this;
-        //根据输入生成条件
-        const condition = await ctx.service.normalTable.selectCondition();
+        const S = ctx.service;
+        let result = await S.normalTableService.findAll();
 
-        const result = await ctx.model[this.modelName].findAll(condition);
         ctx.response.body = {
             total: result.length,
             rows: result
@@ -82,12 +77,40 @@ class NormalTableController extends Controller {
     }
 
     //更改数据
-    async change() {
+    async save() {
+        const { ctx } = this;
+        const S = ctx.service;
+        const B = ctx.request.body;
+        if (!B.value) {
+            throw new Error('无有效数据');
+        }
+        ctx.request.body = JSON.parse(B.value);
+        // //{ B.delete, B.insert, B.update } = x;
+        // B.value = null;
 
+        var message = await S.normalTableService.save();
+
+        ctx.response.body = {
+            message: message,
+        };
     }
+
     //批量替换
     async replace() {
 
+        const { ctx } = this;
+        const S = ctx.service;
+        const B = ctx.request.body;
+        if (!B.update) {
+            throw new Error('无有效数据');
+        }
+        B.update = JSON.parse(B.update);
+
+        var updateLength = await S.normalTableService.replace();
+        var message = `更新${updateLength}条  `;
+        ctx.response.body = {
+            message: message,
+        };
     }
 
     // success(data) {
