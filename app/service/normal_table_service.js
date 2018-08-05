@@ -478,7 +478,7 @@ class NormalTableService extends Service {
         //         exclude: O.excludeAttributes
         //     };
         // }
-
+        C.where = {};
         if (B.name) {
             C.where = this._searchBoxWhere(B.name, B.value, B.isEq);
         } else if (B.where) {
@@ -497,7 +497,7 @@ class NormalTableService extends Service {
             condition.include = O.includeModel;
             if (O.excludeAttributes.length > 0) {
                 condition.attributes = {
-                    exclude: this.excludeAttributes
+                    exclude: O.excludeAttributes
                 };
             }
             condition.where = C.where;
@@ -512,7 +512,7 @@ class NormalTableService extends Service {
             };
         }
         delete C.muiltModelWhere;
-        C.fields = M[O.modelName].updateAttributes;
+        C.fields = O.updateAttributes;
         var updateRecordsLength = await M[O.modelName].update(updateObj, C);
         return updateRecordsLength;
 
