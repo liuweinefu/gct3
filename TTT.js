@@ -25,14 +25,20 @@ class second extends first {
 }
 
 class base {
+    constructor() {
+        this.call = () => {
+            this.one();
+            this.two();
+        }
+    }
     one() {
         console.log('one');
     }
     two() {
         console.log('two');
     }
-    call() {
-        this.one();
-        this.two();
-    }
+    // call() {
+    //     this.one();
+    //     this.two();
+    // }
 }
