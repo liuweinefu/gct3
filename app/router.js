@@ -9,6 +9,8 @@ module.exports = app => {
   // router.get('/', controller.home.index);
   // router.get('/list', controller.home.list);
   // router.post('/getMenu', controller.home.getMenu);
+  router.get('/index', controller.index.index);
+
 
   router.get('/user', controller.user.getTpl);
   router.post('/user/findAll', controller.user.findAll);
