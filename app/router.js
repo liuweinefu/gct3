@@ -12,7 +12,11 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.post('/getMenu', controller.home.getMenu);
 
-  const tableControllers = ['user', 'menu', 'userType'];
+
+  /**
+   * 普通数据表对应的R-C结构
+   */
+  const tableControllers = ['user', 'menu', 'userType', 'card', 'cardRecharge', 'cardType', 'commodity', 'commodityType', 'commodityWarehousing', 'consumption', 'employee', 'employeeType', 'employeeWage', 'member'];
 
   tableControllers.forEach(ctr => {
     router.get('/' + ctr, controller[ctr].getTpl);
