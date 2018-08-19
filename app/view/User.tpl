@@ -1,4 +1,4 @@
-<div id='user' style="height: 600px;"></div>
+<div id='user' style="height: 100%;"></div>
 <script>
     void function () {
         var anchorDiv = $('#user');
@@ -178,7 +178,7 @@
                 }, {
                     field: 'sn',
                     title: '排序号',
-                    width: 100,
+                    width: 20,
                     sortable: true,
                     editor: {
                         type: 'textbox',
@@ -218,7 +218,7 @@
                     //field: 'UserType.name',user_type_id
                     field: 'user_type_id',
                     title: '用户类型',
-                    //width: 180,
+                    width: 80,
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];

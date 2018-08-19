@@ -135,6 +135,7 @@
         // }
 
         var _builtMenuList = function (menus) {
+            menus.sort((one, two) => { return one.sn - two.sn })
             if (!Array.isArray(menus) || menus.length == 0) { return; }
             function builtRoot(menu) {
                 return {

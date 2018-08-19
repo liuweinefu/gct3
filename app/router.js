@@ -12,7 +12,7 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.post('/getMenu', controller.home.getMenu);
 
-  const tableControllers = ['user', 'userType'];
+  const tableControllers = ['user', 'menu', 'userType'];
 
   tableControllers.forEach(ctr => {
     router.get('/' + ctr, controller[ctr].getTpl);
