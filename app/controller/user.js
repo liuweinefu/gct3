@@ -11,7 +11,8 @@ class UserController extends Controller {
             // selectAttributes: [],
             // excludeAttributes: [],
             // updateAttributes: [],
-            // includeModelName: 'two'
+            // noUpdateAttributes: [],
+            includeModelNameArray: ['UserType'],
             // tplName: 'User',
         }
 

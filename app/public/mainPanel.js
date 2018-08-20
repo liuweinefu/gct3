@@ -18,18 +18,18 @@ var tableEvents = function () {
                 field: field
             });
             switch (editor.type) {
-            case 'combogrid':
-                $(editor.target).combogrid('textbox').select();
-                $(editor.target).combogrid('showPanel');
-                break;
-            case 'combobox':
-                $(editor.target).combobox('textbox').select();
-                $(editor.target).combobox('showPanel');
-                break;
-            case 'numberbox':
-            case 'textbox':
-                $(editor.target).textbox('textbox').select();
-                break;
+                case 'combogrid':
+                    $(editor.target).combogrid('textbox').select();
+                    $(editor.target).combogrid('showPanel');
+                    break;
+                case 'combobox':
+                    $(editor.target).combobox('textbox').select();
+                    $(editor.target).combobox('showPanel');
+                    break;
+                case 'numberbox':
+                case 'textbox':
+                    $(editor.target).textbox('textbox').select();
+                    break;
             }
         },
     };
@@ -388,7 +388,19 @@ var buttonFunctionMaker = function (page) {
                     var op = view.getTableDiv().datagrid('getColumnOption', field);
                     op.editor = editor;
                     //op.formatter = formatter;
-                }
+                },
+                onEndEdit: function (index, row, changes) {
+                    if (!Object.keys(changes).includes('value')) { return; }
+                    var ed = $(this).datagrid('getEditor', {
+                        index: index,
+                        field: 'value'
+                    });
+                    if (ed.type == 'combobox') {
+                        row.listValue = $(ed.target).combobox('getText')
+                    } else {
+                        row.listValue = null;
+                    }
+                },
             };
             var compareSymbolData = [
                 {
@@ -505,6 +517,10 @@ var buttonFunctionMaker = function (page) {
                             //panelWidth: 160,
                             //editable: true,                            
                         }
+                    },
+                    formatter: function (value, row, index) {
+                        if (row.listValue) { return row.listValue; }
+                        return value;
                     }
                 },
                 {
@@ -1049,10 +1065,10 @@ var lwTable = function (anchorDiv) {
             //tableDiv.datagrid('getPanel').focus();//不好用
         },
     };
-    if (anchorDiv[0].id && anchorDiv[0].id!='') {        
-        defaultTableOption.url= `/${anchorDiv[0].id}/findAll`;
-        defaultTableOption.saveUrl= `/${anchorDiv[0].id}/save`;
-        defaultTableOption.replaceUrl= `/${anchorDiv[0].id}/update`;
+    if (anchorDiv[0].id && anchorDiv[0].id != '') {
+        defaultTableOption.url = `/${anchorDiv[0].id}/findAll`;
+        defaultTableOption.saveUrl = `/${anchorDiv[0].id}/save`;
+        defaultTableOption.replaceUrl = `/${anchorDiv[0].id}/update`;
     }
     var _buildTable = (tableOption) => {
         tableOption = Object.assign(defaultTableOption, tableOption);

@@ -1,5 +1,7 @@
-<div id='card' style="height: 100%;"></div>
+<div id='card' style="height: 100%;">
+</div>
 <script>
+    //@ sourceURL=card.js
     void function () {
         var anchorDiv = $('#card');
         var view = new lwTable(anchorDiv);
@@ -77,20 +79,25 @@
 
             var currentRow = null;
             op.tableOption = {
-                // onEndEdit: function (index, row, changes) {
-                //     if (!Object.keys(changes).includes('user_type_id')) { return; }
-                //     var ed = $(this).datagrid('getEditor', {
-                //         index: index,
-                //         field: 'user_type_id'
-                //     });
-                //     if (!row.UserType) { row.UserType = {}; }
-                //     row.UserType.name = $(ed.target).combobox('getText');
+                onEndEdit: function (index, row, changes) {
+                    if (!Object.keys(changes).includes('card_type_id')) { return; }
+                    var ed = $(this).datagrid('getEditor', {
+                        index: index,
+                        field: 'card_type_id'
+                    });
+                    if (!row.CardType) { row.CardType = {}; }
+                    row.CardType.name = $(ed.target).combobox('getText');
 
-                //     //row.UserType.name = $(ed.target).combobox('getText');
-                //     // if ($(ed.target).combobox('getText').length!=0) { 
-                //     //     row['UserType.name'] = $(ed.target).combobox('getText');
-                //     // }
-                // },
+                    //row.UserType.name = $(ed.target).combobox('getText');
+                    // if ($(ed.target).combobox('getText').length!=0) { 
+                    //     row['UserType.name'] = $(ed.target).combobox('getText');
+                    // }
+                },
+                onClickCell: function (index, field, value) {
+                    if (field === 'updated_at') {
+                        $(this).datagrid('cancelEdit', index);
+                    }
+                },
                 // onClickCell: function (index, field, value) {
                 //     if (field != 'action_pass') { return; }
                 //     //高阶currentRow 否则dialog的buttons值绑定当前;
@@ -249,6 +256,10 @@
                     title: '最后更新时间',
                     //width: 100,
                     sortable: true,
+                    editor: {
+                        type: 'datetimebox',
+                        options: {}
+                    },
                     formatter: function (value, row, index) {
                         if (!Number.isNaN(Date.parse(value))) {
                             return new Date(Date.parse(value)).toLocaleString();
@@ -265,23 +276,38 @@
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];
                         //return row.UserType ? row.UserType.name : '';
-                        return row;
+                        return row.CardType ? row.CardType.name : '';
                     },
                     editor: {
                         type: 'combobox',
                         options: {
-                            //panelWidth: 160,                    
-                            editable: false,
+                            panelWidth: 160,
+                            // editable: false,
+                            editable: true,
                             valueField: 'id',
                             textField: 'name',
+                            mode: 'remote',
+                            url: '/cardType/findAll',
+                            loadFilter: function (data) {
+                                return data.rows;
+                            },
                             //data: userType,
-                            // panelHeight: userType.length * 20 + 15,
-                            // onShowPanel: function () {
-                            //     $(this).combobox('loadData', userType);
+                            panelHeight: 100,
+                            // onLoadSuccess: function () {
+                            //     var panelHeight = $(this).combobox('getData').length * 30 + 15;
                             //     $(this).combobox('panel').panel('resize', {
-                            //         height: userType.length * 20 + 15
+                            //         height: panelHeight
                             //     });
-                            // }
+                            // },
+                            onShowPanel: function () {
+                                // var panelHeight = $(this).combobox('getData').length * 30 + 15;
+                                // $(this).combobox('panel').panel('resize', {
+                                //     height: panelHeight
+                                // });
+                                //替换后无法选中
+                                // $(this).combobox('textbox').select();
+                            }
+
                         }
                     }
                 }, {

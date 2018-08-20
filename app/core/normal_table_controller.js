@@ -27,26 +27,43 @@ class NormalTableController extends Controller {
                 && !op.excludeAttributes.every(item => op.attributes.includes(item))) {
                 throw new Error('excludeAttributes 超项');
             }
-
-
-            op.updateAttributes = Array.isArray(op.updateAttributes)
-                ? op.updateAttributes
-                : op.attributes.filter(item => !op.excludeAttributes.includes(item));
-            if (op.updateAttributes.length > 0
-                && !op.updateAttributes.every(item => op.attributes.includes(item))) {
-                throw new Error('updateAttributes 超项');
-            }
-
             op.selectAttributes = Array.isArray(op.selectAttributes)
-                ? op.selectAttributes : op.updateAttributes;
+                ? op.selectAttributes
+                : op.attributes.filter(item => !op.excludeAttributes.includes(item));
             if (op.selectAttributes.length > 0
                 && !op.selectAttributes.every(item => op.attributes.includes(item))) {
                 throw new Error('selectAttributes 超项');
             }
 
-            if (typeof op.includeModelName === 'string' && ctx.model[op.includeModelName] === undefined) {
-                throw new Error('includeModelName 无效');
+            op.noUpdateAttributes = Array.isArray(op.noUpdateAttributes) ? op.noUpdateAttributes : [];
+            if (op.noUpdateAttributes.length > 0
+                && !op.noUpdateAttributes.every(item => op.attributes.includes(item))) {
+                throw new Error('noUpdateAttributes 超项');
             }
+            ['updated_at', 'created_at'].forEach(item => {
+                if (!op.noUpdateAttributes.includes(item)) { op.noUpdateAttributes.push(item) }
+            });
+            //op.noUpdateAttributes = [...op.noUpdateAttributes, 'updated_at', 'created_at'];
+
+            op.updateAttributes = Array.isArray(op.updateAttributes)
+                ? op.updateAttributes
+                : op.attributes.filter(item => !op.noUpdateAttributes.includes(item));
+            if (op.updateAttributes.length > 0
+                && !op.updateAttributes.every(item => op.attributes.includes(item))) {
+                throw new Error('updateAttributes 超项');
+            }
+
+
+
+            if (Array.isArray(op.includeModelNameArray)) {
+                if (op.includeModelNameArray.every(modelName => ctx.model[modelName] === undefined)) {
+                    throw new Error('includeModelName 无效');
+                }
+                op.includeModel = op.includeModelNameArray.map(modelName => ctx.model[modelName])
+            }
+            if (op.includeModelNameArray) {
+                delete op.includeModelNameArray;
+            };
             ctx.app.controllerOption[ctx.controllerOption.name] = op;
         } else {
             ctx.controllerOption = ctx.app.controllerOption[ctx.controllerOption.name]

@@ -10,8 +10,8 @@ class CommodityTypeController extends Controller {
             modelName: 'CommodityType',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],
-            // includeModelName: 'two'
+            // updateAttributes: [],             // noUpdateAttributes: [],
+            // includeModelNameArray:['User','UserType']
             // tplName: 'User',
         }
 

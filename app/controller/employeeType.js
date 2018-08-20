@@ -10,8 +10,8 @@ class EmployeeTypeController extends Controller {
             modelName: 'EmployeeType',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],
-            // includeModelName: 'two'
+            // updateAttributes: [],             // noUpdateAttributes: [],
+            // includeModelNameArray:['User','UserType']
             // tplName: 'User',
         }
 

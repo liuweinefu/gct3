@@ -1,5 +1,6 @@
 <div id='cardType' style="height: 100%;"></div>
 <script>
+    //@ sourceURL=cardType.js
     void function () {
         var anchorDiv = $('#cardType');
         var view = new lwTable(anchorDiv);
@@ -62,7 +63,7 @@
             //表格设置**************************************************
             view.makeNewRow = (newRowIndex) => {
                 return {
-                    name: '新类型会员卡 ' + Math.round(Math.random() * 1000),
+                    name: '会员卡类型 ' + Math.round(Math.random() * 1000),
                     discount: 1,
                     sn: newRowIndex ? newRowIndex : 9999,
                     remark: '备注' + Math.round(Math.random() * 1000),
@@ -85,6 +86,12 @@
                 //     //     row['UserType.name'] = $(ed.target).combobox('getText');
                 //     // }
                 // },
+                onClickCell: function (index, field, value) {
+                    if (field === 'updated_at') {
+                        $(this).datagrid('cancelEdit', index);
+                    }
+                },
+
                 // onClickCell: function (index, field, value) {
                 //     if (field != 'action_pass') { return; }
                 //     //高阶currentRow 否则dialog的buttons值绑定当前;
@@ -178,7 +185,7 @@
                     hidden: true,
                 }, {
                     field: 'name',
-                    title: '主会员名',
+                    title: '会员卡类型',
                     sortable: true,
                     width: 30,
                     editor: {
@@ -225,6 +232,10 @@
                     title: '最后更新时间',
                     //width: 100,
                     sortable: true,
+                    editor: {
+                        type: 'datetimebox',
+                        options: {}
+                    },
                     formatter: function (value, row, index) {
                         if (!Number.isNaN(Date.parse(value))) {
                             return new Date(Date.parse(value)).toLocaleString();

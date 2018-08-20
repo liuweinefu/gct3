@@ -337,7 +337,11 @@ class NormalTableService extends Service {
         var upsertRecords = [];
         if (records.length) {
             upsertRecords = records.map((row) => {
-                //return models.User.upsert(row, { fields: modifiedFields });                
+                Object.keys(row).forEach(field => {
+                    if (!O.updateAttributes.includes(field)) {
+                        delete row[field];
+                    }
+                })
                 return M[O.modelName].upsert(row, {
                     fields: O.updateAttributes
                 });

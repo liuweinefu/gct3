@@ -9,9 +9,10 @@ class CardTypeController extends Controller {
         ctx.controllerOption = {
             modelName: 'CardType',
             // selectAttributes: [],
-            // excludeAttributes: [],
-            // updateAttributes: [],
-            // includeModelName: 'two'
+            // excludeAttributes: ['updated_at'],
+            // updateAttributes: [],  
+            // noUpdateAttributes: [],
+            // includeModelNameArray:['User','UserType']
             // tplName: 'User',
         }
 

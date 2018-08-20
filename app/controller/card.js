@@ -10,8 +10,8 @@ class CardController extends Controller {
             modelName: 'Card',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],
-            // includeModelName: 'two'
+            // updateAttributes: [],             // noUpdateAttributes: [],
+            includeModelNameArray: ['CardType'],
             // tplName: 'User',
         }
 
