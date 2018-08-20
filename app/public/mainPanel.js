@@ -396,9 +396,9 @@ var buttonFunctionMaker = function (page) {
                         field: 'value'
                     });
                     if (ed.type == 'combobox') {
-                        row.listValue = $(ed.target).combobox('getText')
+                        row.viewValue = $(ed.target).combobox('getText')
                     } else {
-                        row.listValue = null;
+                        row.viewValue = null;
                     }
                 },
             };
@@ -519,7 +519,7 @@ var buttonFunctionMaker = function (page) {
                         }
                     },
                     formatter: function (value, row, index) {
-                        if (row.listValue) { return row.listValue; }
+                        if (row.viewValue) { return row.viewValue; }
                         return value;
                     }
                 },
