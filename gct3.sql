@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-08-19 22:55:59
+Date: 2018-08-20 22:50:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,14 +36,16 @@ CREATE TABLE `card` (
   UNIQUE KEY `name` (`name`),
   KEY `card_type_id` (`card_type_id`),
   CONSTRAINT `card_ibfk_1` FOREIGN KEY (`card_type_id`) REFERENCES `card_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of card
 -- ----------------------------
-INSERT INTO `card` VALUES ('1', '1', '1', '123', '1.2300', '123', '123', '123', '2018-08-19 14:24:49', '2018-08-19 14:24:49', null);
-INSERT INTO `card` VALUES ('2', '2', '想23', null, '999.0000', '00000000000', '0000', '备注883', '2018-08-19 14:02:13', '2018-08-19 14:02:29', null);
-INSERT INTO `card` VALUES ('9', '3', '新会员卡 318', null, '222.3400', '00000000000', '0000', '备注119', '2018-08-19 14:03:32', '2018-08-19 14:03:32', null);
+INSERT INTO `card` VALUES ('1', '1', '1', '123', '1.2300', '123', '123', '123', '2018-08-19 14:24:49', '2018-08-19 14:24:49', '5');
+INSERT INTO `card` VALUES ('2', '2', '新会员卡 163', null, '0.0000', '00000000000', '0000', '备注826', '2018-08-19 14:02:13', '2018-08-20 13:42:50', '2');
+INSERT INTO `card` VALUES ('9', '3', '新会员卡 318', null, '222.3400', '00000000000', '0000', '备注119', '2018-08-19 14:03:32', '2018-08-19 14:03:32', '1');
+INSERT INTO `card` VALUES ('10', '4', '新会员卡 659', null, '0.0000', '00000000000', '0000', '备注817', '2018-08-20 13:42:41', '2018-08-20 13:43:16', '1');
+INSERT INTO `card` VALUES ('14', '5', '新会员卡 321', null, '0.0000', '00000000000', '0000', '备注534', '2018-08-20 13:42:59', '2018-08-20 13:43:16', '5');
 
 -- ----------------------------
 -- Table structure for card_recharge
@@ -81,16 +83,25 @@ CREATE TABLE `card_type` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of card_type
 -- ----------------------------
-INSERT INTO `card_type` VALUES ('1', '金', '0.5500', '2', '备注993', '2018-08-19 14:32:22', '2018-08-19 14:32:22');
-INSERT INTO `card_type` VALUES ('2', '银', '0.6500', '3', '备注608', '2018-08-19 14:32:22', '2018-08-19 14:36:35');
-INSERT INTO `card_type` VALUES ('3', '铜', '0.7000', '4', '备注952', '2018-08-19 14:32:22', '2018-08-19 14:36:35');
-INSERT INTO `card_type` VALUES ('4', '铁', '0.8000', '5', '备注432', '2018-08-19 14:32:22', '2018-08-19 14:36:35');
-INSERT INTO `card_type` VALUES ('5', 'Vip', '0.4500', '1', '备注973', '2018-08-19 14:36:35', '2018-08-19 14:36:35');
+INSERT INTO `card_type` VALUES ('1', '金', '0.5500', '2', '2', '2018-08-19 14:32:22', '2018-08-20 12:28:10');
+INSERT INTO `card_type` VALUES ('2', '银', '0.6500', '3', '3', '2018-08-19 14:32:22', '2018-08-20 12:28:10');
+INSERT INTO `card_type` VALUES ('3', '铜', '0.7000', '4', '4', '2018-08-19 14:32:22', '2018-08-20 12:28:10');
+INSERT INTO `card_type` VALUES ('4', '铁', '0.8000', '5', '5', '2018-08-19 14:32:22', '2018-08-20 12:28:10');
+INSERT INTO `card_type` VALUES ('5', 'Vip', '0.4500', '1', '3', '2018-08-19 14:36:35', '2018-08-20 12:28:32');
+INSERT INTO `card_type` VALUES ('6', '会员卡类型 256', '1.0000', '6', '备注764', '2018-08-20 12:49:12', '2018-08-20 12:49:12');
+INSERT INTO `card_type` VALUES ('7', '会员卡类型 656', '1.0000', '13', '备注502', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('8', '会员卡类型 849', '1.0000', '12', '备注590', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('9', '会员卡类型 730', '1.0000', '11', '备注365', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('10', '会员卡类型 356', '1.0000', '10', '备注760', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('11', '会员卡类型 244', '1.0000', '9', '备注995', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('12', '会员卡类型 782', '1.0000', '8', '备注18', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('13', '会员卡类型 696', '1.0000', '7', '备注36', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
+INSERT INTO `card_type` VALUES ('14', '会员卡类型 26', '1.0000', '14', '备注882', '2018-08-20 12:49:21', '2018-08-20 12:49:21');
 
 -- ----------------------------
 -- Table structure for commodity
@@ -337,15 +348,15 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '新登录用户 743', null, null, '2', '9', null, '2018-08-04 07:39:11', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('2', '新登录用户 26', null, null, '2', '8', null, '2018-08-04 07:40:18', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('3', '22', null, null, '2', '2', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('4', '新登录用户 227', null, null, '2', '3', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('5', '新登录用户 413', null, null, '2', '5', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('6', '4', null, null, '2', '6', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('10', '新登录用户 700', null, null, '2', '1', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('11', '新登录用户 346', null, null, '2', '4', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', null);
-INSERT INTO `user` VALUES ('12', '新登录用户 275', null, null, '2', '7', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', null);
+INSERT INTO `user` VALUES ('1', '新登录用户 743', null, null, '2', '9', null, '2018-08-04 07:39:11', '2018-08-05 01:19:56', '1');
+INSERT INTO `user` VALUES ('2', '新登录用户 26', null, null, '2', '8', null, '2018-08-04 07:40:18', '2018-08-05 01:19:56', '1');
+INSERT INTO `user` VALUES ('3', '22', null, null, '2', '2', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '2');
+INSERT INTO `user` VALUES ('4', '新登录用户 227', null, null, '2', '3', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '2');
+INSERT INTO `user` VALUES ('5', '新登录用户 413', null, null, '2', '5', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '3');
+INSERT INTO `user` VALUES ('6', '4', null, null, '2', '6', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '4');
+INSERT INTO `user` VALUES ('10', '新登录用户 700', null, null, '2', '1', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', '5');
+INSERT INTO `user` VALUES ('11', '新登录用户 346', null, null, '2', '4', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', '1');
+INSERT INTO `user` VALUES ('12', '新登录用户 275', null, null, '2', '7', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', '1');
 
 -- ----------------------------
 -- Table structure for user_type
@@ -360,11 +371,16 @@ CREATE TABLE `user_type` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of user_type
 -- ----------------------------
+INSERT INTO `user_type` VALUES ('1', '系统管理员', '1', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `user_type` VALUES ('2', '管理员', '2', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `user_type` VALUES ('3', '总经理', '3', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `user_type` VALUES ('4', '前台', '4', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `user_type` VALUES ('5', '会计', '5', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for user_type_menu
