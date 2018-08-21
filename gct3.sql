@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-08-20 22:50:02
+Date: 2018-08-21 20:59:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -313,16 +313,19 @@ CREATE TABLE `menu` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', 'menu', '\\menu', '1', '0000-00-00 00:00:00', '2018-08-19 14:01:07');
-INSERT INTO `menu` VALUES ('2', 'user', '\\user', '2', '0000-00-00 00:00:00', '2018-08-19 14:01:07');
-INSERT INTO `menu` VALUES ('3', 'card', '\\card', '3', '0000-00-00 00:00:00', '2018-08-19 14:01:07');
-INSERT INTO `menu` VALUES ('4', 'member', '\\member', '5', '0000-00-00 00:00:00', '2018-08-19 14:01:26');
-INSERT INTO `menu` VALUES ('10', 'cardType', '\\cardType', '4', '2018-08-19 14:01:26', '2018-08-19 14:01:26');
+INSERT INTO `menu` VALUES ('1', '菜单', '\\menu', '2', '0000-00-00 00:00:00', '2018-08-21 08:29:50');
+INSERT INTO `menu` VALUES ('2', '用户', '\\user', '4', '0000-00-00 00:00:00', '2018-08-21 08:29:50');
+INSERT INTO `menu` VALUES ('3', '会员卡', '\\card', '6', '0000-00-00 00:00:00', '2018-08-21 08:29:44');
+INSERT INTO `menu` VALUES ('4', '会员', '\\member', '8', '0000-00-00 00:00:00', '2018-08-21 08:29:44');
+INSERT INTO `menu` VALUES ('10', '会员卡类型', '\\cardType', '7', '2018-08-19 14:01:26', '2018-08-21 08:29:44');
+INSERT INTO `menu` VALUES ('11', '系统设置', '', '1', '2018-08-21 04:04:13', '2018-08-21 08:29:50');
+INSERT INTO `menu` VALUES ('12', '查询', '', '3', '2018-08-21 04:06:21', '2018-08-21 08:29:50');
+INSERT INTO `menu` VALUES ('15', '用户类型', '\\userType', '5', '2018-08-21 08:29:44', '2018-08-21 08:29:50');
 
 -- ----------------------------
 -- Table structure for user
@@ -348,15 +351,15 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '新登录用户 743', null, null, '2', '9', null, '2018-08-04 07:39:11', '2018-08-05 01:19:56', '1');
-INSERT INTO `user` VALUES ('2', '新登录用户 26', null, null, '2', '8', null, '2018-08-04 07:40:18', '2018-08-05 01:19:56', '1');
-INSERT INTO `user` VALUES ('3', '22', null, null, '2', '2', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '2');
-INSERT INTO `user` VALUES ('4', '新登录用户 227', null, null, '2', '3', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '2');
-INSERT INTO `user` VALUES ('5', '新登录用户 413', null, null, '2', '5', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '3');
-INSERT INTO `user` VALUES ('6', '4', null, null, '2', '6', null, '2018-08-04 07:40:27', '2018-08-05 01:19:56', '4');
-INSERT INTO `user` VALUES ('10', '新登录用户 700', null, null, '2', '1', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', '5');
-INSERT INTO `user` VALUES ('11', '新登录用户 346', null, null, '2', '4', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', '1');
-INSERT INTO `user` VALUES ('12', '新登录用户 275', null, null, '2', '7', null, '2018-08-04 14:34:18', '2018-08-05 01:19:56', '1');
+INSERT INTO `user` VALUES ('1', '新登录用户 743', null, null, '', '9', null, '2018-08-04 07:39:11', '2018-08-21 08:26:48', '4');
+INSERT INTO `user` VALUES ('2', '新登录用户 26', '165c468905fa4e852e23d2ab8ab2c33a', null, '', '8', null, '2018-08-04 07:40:18', '2018-08-21 12:07:27', '1');
+INSERT INTO `user` VALUES ('3', '22', 'c33367701511b4f6020ec61ded352059', null, '345', '2', null, '2018-08-04 07:40:27', '2018-08-21 12:04:48', '5');
+INSERT INTO `user` VALUES ('4', '新登录用户 227', null, null, '', '3', null, '2018-08-04 07:40:27', '2018-08-21 08:26:48', '3');
+INSERT INTO `user` VALUES ('5', '新登录用户 413', null, null, '', '5', null, '2018-08-04 07:40:27', '2018-08-21 08:26:48', '3');
+INSERT INTO `user` VALUES ('6', '4', null, null, '', '6', null, '2018-08-04 07:40:27', '2018-08-21 08:26:48', '4');
+INSERT INTO `user` VALUES ('10', '新登录用户 700', '96e79218965eb72c92a549dd5a330112', null, '345', '1', null, '2018-08-04 14:34:18', '2018-08-21 12:30:40', '5');
+INSERT INTO `user` VALUES ('11', '新登录用户 346', null, null, '', '4', null, '2018-08-04 14:34:18', '2018-08-21 08:26:48', '1');
+INSERT INTO `user` VALUES ('12', '新登录用户 275', null, null, '', '7', null, '2018-08-04 14:34:18', '2018-08-21 08:26:48', '4');
 
 -- ----------------------------
 -- Table structure for user_type
@@ -400,3 +403,9 @@ CREATE TABLE `user_type_menu` (
 -- ----------------------------
 -- Records of user_type_menu
 -- ----------------------------
+INSERT INTO `user_type_menu` VALUES ('0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '1');
+INSERT INTO `user_type_menu` VALUES ('0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '2');
+INSERT INTO `user_type_menu` VALUES ('0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '3');
+INSERT INTO `user_type_menu` VALUES ('0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '4');
+INSERT INTO `user_type_menu` VALUES ('0000-00-00 00:00:00', '0000-00-00 00:00:00', '2', '1');
+INSERT INTO `user_type_menu` VALUES ('0000-00-00 00:00:00', '0000-00-00 00:00:00', '2', '2');
