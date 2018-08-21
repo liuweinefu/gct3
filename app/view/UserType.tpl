@@ -194,22 +194,19 @@
                         buttons: [{
                             text: '保存',
                             handler: function () {
-                                var value = passwordboxDiv.textbox('getValue');
-                                $.post('user/resetPass', {
-                                    id: currentRow.id,
-                                    pass: value
-                                }).done(function (data) {
-                                    dialogDiv.dialog('close');
-                                    //dialogDiv.dialog('destroy');
-                                    $.messager.alert('提示', data.message, 'info', function () {
+                                var sendObject = {
+                                    menus: JSON.stringify(menuView.getTableDiv().datagrid('getChecked'))
+                                };
+                                $.post('userType/setMenus', sendObject)
+                                    .done(function (data) {
+                                        dialogDiv.dialog('close');
+                                        //dialogDiv.dialog('destroy');
+                                        $.messager.alert('提示', data.message, 'info', function () {
+                                        });
+                                    }).fail(function (err) {
+                                        //console.log(err);
+                                        $.messager.alert('失败', err.responseText, 'warning', function () { });
                                     });
-                                }).fail(function (err) {
-                                    //console.log(err);
-                                    $.messager.alert('失败', err.responseText, 'warning', function () {
-                                        //重置焦点
-                                        passwordboxDiv.textbox('textbox').focus();
-                                    });
-                                });
                             },
                         }, {
                             text: '关闭',
@@ -222,7 +219,6 @@
                     dialogDiv.dialog(dialogOp);
 
                 },
-
                 multiSort: true,
                 remoteSort: true,
 

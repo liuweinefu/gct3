@@ -16,10 +16,17 @@ class UserTypeController extends Controller {
             // tplName: 'User',
         }
 
-
         //系统自带
         ctx.controllerOption.name = controllerName;
         super(ctx);
+    }
+    async setMenus() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        const O = ctx.controllerOption;
+
     }
 }
 module.exports = UserTypeController;

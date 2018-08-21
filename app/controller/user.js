@@ -34,6 +34,7 @@ class UserController extends Controller {
                 message: `密码长度不够`,
             };
         } else {
+            // var updateLength = await M[O.modelName].update({ pass: md5(B.pass) }, { where: { id: B.id } });
             var user = await M[O.modelName].findOne({ where: { id: B.id } });
             user.pass = md5(B.pass);
             user = await user.save();

@@ -26,6 +26,7 @@ module.exports = app => {
   })
 
   router.post('/user/resetPass', controller.user.resetPass);
+  router.post('/userType/setMenus', controller.userType.setMenus);
 
 
   // router.get('/user', controller.user.getTpl);
