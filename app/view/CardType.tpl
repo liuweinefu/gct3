@@ -70,7 +70,7 @@
                 };
             };
 
-            var currentRow = null;
+            view.currentRow = null;
             op.tableOption = {
                 // onEndEdit: function (index, row, changes) {
                 //     if (!Object.keys(changes).includes('user_type_id')) { return; }

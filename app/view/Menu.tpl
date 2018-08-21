@@ -41,8 +41,8 @@
 
             //buttons设置**************************************************
             op.buttonOption = {
-                importExcel: true,
-                exportExcel: true,
+                // importExcel: true,
+                // exportExcel: true,
                 sort: true,
                 search: true,
                 replace: true,
@@ -68,101 +68,15 @@
                     sn: newRowIndex ? newRowIndex : 0,
                 };
             };
-            var currentRow = null;
+            view.currentRow = null;
             op.tableOption = {
-                // onEndEdit: function (index, row, changes) {
-                //     if (!Object.keys(changes).includes('user_type_id')) { return; }
-                //     var ed = $(this).datagrid('getEditor', {
-                //         index: index,
-                //         field: 'user_type_id'
-                //     });
-                //     if (!row.UserType) { row.UserType = {}; }
-                //     row.UserType.name = $(ed.target).combobox('getText');
-
-                //     //row.UserType.name = $(ed.target).combobox('getText');
-                //     // if ($(ed.target).combobox('getText').length!=0) { 
-                //     //     row['UserType.name'] = $(ed.target).combobox('getText');
-                //     // }
-                // },
-                // onClickCell: function (index, field, value) {
-                //     if (field != 'action_pass') { return; }
-                //     //高阶currentRow 否则dialog的buttons值绑定当前;
-                //     currentRow = view.getTableDiv().datagrid('getRows')[index];
-                //     if (!currentRow.id) {
-                //         $.messager.alert('提示', '请先保存再授权', 'info');
-                //         return;
-                //     }
-                //     if (view.dialogPage.passDiv) {
-                //         view.dialogPage.passDiv.dialog('setTitle', `修改   ${currentRow.name}   的密码`);
-                //         view.dialogPage.passDiv.dialog('open', true);
-                //         return;
-                //     }
-                //     var dialogDiv = $('<div></div>');
-                //     var passwordboxDiv = $('<div></div>');
-                //     passwordboxDiv.appendTo(dialogDiv);
-                //     dialogDiv.appendTo(view.getDialogContainerDiv());
-                //     view.dialogPage.passDiv = dialogDiv;
-
-                //     var dialogOp = {
-                //         title: `修改   ${currentRow.name}   的密码`,
-                //         width: 400,
-                //         top: 120,
-                //         //height: 120,
-                //         closed: false,
-                //         cache: false,
-                //         //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
-                //         //href: 'get_content.php',
-                //         modal: true,
-                //         onBeforeOpen: function () {
-                //             passwordboxDiv.passwordbox({
-                //                 width: '100%',
-                //                 height: 34,
-                //                 prompt: '请输入密码',
-                //                 iconWidth: 28,
-                //                 showEye: true
-                //             });
-                //         },
-                //         onOpen: function () {
-                //             passwordboxDiv.textbox('clear');
-                //             //设置焦点                            
-                //             passwordboxDiv.textbox('textbox').focus();
-                //         },
-                //         buttons: [{
-                //             text: '保存',
-                //             handler: function () {
-                //                 var value = passwordboxDiv.textbox('getValue');
-                //                 $.post('user/resetPass', {
-                //                     id: currentRow.id,
-                //                     pass: value
-                //                 })
-                //                     .done(function (data) {
-                //                         dialogDiv.dialog('close');
-                //                         //dialogDiv.dialog('destroy');
-                //                         $.messager.alert('提示', data.message, 'info', function () {
-                //                         });
-                //                     })
-                //                     .fail(function (err) {
-                //                         //console.log(err);
-                //                         $.messager.alert('失败', err.responseText, 'warning', function () {
-                //                             //重置焦点
-                //                             passwordboxDiv.textbox('textbox').focus();
-                //                         });
-                //                     });
-                //             },
-                //         }, {
-                //             text: '关闭',
-                //             handler: function () {
-                //                 //dialogDiv.dialog('destroy');
-                //                 dialogDiv.dialog('close');
-                //             }
-                //         }]
-                //     };
-                //     dialogDiv.dialog(dialogOp);
-
-                // },
-                // multiSort: true,
+                onClickCell: function (index, field, value) {
+                    if (field === 'updated_at') {
+                        $(this).datagrid('cancelEdit', index);
+                    }
+                },
+                multiSort: true,
                 remoteSort: true,
-
             };
 
             op.tableOption.columns = [[
@@ -212,6 +126,10 @@
                         } else {
                             return '';
                         }
+                    },
+                    editor: {
+                        type: 'datetimebox',
+                        options: {}
                     },
                 }
 

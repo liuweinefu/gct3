@@ -10,8 +10,9 @@ class UserTypeController extends Controller {
             modelName: 'UserType',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],             // noUpdateAttributes: [],
-            // includeModelNameArray:['User','UserType']
+            // updateAttributes: [],            
+            // noUpdateAttributes: [],
+            includeModelNameArray: ['Menu']
             // tplName: 'User',
         }
 

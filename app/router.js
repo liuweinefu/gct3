@@ -25,6 +25,7 @@ module.exports = app => {
     router.post('/' + ctr + '/update', controller[ctr].replace);
   })
 
+  router.post('/user/resetPass', controller.user.resetPass);
 
 
   // router.get('/user', controller.user.getTpl);

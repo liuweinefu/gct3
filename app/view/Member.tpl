@@ -72,7 +72,7 @@
                     card_id: newRowIndex ? newRowIndex : 0,
                 };
             };
-            var currentRow = null;
+            view.currentRow = null;
             op.tableOption = {
                 // onEndEdit: function (index, row, changes) {
                 //     if (!Object.keys(changes).includes('user_type_id')) { return; }
@@ -90,14 +90,14 @@
                 // },
                 // onClickCell: function (index, field, value) {
                 //     if (field != 'action_pass') { return; }
-                //     //高阶currentRow 否则dialog的buttons值绑定当前;
-                //     currentRow = view.getTableDiv().datagrid('getRows')[index];
-                //     if (!currentRow.id) {
+                //     //高阶view.currentRow 否则dialog的buttons值绑定当前;
+                //     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                //     if (!view.currentRow.id) {
                 //         $.messager.alert('提示', '请先保存再授权', 'info');
                 //         return;
                 //     }
                 //     if (view.dialogPage.passDiv) {
-                //         view.dialogPage.passDiv.dialog('setTitle', `修改   ${currentRow.name}   的密码`);
+                //         view.dialogPage.passDiv.dialog('setTitle', `修改   ${view.currentRow.name}   的密码`);
                 //         view.dialogPage.passDiv.dialog('open', true);
                 //         return;
                 //     }
@@ -108,7 +108,7 @@
                 //     view.dialogPage.passDiv = dialogDiv;
 
                 //     var dialogOp = {
-                //         title: `修改   ${currentRow.name}   的密码`,
+                //         title: `修改   ${view.currentRow.name}   的密码`,
                 //         width: 400,
                 //         top: 120,
                 //         //height: 120,
@@ -136,7 +136,7 @@
                 //             handler: function () {
                 //                 var value = passwordboxDiv.textbox('getValue');
                 //                 $.post('user/resetPass', {
-                //                     id: currentRow.id,
+                //                     id: view.currentRow.id,
                 //                     pass: value
                 //                 })
                 //                     .done(function (data) {
