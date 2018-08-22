@@ -30,7 +30,7 @@ module.exports = app => {
             allowNull: true,
         },
         balance: {
-            type: DECIMAL(10, 4),
+            type: DECIMAL(16,4),
             allowNull: false,
             defaultValue: 0.0,
         },

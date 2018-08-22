@@ -125,7 +125,7 @@
                         // method: 'post',
                         // toolbar: '',
                         // striped: true,
-                        // pagination: false,
+                        pagination: false,
                         // rownumbers: true,
                         // pageNumber: 1,
                         // pageSize: '50',
@@ -173,7 +173,7 @@
                             width: 100,
                         }
                     ]];
-
+                    // menuView.build(menuViewOp);
                     //对话框设置
                     var dialogOp = {
                         title: `为   ${view.currentRow.name}   进行菜单授权`,
@@ -195,6 +195,7 @@
                             text: '保存',
                             handler: function () {
                                 var sendObject = {
+                                    currentRow: JSON.stringify(view.currentRow),
                                     menus: JSON.stringify(menuView.getTableDiv().datagrid('getChecked'))
                                 };
                                 $.post('userType/setMenus', sendObject)
@@ -202,6 +203,7 @@
                                         dialogDiv.dialog('close');
                                         //dialogDiv.dialog('destroy');
                                         $.messager.alert('提示', data.message, 'info', function () {
+                                            view.getTableDiv().datagrid('reload');
                                         });
                                     }).fail(function (err) {
                                         //console.log(err);

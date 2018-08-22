@@ -16,12 +16,12 @@ module.exports = app => {
             //defaultValue: UUIDV1,
         },
         wage: {
-            type: DECIMAL(10, 4),
+            type: DECIMAL(16,4),
             allowNull: false,
             defaultValue: 0.0,
         },
         bonus: {
-            type: DECIMAL(10, 4),
+            type: DECIMAL(16,4),
             allowNull: false,
             defaultValue: 0.0,
         },

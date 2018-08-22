@@ -21,7 +21,7 @@ module.exports = app => {
             defaultValue: 1,
         },
         price: {
-            type: DECIMAL(10, 4),
+            type: DECIMAL(16,4),
             allowNull: false,
             defaultValue: 0.0,
         },

@@ -21,7 +21,7 @@ module.exports = app => {
             unique: true
         },
         discount: {
-            type: DECIMAL(10, 4),
+            type: DECIMAL(16,4),
             allowNull: false,
             defaultValue: 1,
         },

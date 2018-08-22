@@ -25,9 +25,13 @@ module.exports = app => {
     router.post('/' + ctr + '/update', controller[ctr].replace);
   })
 
+  /**
+   * 特殊的设置
+   */
   router.post('/user/resetPass', controller.user.resetPass);
   router.post('/userType/setMenus', controller.userType.setMenus);
 
+  router.post('/card/resetPass', controller.card.resetPass);
 
   // router.get('/user', controller.user.getTpl);
   // router.post('/user/findAll', controller.user.findAll);

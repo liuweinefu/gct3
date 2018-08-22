@@ -11,42 +11,67 @@ class NormalTableService extends Service {
         }
         super(ctx);
     }
-
     /**
-     * 表格数据作为其他表格的属性形式存在时，只通过id或者name查询
      * @param {string} findValue -ctx.request.body.q
      * @returns {object} ctx.condition.where
      * 
      */
-    _comboGridWhere(findValue) {
+    _comboWhere(findValue) {
         // const { ctx } = this;
 
         let value = typeof findValue === 'string' ? findValue : '';
-        const Op = this.app.Sequelize.Op;
-        // if (!O.attributes.includes('id')
-        //     || !O.attributes.includes('name')) {
-        //     throw new Error('comboGridWhere:do not have id or name ');
-        // }
-
-        //return ctx.condition.where
         if (value === '') {
             return {};
         }
+
+        const Op = this.app.Sequelize.Op;
+
+
+        const { ctx } = this;
+        const B = ctx.request.body;
+        const O = ctx.controllerOption;
+
+        let findBy = ['name'];
+        if (Array.isArray(B.findBy) && B.findBy.every(field => O.selectAttributes.includes(field))) {
+            findBy = B.findBy;
+        }
+
         return {
-            [Op.or]: [
-                {
-                    ['id']: {
-                        [Op.like]: '%' + value + '%'
-                    },
-                },
-                {
-                    ['name']: {
+            [Op.or]: findBy.map(field => {
+                return {
+                    [field]: {
                         [Op.like]: '%' + value + '%'
                     },
                 }
-            ]
+            })
         };
+
+
+
+
+
+        // return {
+        //     [Op.or]: [
+        //         {
+        //             ['id']: {
+        //                 [Op.like]: '%' + value + '%'
+        //             },
+        //         },
+        //         {
+        //             ['name']: {
+        //                 [Op.like]: '%' + value + '%'
+        //             },
+        //         }
+        //     ]
+        // };
+
+        // return {
+        //     ['name']: {
+        //         [Op.like]: '%' + value + '%'
+        //     },
+        // }
     }
+
 
     /**
      * 
@@ -285,7 +310,7 @@ class NormalTableService extends Service {
         }
 
         if (B.q) {
-            C.where = this._comboGridWhere(B.q);
+            C.where = this._comboWhere(B.q);
         } else if (B.name) {
             C.where = this._searchBoxWhere(B.name, B.value, B.isEq);
         } else if (B.where) {

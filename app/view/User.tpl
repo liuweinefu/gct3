@@ -97,7 +97,7 @@
                     }
 
                     if (field !== 'action_pass') { return; }
-                    //高阶currentRow 否则dialog的buttons值绑定当前;
+                    
                     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
                     if (!view.currentRow.id) {
                         $.messager.alert('提示', '请先保存再设置密码', 'info');

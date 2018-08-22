@@ -12,6 +12,7 @@ class MemberController extends Controller {
             // excludeAttributes: [],
             // updateAttributes: [],             // noUpdateAttributes: [],
             // includeModelNameArray:['User','UserType']
+            includeModelNameArray: ['Card'],
             // tplName: 'User',
         }
 

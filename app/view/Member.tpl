@@ -1,7 +1,7 @@
-<div id='Member' style="height: 100%;"></div>
+<div id='member' style="height: 100%;"></div>
 <script>
     void function () {
-        var anchorDiv = $('#Member');
+        var anchorDiv = $('#member');
         var view = new lwTable(anchorDiv);
 
         // var userType = null;
@@ -38,12 +38,13 @@
                 { name: 'phone', text: '会员电话' },
                 { name: 'otherphone', text: '其他电话' },
                 { name: 'remark', text: '备注' },
-                { name: 'Card.card_number', text: '卡号' },
+                { name: 'Card.card_number', text: '会员卡号' },
+                { name: 'Card.name', text: '会员卡主名' },
             ];
 
             //buttons设置**************************************************
             op.buttonOption = {
-                importExcel: true,
+                // importExcel: true,
                 exportExcel: true,
                 sort: true,
                 search: true,
@@ -74,96 +75,20 @@
             };
             view.currentRow = null;
             op.tableOption = {
-                // onEndEdit: function (index, row, changes) {
-                //     if (!Object.keys(changes).includes('user_type_id')) { return; }
-                //     var ed = $(this).datagrid('getEditor', {
-                //         index: index,
-                //         field: 'user_type_id'
-                //     });
-                //     if (!row.UserType) { row.UserType = {}; }
-                //     row.UserType.name = $(ed.target).combobox('getText');
+                onEndEdit: function (index, row, changes) {
+                    if (!Object.keys(changes).includes('card_id')) { return; }
+                    var ed = $(this).datagrid('getEditor', {
+                        index: index,
+                        field: 'card_id'
+                    });
+                    if (!row.Card) { row.Card = {}; }
+                    row.Card.card_number = $(ed.target).combobox('getText');
 
-                //     //row.UserType.name = $(ed.target).combobox('getText');
-                //     // if ($(ed.target).combobox('getText').length!=0) { 
-                //     //     row['UserType.name'] = $(ed.target).combobox('getText');
-                //     // }
-                // },
-                // onClickCell: function (index, field, value) {
-                //     if (field != 'action_pass') { return; }
-                //     //高阶view.currentRow 否则dialog的buttons值绑定当前;
-                //     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
-                //     if (!view.currentRow.id) {
-                //         $.messager.alert('提示', '请先保存再授权', 'info');
-                //         return;
-                //     }
-                //     if (view.dialogPage.passDiv) {
-                //         view.dialogPage.passDiv.dialog('setTitle', `修改   ${view.currentRow.name}   的密码`);
-                //         view.dialogPage.passDiv.dialog('open', true);
-                //         return;
-                //     }
-                //     var dialogDiv = $('<div></div>');
-                //     var passwordboxDiv = $('<div></div>');
-                //     passwordboxDiv.appendTo(dialogDiv);
-                //     dialogDiv.appendTo(view.getDialogContainerDiv());
-                //     view.dialogPage.passDiv = dialogDiv;
-
-                //     var dialogOp = {
-                //         title: `修改   ${view.currentRow.name}   的密码`,
-                //         width: 400,
-                //         top: 120,
-                //         //height: 120,
-                //         closed: false,
-                //         cache: false,
-                //         //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
-                //         //href: 'get_content.php',
-                //         modal: true,
-                //         onBeforeOpen: function () {
-                //             passwordboxDiv.passwordbox({
-                //                 width: '100%',
-                //                 height: 34,
-                //                 prompt: '请输入密码',
-                //                 iconWidth: 28,
-                //                 showEye: true
-                //             });
-                //         },
-                //         onOpen: function () {
-                //             passwordboxDiv.textbox('clear');
-                //             //设置焦点                            
-                //             passwordboxDiv.textbox('textbox').focus();
-                //         },
-                //         buttons: [{
-                //             text: '保存',
-                //             handler: function () {
-                //                 var value = passwordboxDiv.textbox('getValue');
-                //                 $.post('user/resetPass', {
-                //                     id: view.currentRow.id,
-                //                     pass: value
-                //                 })
-                //                     .done(function (data) {
-                //                         dialogDiv.dialog('close');
-                //                         //dialogDiv.dialog('destroy');
-                //                         $.messager.alert('提示', data.message, 'info', function () {
-                //                         });
-                //                     })
-                //                     .fail(function (err) {
-                //                         //console.log(err);
-                //                         $.messager.alert('失败', err.responseText, 'warning', function () {
-                //                             //重置焦点
-                //                             passwordboxDiv.textbox('textbox').focus();
-                //                         });
-                //                     });
-                //             },
-                //         }, {
-                //             text: '关闭',
-                //             handler: function () {
-                //                 //dialogDiv.dialog('destroy');
-                //                 dialogDiv.dialog('close');
-                //             }
-                //         }]
-                //     };
-                //     dialogDiv.dialog(dialogOp);
-
-                // },
+                    //row.UserType.name = $(ed.target).combobox('getText');
+                    // if ($(ed.target).combobox('getText').length!=0) { 
+                    //     row['UserType.name'] = $(ed.target).combobox('getText');
+                    // }
+                },
 
                 multiSort: true,
                 remoteSort: true,
@@ -181,7 +106,7 @@
                     hidden: true,
                 }, {
                     field: 'name',
-                    title: '用户名',
+                    title: '会员名',
                     sortable: true,
                     width: 60,
                     editor: {
@@ -235,27 +160,41 @@
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];
-                        //return row.UserType ? row.UserType.name : '';
-                        return row;
+                        return row.Card ? row.Card.card_number : '';
+
                     },
                     editor: {
-                        type: 'combobox',
+                        type: 'combogrid',
                         options: {
-                            //panelWidth: 160,                    
-                            editable: false,
-                            valueField: 'id',
-                            textField: 'name',
-                            data: userType,
-                            panelHeight: userType.length * 20 + 15,
-                            // onShowPanel: function () {
-                            //     $(this).combobox('loadData', userType);
-                            //     $(this).combobox('panel').panel('resize', {
-                            //         height: userType.length * 20 + 15
-                            //     });
-                            // }
+                            queryParams: { findBy: ['card_number', 'name'] },
+                            mode: 'remote',
+                            url: '/card/findAll',
+                            // panelWidth: 120,
+                            idField: 'id',
+                            textField: 'card_number',
+                            columns: [[
+                                // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
+                                { field: 'card_number', title: '会员卡号', width: 50 },
+                                { field: 'name', title: '会员卡主名', width: 100 },
+                            ]],
+                            loadFilter: function (data) {
+                                return data.rows;
+                            },
+                            // panelHeight: 100,
+                            // pagination: true,
                         }
                     }
-                },
+                }, {
+                    field: 'Card.name',
+                    title: '会员名',
+                    width: 100,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        //return row['UserType']['name'];
+                        return row.Card ? row.Card.name : '';
+
+                    },
+                }
 
             ]];
 
