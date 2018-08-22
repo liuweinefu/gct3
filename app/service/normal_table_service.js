@@ -94,7 +94,7 @@ class NormalTableService extends Service {
 
         //return ctx.condition.where
         if (name === '') { return {}; }
-        if (isEq === true) {
+        if (isEq === 'true') {
             return {
                 [name]: {
                     [Op.eq]: value
@@ -339,7 +339,7 @@ class NormalTableService extends Service {
             C.include = null;
         }
 
-        let result = await M[O.modelName].findAll(C);
+        let result = await M[O.modelName].findAndCount(C);
         return result;
 
     }

@@ -88,8 +88,8 @@ class NormalTableController extends Controller {
         let result = await S.normalTableService.findAll();
 
         ctx.response.body = {
-            total: result.length,
-            rows: result
+            total: result.count,
+            rows: result.rows
         };
     }
 

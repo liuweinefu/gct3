@@ -1,5 +1,6 @@
 <div id='member' style="height: 100%;"></div>
 <script>
+    //@ sourceURL=member.js
     void function () {
         var anchorDiv = $('#member');
         var view = new lwTable(anchorDiv);
@@ -82,7 +83,23 @@
                         field: 'card_id'
                     });
                     if (!row.Card) { row.Card = {}; }
-                    row.Card.card_number = $(ed.target).combobox('getText');
+                    var selectedCard = $(ed.target).combogrid('grid').datagrid('getSelected');
+                    if (!selectedCard) {
+                        // $(this).datagrid('updateRow', {
+                        //     index: index,
+                        //     row: {
+                        //         card_id: 1,
+                        //     }
+                        // });
+
+                        row.card_id = 1;
+                        row.Card.card_number = '卡号不能为空';
+                        row.Card.name = '卡号不能为空';
+                    } else {
+                        row.Card.card_number = selectedCard.card_number;
+                        row.Card.name = selectedCard.name;
+                    }
+
 
                     //row.UserType.name = $(ed.target).combobox('getText');
                     // if ($(ed.target).combobox('getText').length!=0) { 
@@ -159,9 +176,7 @@
                     width: 80,
                     sortable: true,
                     formatter: function (value, row, index) {
-                        //return row['UserType']['name'];
                         return row.Card ? row.Card.card_number : '';
-
                     },
                     editor: {
                         type: 'combogrid',
@@ -169,19 +184,32 @@
                             queryParams: { findBy: ['card_number', 'name'] },
                             mode: 'remote',
                             url: '/card/findAll',
-                            // panelWidth: 120,
+                            panelWidth: 360,
                             idField: 'id',
                             textField: 'card_number',
                             columns: [[
                                 // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
-                                { field: 'card_number', title: '会员卡号', width: 50 },
-                                { field: 'name', title: '会员卡主名', width: 100 },
+                                { field: 'card_number', title: '会员卡号', width: 100 },
+                                { field: 'name', title: '会员卡主名', width: 200 },
                             ]],
-                            loadFilter: function (data) {
-                                return data.rows;
-                            },
-                            // panelHeight: 100,
-                            // pagination: true,
+                            sortName: 'card_number',
+                            pagination: true,
+                            rownumbers: true,
+                            onShowPanel: function () {
+                                var value = '';
+                                var cell = view.getTableDiv().datagrid('cell');
+                                if (cell) {
+                                    value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
+                                }
+
+                                $(this).combogrid('grid').datagrid('load', {
+                                    name: 'id',
+                                    value: value,
+                                    isEq: true
+                                });
+                                console.log('abc');
+                                //$(this).combogrid('textbox').attr("selected", true);
+                            }
                         }
                     }
                 }, {
@@ -190,7 +218,7 @@
                     width: 100,
                     sortable: true,
                     formatter: function (value, row, index) {
-                        //return row['UserType']['name'];
+                        //return row['UserType']['name'];        
                         return row.Card ? row.Card.name : '';
 
                     },
