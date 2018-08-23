@@ -133,7 +133,7 @@
                 }, {
                     field: 'phone',
                     title: '电话',
-                    width: 20,
+                    width: 80,
                     sortable: true,
                     editor: {
                         type: 'textbox',
@@ -141,8 +141,8 @@
                     }
                 }, {
                     field: 'otherphone',
-                    title: '会员名',
-                    width: 20,
+                    title: '会员其他电话',
+                    width: 80,
                     sortable: true,
                     editor: {
                         type: 'textbox',
@@ -184,17 +184,31 @@
                             queryParams: { findBy: ['card_number', 'name'] },
                             mode: 'remote',
                             url: '/card/findAll',
-                            panelWidth: 360,
+                            panelWidth: 300,
+                            panelMaxHeight: 265,
+                            //panelHeight: 200,
                             idField: 'id',
                             textField: 'card_number',
                             columns: [[
                                 // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
                                 { field: 'card_number', title: '会员卡号', width: 100 },
-                                { field: 'name', title: '会员卡主名', width: 200 },
+                                { field: 'name', title: '会员卡主名', width: 165 },
                             ]],
+                            reversed: true,
                             sortName: 'card_number',
+                            //避免出现滑条，造成选择的时候无法选中
                             pagination: true,
+                            pageSize: 6,
+                            pageList: [6],
+                            //pagePosition: 'top',
+
                             rownumbers: true,
+                            onLoadSuccess: function (data) {
+                                $(this).datagrid('selectRow', 0);
+                                //$(this).focus();
+                                // $(this).datagrid('getPager').select();
+                                // $(this).datagrid('getPanel').focus();
+                            },
                             onShowPanel: function () {
                                 var value = '';
                                 var cell = view.getTableDiv().datagrid('cell');
@@ -206,21 +220,21 @@
                                     name: 'id',
                                     value: value,
                                     isEq: true
-                                });
-                                console.log('abc');
-                                //$(this).combogrid('textbox').attr("selected", true);
-                            }
+                                })
+
+                                //$(this).combogrid('textbox').select();
+                            },
+
                         }
                     }
                 }, {
                     field: 'Card.name',
-                    title: '会员名',
+                    title: '会员卡主名',
                     width: 100,
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];        
                         return row.Card ? row.Card.name : '';
-
                     },
                 }
 

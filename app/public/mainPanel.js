@@ -19,8 +19,15 @@ var tableEvents = function () {
             });
             switch (editor.type) {
                 case 'combogrid':
-                    $(editor.target).combogrid('textbox').select();
                     $(editor.target).combogrid('showPanel');
+                    //重置分页组件,为了选择时不受视线干扰
+                    $(editor.target).combogrid('grid').datagrid('getPager').pagination({
+                        layout: ["sep", "first", "prev", "sep", "manual", "sep", "next", "last", "sep", "refresh"]
+                    });
+                    //textbox的内容有转换过程，为了达到选中目的，调用延时
+                    setTimeout(function () {
+                        $(editor.target).combogrid('textbox').select();
+                    }, 100);
                     break;
                 case 'combobox':
                     $(editor.target).combobox('textbox').select();
@@ -43,7 +50,9 @@ var buttonFunctionMaker = function (page) {
         page.getTableDiv().datagrid('options').columns.forEach(item => {
             item.forEach(column => {
                 if (column.field.includes('action_')) { return; }
-                if (replace && !column.editor) { return; }
+                if (column.field.includes('_at')) { return; }
+                //if (replace && !column.editor) { return; }
+                if (!column.editor) { return; }
                 if (column.field && column.title && !column.hidden) {
                     fieldData.push({
                         field: column.field,
@@ -397,6 +406,8 @@ var buttonFunctionMaker = function (page) {
                     });
                     if (ed.type == 'combobox') {
                         row.viewValue = $(ed.target).combobox('getText')
+                    } if (ed.type == 'combogrid') {
+                        row.viewValue = $(ed.target).combogrid('getText')
                     } else {
                         row.viewValue = null;
                     }
