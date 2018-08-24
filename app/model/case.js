@@ -3,7 +3,7 @@
 module.exports = app => {
     const { STRING, INTEGER, DATE, TEXT } = app.Sequelize;
 
-    const Member = app.model.define('Member', {
+    const Case = app.model.define('Case', {
         // id: {
         //     type: UUID,
         //     primaryKey: true,
@@ -21,35 +21,27 @@ module.exports = app => {
             allowNull: false,
             //unique: true
         },
-        phone: {
-            type: STRING(11),
-            allowNull: false,
-        },
-        otherphone: {
-            type: STRING(64),
-            allowNull: true,
+        case: {
+            type: TEXT
         },
         remark: {
-            type: STRING(255)
-        },
+            type: TEXT
+        }
     }, {
             timestamps: true,
             underscored: true,
             freezeTableName: true,
-            tableName: 'member',
+            tableName: 'case',
         });
 
 
-    Member.associate = function () {
+    Case.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { Member, Card, Consumption, Case } = app.model;
-        Member.belongsTo(Card);
-        Member.hasMany(Consumption);
-        Member.hasMany(Case);
-
+        const { Case, Member } = app.model;
+        Case.belongsTo(Member);
     };
 
 
 
-    return Member;
+    return Case;
 };

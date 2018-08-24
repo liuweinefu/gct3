@@ -97,7 +97,7 @@
                     }
 
                     if (field !== 'action_pass') { return; }
-                    
+
                     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
                     if (!view.currentRow.id) {
                         $.messager.alert('提示', '请先保存再设置密码', 'info');
@@ -260,7 +260,8 @@
                             valueField: 'id',
                             textField: 'name',
                             data: userType,
-                            panelHeight: userType.length * 20 + 15,
+                            panelMaxHeight: 265,
+                            // panelHeight: userType.length * 20 + 15,
                             // onShowPanel: function () {
                             //     $(this).combobox('loadData', userType);
                             //     $(this).combobox('panel').panel('resize', {
