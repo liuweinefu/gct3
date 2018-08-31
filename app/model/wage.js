@@ -3,7 +3,7 @@
 module.exports = app => {
     const { STRING, INTEGER, DECIMAL } = app.Sequelize;
 
-    const EmployeeWage = app.model.define('EmployeeWage', {
+    const Wage = app.model.define('Wage', {
         // id: {
         //     type: UUID,
         //     primaryKey: true,
@@ -16,12 +16,12 @@ module.exports = app => {
             //defaultValue: UUIDV1,
         },
         wage: {
-            type: DECIMAL(16,4),
+            type: DECIMAL(16, 4),
             allowNull: false,
             defaultValue: 0.0,
         },
         bonus: {
-            type: DECIMAL(16,4),
+            type: DECIMAL(16, 4),
             allowNull: false,
             defaultValue: 0.0,
         },
@@ -32,22 +32,22 @@ module.exports = app => {
             timestamps: true,
             underscored: true,
             freezeTableName: true,
-            tableName: 'employee_wage',
+            tableName: 'wage',
         });
 
-    EmployeeWage.associate = function () {
+    Wage.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { EmployeeWage, Consumption, Employee, User } = app.model;
+        const { Wage, Consumption, Employee, User } = app.model;
 
-        EmployeeWage.hasMany(Consumption);
-        EmployeeWage.belongsTo(Employee);
-        EmployeeWage.belongsTo(User);
+        Wage.hasMany(Consumption);
+        Wage.belongsTo(Employee);
+        Wage.belongsTo(User);
 
         // app.model.User.belongsTo(app.model.UserType);
         // app.model.User.hasMany(app.model.CardRecharge);
         // app.model.User.hasMany(app.model.CommodityWarehousing);
         // app.model.User.hasMany(app.model.Consumption);
-        // app.model.User.hasMany(app.model.EmployeeWage);
+        // app.model.User.hasMany(app.model.Wage);
     };
 
     // User.findByLogin = function* (login) {
@@ -68,9 +68,9 @@ module.exports = app => {
     //     app.model.User.hasMany(app.model.CardRecharge);
     //     app.model.User.hasMany(app.model.CommodityWarehousing);
     //     app.model.User.hasMany(app.model.Consumption);
-    //     app.model.User.hasMany(app.model.EmployeeWage);
+    //     app.model.User.hasMany(app.model.Wage);
 
     // };
 
-    return EmployeeWage;
+    return Wage;
 };

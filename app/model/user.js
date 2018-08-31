@@ -55,19 +55,19 @@ module.exports = app => {
 
     User.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { User, UserType, CardRecharge, CommodityWarehousing, Consumption, EmployeeWage } = app.model;
+        const { User, UserType, CardRecharge, CommodityWarehousing, Consumption, Wage } = app.model;
 
         User.belongsTo(UserType);
         User.hasMany(CardRecharge);
         User.hasMany(CommodityWarehousing);
         User.hasMany(Consumption);
-        User.hasMany(EmployeeWage);
+        User.hasMany(Wage);
 
         // app.model.User.belongsTo(app.model.UserType);
         // app.model.User.hasMany(app.model.CardRecharge);
         // app.model.User.hasMany(app.model.CommodityWarehousing);
         // app.model.User.hasMany(app.model.Consumption);
-        // app.model.User.hasMany(app.model.EmployeeWage);
+        // app.model.User.hasMany(app.model.Wage);
     };
 
     // User.findByLogin = function* (login) {
@@ -88,7 +88,7 @@ module.exports = app => {
     //     app.model.User.hasMany(app.model.CardRecharge);
     //     app.model.User.hasMany(app.model.CommodityWarehousing);
     //     app.model.User.hasMany(app.model.Consumption);
-    //     app.model.User.hasMany(app.model.EmployeeWage);
+    //     app.model.User.hasMany(app.model.Wage);
 
     // };
 

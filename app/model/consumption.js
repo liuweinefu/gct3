@@ -16,7 +16,7 @@ module.exports = app => {
             //defaultValue: UUIDV1,
         },
         price: {
-            type: DECIMAL(16,4),
+            type: DECIMAL(16, 4),
             allowNull: false,
             defaultValue: 0.0,
         },
@@ -52,14 +52,14 @@ module.exports = app => {
 
     Consumption.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { Consumption, User, Card, Member, Employee, Commodity, EmployeeWage } = app.model;
+        const { Consumption, User, Card, Member, Employee, Commodity, Wage } = app.model;
         Consumption.belongsTo(User);
         Consumption.belongsTo(Card);
         Consumption.belongsTo(Member);
         Consumption.belongsTo(Employee);
         Consumption.belongsTo(Commodity);
 
-        Consumption.belongsTo(EmployeeWage);
+        Consumption.belongsTo(Wage);
     };
 
 

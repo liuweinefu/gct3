@@ -59,7 +59,7 @@ module.exports = app => {
     //     app.model.User.hasMany(app.model.CardRecharge);
     //     app.model.User.hasMany(app.model.CommodityWarehousing);
     //     app.model.User.hasMany(app.model.Consumption);
-    //     app.model.User.hasMany(app.model.EmployeeWage);
+    //     app.model.User.hasMany(app.model.Wage);
 
     // };
 
