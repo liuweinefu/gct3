@@ -3,16 +3,16 @@
 const Controller = require('../core/normal_table_controller');
 const controllerName = Symbol(__filename);
 
-class CommodityController extends Controller {
+class CaseController extends Controller {
     constructor(ctx) {
         //填写配置
         ctx.controllerOption = {
-            modelName: 'Commodity',
+            modelName: 'Case',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],  
-            // noUpdateAttributes: [],
-            includeModelNameArray: ['CommodityType']
+            // updateAttributes: [],             // noUpdateAttributes: [],
+            // includeModelNameArray:['User','UserType']
+            includeModelNameArray: ['Member'],
             // tplName: 'User',
         }
 
@@ -22,4 +22,4 @@ class CommodityController extends Controller {
         super(ctx);
     }
 }
-module.exports = CommodityController;
+module.exports = CaseController;

@@ -1,8 +1,8 @@
-<div id='member' style="height: 100%;"></div>
+<div id='case' style="height: 100%;"></div>
 <script>
-    //@ sourceURL=member.js
+    //@ sourceURL=case.js
     void function () {
-        var anchorDiv = $('#member');
+        var anchorDiv = $('#case');
         var view = new lwTable(anchorDiv);
 
         // var userType = null;
@@ -35,12 +35,11 @@
             //     menu: '#abc'
             // };
             op.searchBoxOption.menu = [
-                { name: 'name', text: '会员名' },
-                { name: 'phone', text: '会员电话' },
-                { name: 'otherphone', text: '其他电话' },
+                { name: 'name', text: '病例概述' },
+                { name: 'case', text: '病例' },
                 { name: 'remark', text: '备注' },
-                { name: 'Card.card_number', text: '会员卡号' },
-                { name: 'Card.name', text: '会员卡主名' },
+                { name: 'Member.name', text: '会员名' },
+                { name: 'Member.phone', text: '会员电话' },
             ];
 
             //buttons设置**************************************************
@@ -67,37 +66,34 @@
             //表格设置**************************************************
             view.makeNewRow = (newRowIndex) => {
                 return {
-                    name: '新会员 ' + Math.round(Math.random() * 1000),
-                    phone: '00000000000',
-                    otherphone: '0000',
-                    remark: '备注' + Math.round(Math.random() * 1000),
-                    card_id: newRowIndex ? newRowIndex : 0,
+                    name: '新病例 ' + Date(),
+                    member_id: 1,
                 };
             };
             view.currentRow = null;
             op.tableOption = {
                 onEndEdit: function (index, row, changes) {
-                    if (!Object.keys(changes).includes('card_id')) { return; }
+                    if (!Object.keys(changes).includes('number_id')) { return; }
                     var ed = $(this).datagrid('getEditor', {
                         index: index,
-                        field: 'card_id'
+                        field: 'number_id'
                     });
-                    if (!row.Card) { row.Card = {}; }
-                    var selectedCard = $(ed.target).combogrid('grid').datagrid('getSelected');
-                    if (!selectedCard) {
+                    if (!row.Member) { row.Member = {}; }
+                    var selectedMember = $(ed.target).combogrid('grid').datagrid('getSelected');
+                    if (!selectedMember) {
                         // $(this).datagrid('updateRow', {
                         //     index: index,
                         //     row: {
-                        //         card_id: 1,
+                        //         Member_id: 1,
                         //     }
                         // });
 
-                        row.card_id = 1;
-                        row.Card.card_number = '卡号不能为空';
-                        row.Card.name = '卡号不能为空';
+                        row.Member_id = 1;
+                        row.Member.name = '会员名不能为空';
+                        row.Member.phone = '会员名不能为空';
                     } else {
-                        row.Card.card_number = selectedCard.card_number;
-                        row.Card.name = selectedCard.name;
+                        row.Member.name = selectedMember.name;
+                        row.Member.phone = selectedMember.phone;
                     }
 
 
@@ -119,11 +115,11 @@
                 },
                 {
                     field: 'id',
-                    title: '会员ID',
+                    title: '病例ID',
                     hidden: true,
                 }, {
                     field: 'name',
-                    title: '会员名',
+                    title: '病例概述',
                     sortable: true,
                     width: 60,
                     editor: {
@@ -131,17 +127,8 @@
                         options: {}
                     }
                 }, {
-                    field: 'phone',
-                    title: '电话',
-                    width: 80,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'otherphone',
-                    title: '其他电话',
+                    field: 'case',
+                    title: '病例',
                     width: 80,
                     sortable: true,
                     editor: {
@@ -171,31 +158,31 @@
                     },
                 }, {
                     //field: 'UserType.name',user_type_id
-                    field: 'card_id',
-                    title: '会员卡号',
+                    field: 'member_id',
+                    title: '会员名',
                     width: 80,
                     sortable: true,
                     formatter: function (value, row, index) {
-                        return row.Card ? row.Card.card_number : '';
+                        return row.Member ? row.Member.name : '';
                     },
                     editor: {
                         type: 'combogrid',
                         options: {
-                            queryParams: { findBy: ['card_number', 'name'] },
+                            queryParams: { findBy: ['phone', 'name'] },
                             mode: 'remote',
-                            url: '/card/findAll',
+                            url: '/member/findAll',
                             panelWidth: 300,
                             panelMaxHeight: 265,
                             //panelHeight: 200,
                             idField: 'id',
-                            textField: 'card_number',
+                            textField: 'name',
                             columns: [[
                                 // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
-                                { field: 'card_number', title: '会员卡号', width: 100 },
-                                { field: 'name', title: '会员卡主名', width: 165 },
+                                { field: 'name', title: '会员名', width: 100 },
+                                { field: 'phone', title: '会员电话', width: 165 },
                             ]],
                             reversed: true,
-                            sortName: 'card_number',
+                            sortName: 'name',
                             //避免出现滑条，造成选择的时候无法选中
                             pagination: true,
                             pageSize: 6,
@@ -228,13 +215,13 @@
                         }
                     }
                 }, {
-                    field: 'Card.name',
-                    title: '会员卡主名',
+                    field: 'Member.phone',
+                    title: '会员电话',
                     width: 100,
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];        
-                        return row.Card ? row.Card.name : '';
+                        return row.Member ? row.Member.phone : '';
                     },
                 }
 
