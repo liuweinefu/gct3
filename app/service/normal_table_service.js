@@ -373,6 +373,10 @@ class NormalTableService extends Service {
                     if (!O.updateAttributes.includes(field)) {
                         delete row[field];
                     }
+                    if (field.includes('_id') && !row[field]) {
+                        row[field] = null;
+
+                    }
                 })
                 return M[O.modelName].upsert(row, {
                     fields: O.updateAttributes
