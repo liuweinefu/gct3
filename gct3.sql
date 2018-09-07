@@ -11,7 +11,7 @@
  Target Server Version : 100108
  File Encoding         : 65001
 
- Date: 31/08/2018 17:23:16
+ Date: 07/09/2018 18:17:34
 */
 
 SET NAMES utf8mb4;
@@ -38,12 +38,12 @@ CREATE TABLE `card`  (
   UNIQUE INDEX `name`(`name`) USING BTREE,
   INDEX `card_type_id`(`card_type_id`) USING BTREE,
   CONSTRAINT `card_ibfk_1` FOREIGN KEY (`card_type_id`) REFERENCES `card_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of card
 -- ----------------------------
-INSERT INTO `card` VALUES (1, '250', '测试用户测试用户测试用户测试用户', 'e10adc3949ba59abbe56e057f20f883e', 0.0000, '123', '123', '123', '2018-08-19 14:24:49', '2018-08-23 08:22:04', 1);
+INSERT INTO `card` VALUES (1, '250', '测试用户测试用户测试用户测试用户', 'e10adc3949ba59abbe56e057f20f883e', 0.0000, '123', '123', '123', '2018-08-19 14:24:49', '2018-09-07 02:10:20', 13);
 INSERT INTO `card` VALUES (2, '2', 'b', NULL, 0.3000, '00000000000', '0000', '备注826', '2018-08-19 14:02:13', '2018-08-22 12:36:09', 2);
 INSERT INTO `card` VALUES (9, '3', 'c', '96e79218965eb72c92a549dd5a330112', 10000000.0000, '11111111111', '0000', '备注119', '2018-08-19 14:03:32', '2018-08-22 12:36:09', 3);
 INSERT INTO `card` VALUES (10, '4', 'd', NULL, 0.0000, '00000000000', '0000', '备注817', '2018-08-20 13:42:41', '2018-08-22 12:36:09', 4);
@@ -53,11 +53,12 @@ INSERT INTO `card` VALUES (23, '10', '新会员卡 433', NULL, 0.0000, '00000000
 INSERT INTO `card` VALUES (24, '11', '新会员卡 245', NULL, 0.0000, '00000000000', '0000', '备注292', '2018-08-22 14:06:16', '2018-08-22 14:06:55', 14);
 INSERT INTO `card` VALUES (25, '12', '新会员卡 756', NULL, 0.0000, '00000000000', '0000', '备注166', '2018-08-22 14:06:16', '2018-08-22 14:06:55', 2);
 INSERT INTO `card` VALUES (26, '13', '新会员卡 218', NULL, 0.0000, '00000000000', '0000', '备注318', '2018-08-22 14:06:16', '2018-08-22 14:06:55', 3);
-INSERT INTO `card` VALUES (27, '14', '新会员卡 646', NULL, 0.0000, '00000000000', '0000', '备注967', '2018-08-22 14:06:16', '2018-08-22 14:06:55', 1);
+INSERT INTO `card` VALUES (27, '14', '新会员卡 646', NULL, 0.0000, '00000000000', '0000', '备注967', '2018-08-22 14:06:16', '2018-09-07 02:35:17', NULL);
 INSERT INTO `card` VALUES (28, '15', '新会员卡 466', NULL, 0.0000, '00000000000', '0000', '备注20', '2018-08-22 14:06:16', '2018-08-22 14:06:55', 2);
 INSERT INTO `card` VALUES (29, '19', '新会员卡 315', NULL, 0.0000, '00000000000', '0000', '备注251', '2018-08-22 14:06:31', '2018-08-22 14:06:55', 9);
 INSERT INTO `card` VALUES (30, '18', '新会员卡 103', NULL, 0.0000, '00000000000', '0000', '备注194', '2018-08-22 14:06:31', '2018-08-22 14:06:55', 13);
 INSERT INTO `card` VALUES (31, '17', '新会员卡 33', NULL, 0.0000, '00000000000', '0000', '备注395', '2018-08-22 14:06:31', '2018-08-22 14:06:55', 2);
+INSERT INTO `card` VALUES (32, '9999', '新会员卡 671', NULL, 0.0000, '00000000000', '0000', '备注572', '2018-09-07 02:35:02', '2018-09-07 02:35:17', NULL);
 
 -- ----------------------------
 -- Table structure for card_recharge
@@ -218,7 +219,28 @@ CREATE TABLE `employee`  (
   UNIQUE INDEX `name`(`name`) USING BTREE,
   INDEX `employee_type_id`(`employee_type_id`) USING BTREE,
   CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`employee_type_id`) REFERENCES `employee_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of employee
+-- ----------------------------
+INSERT INTO `employee` VALUES (1, '新员工 36', '00000000000', NULL, '备注559', 13, '2018-09-07 03:15:53', '2018-09-07 09:03:06', 1);
+INSERT INTO `employee` VALUES (2, '新员工 776', '00000000000', NULL, '备注564', 14, '2018-09-07 03:15:53', '2018-09-07 09:03:06', 2);
+INSERT INTO `employee` VALUES (3, '新员工 896', '00000000000', NULL, '备注599', 15, '2018-09-07 03:15:53', '2018-09-07 09:03:06', 5);
+INSERT INTO `employee` VALUES (4, '新员工 952', '00000000000', NULL, '备注519', 16, '2018-09-07 03:15:53', '2018-09-07 09:03:06', 9);
+INSERT INTO `employee` VALUES (5, '新员工 251', '00000000000', NULL, '备注811', 17, '2018-09-07 03:15:53', '2018-09-07 09:03:06', 15);
+INSERT INTO `employee` VALUES (6, '新员工 853', '00000000000', NULL, '备注128', 12, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 18);
+INSERT INTO `employee` VALUES (7, '新员工 869', '00000000000', NULL, '备注232', 11, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 16);
+INSERT INTO `employee` VALUES (8, '新员工 186', '00000000000', NULL, '备注409', 10, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 5);
+INSERT INTO `employee` VALUES (9, '新员工 688', '00000000000', NULL, '备注544', 9, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 5);
+INSERT INTO `employee` VALUES (10, '新员工 909', '00000000000', NULL, '备注238', 8, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 14);
+INSERT INTO `employee` VALUES (11, '新员工 985', '00000000000', NULL, '备注673', 7, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 20);
+INSERT INTO `employee` VALUES (12, '新员工 461', '00000000000', NULL, '备注674', 6, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 4);
+INSERT INTO `employee` VALUES (13, '新员工 125', '00000000000', NULL, '备注289', 5, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 3);
+INSERT INTO `employee` VALUES (14, '新员工 777', '00000000000', NULL, '备注97', 4, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 3);
+INSERT INTO `employee` VALUES (15, '新员工 575', '00000000000', NULL, '备注293', 3, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 2);
+INSERT INTO `employee` VALUES (16, '新员工 992', '00000000000', NULL, '备注435', 2, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 2);
+INSERT INTO `employee` VALUES (17, '新员工 9', '00000000000', NULL, '备注596', 1, '2018-09-07 03:21:00', '2018-09-07 09:02:43', 1);
 
 -- ----------------------------
 -- Table structure for employee_type
@@ -234,7 +256,31 @@ CREATE TABLE `employee_type`  (
   `updated_at` datetime(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of employee_type
+-- ----------------------------
+INSERT INTO `employee_type` VALUES (1, '一级', 3000.0000, 12, '备注368', '2018-09-07 03:14:44', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (2, '二级', 1500.0000, 13, '备注91', '2018-09-07 03:14:44', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (3, '三级', 1000.0000, 14, '备注22', '2018-09-07 03:14:44', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (4, '四级', 500.0000, 15, '备注28', '2018-09-07 03:14:44', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (5, '实习', 0.0000, 16, '备注995', '2018-09-07 03:19:15', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (6, '技师类型 521', 0.0000, 17, '备注195', '2018-09-07 03:19:54', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (7, '技师类型 224', 0.0000, 18, '备注703', '2018-09-07 03:19:54', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (8, '技师类型 871', 0.0000, 19, '备注35', '2018-09-07 03:19:54', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (9, '技师类型 905', 0.0000, 20, '备注959', '2018-09-07 03:19:54', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (10, '技师类型 904', 0.0000, 11, '备注966', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (11, '技师类型 197', 0.0000, 10, '备注195', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (12, '技师类型 355', 0.0000, 2, '备注228', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (13, '技师类型 845', 0.0000, 3, '备注377', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (14, '技师类型 858', 0.0000, 4, '备注212', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (15, '技师类型 974', 0.0000, 5, '备注637', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (16, '技师类型 7', 0.0000, 6, '备注807', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (17, '技师类型 899', 0.0000, 7, '备注324', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (18, '技师类型 316', 0.0000, 8, '备注959', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (19, '技师类型 526', 0.0000, 9, '备注80', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
+INSERT INTO `employee_type` VALUES (20, '技师类型 595', 0.0000, 1, '备注759', '2018-09-07 03:20:14', '2018-09-07 03:20:15');
 
 -- ----------------------------
 -- Table structure for member
@@ -254,14 +300,14 @@ CREATE TABLE `member`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `card_id`(`card_id`) USING BTREE,
   CONSTRAINT `member_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of member
 -- ----------------------------
-INSERT INTO `member` VALUES (1, '新会员 982', '00000000000', '0000', '2', NULL, NULL, '0000-00-00 00:00:00', '2018-08-23 06:32:00', 25);
-INSERT INTO `member` VALUES (5, '新会员 982', '00000000000', '0000', '2', NULL, NULL, '2018-08-22 09:04:39', '2018-08-23 06:32:00', 30);
-INSERT INTO `member` VALUES (6, '新会员 983', '00000000000', '0000', '备注494', NULL, NULL, '2018-08-22 09:04:39', '2018-08-23 06:32:00', 25);
+INSERT INTO `member` VALUES (1, '新会员 982', '00000000000', '0000', 'abc', NULL, NULL, '0000-00-00 00:00:00', '2018-09-07 03:14:18', 23);
+INSERT INTO `member` VALUES (5, '新会员 982', '00000000000', '0000', '2', NULL, NULL, '2018-08-22 09:04:39', '2018-09-07 03:14:18', NULL);
+INSERT INTO `member` VALUES (6, '新会员 983', '00000000000', '0000', '备注494', NULL, NULL, '2018-08-22 09:04:39', '2018-09-07 03:14:18', 23);
 INSERT INTO `member` VALUES (7, '新会员 660', '00000000000', '0000', '备注941', NULL, NULL, '2018-08-22 09:04:39', '2018-08-23 06:32:00', 1);
 INSERT INTO `member` VALUES (9, '新会员 475', '00000000000', '0000', '备注763', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 1);
 INSERT INTO `member` VALUES (10, '新会员 31', '00000000000', '0000', '备注708', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 1);
@@ -270,6 +316,9 @@ INSERT INTO `member` VALUES (12, '新会员 952', '00000000000', '0000', '备注
 INSERT INTO `member` VALUES (13, '新会员 798', '00000000000', '0000', '备注240', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 1);
 INSERT INTO `member` VALUES (14, '新会员 662', '00000000000', '0000', '备注136', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 1);
 INSERT INTO `member` VALUES (15, '新会员 677', '00000000000', '0000', '备注520', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 24);
+INSERT INTO `member` VALUES (16, '新会员 697', '00000000000', '0000', '备注146', NULL, NULL, '2018-09-07 02:10:45', '2018-09-07 02:10:45', 23);
+INSERT INTO `member` VALUES (17, '新会员 134', '00000000000', '0000', '备注371', NULL, NULL, '2018-09-07 02:25:31', '2018-09-07 02:25:31', NULL);
+INSERT INTO `member` VALUES (18, '新会员 563', '00000000000', '0000', '备注809', NULL, NULL, '2018-09-07 02:35:50', '2018-09-07 02:35:50', NULL);
 
 -- ----------------------------
 -- Table structure for menu
@@ -284,7 +333,7 @@ CREATE TABLE `menu`  (
   `updated_at` datetime(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of menu
@@ -302,6 +351,9 @@ INSERT INTO `menu` VALUES (18, '员工类型', '\\employeeType', 8, '2018-08-22 
 INSERT INTO `menu` VALUES (19, '员工', '\\employee', 9, '2018-08-22 10:11:54', '2018-08-22 10:14:05');
 INSERT INTO `menu` VALUES (20, '常用', '', 1, '2018-08-22 10:14:05', '2018-08-22 10:14:13');
 INSERT INTO `menu` VALUES (21, '首页', '\\mix', 2, '2018-08-22 10:14:05', '2018-08-22 10:15:58');
+INSERT INTO `menu` VALUES (22, '查询', '', 14, '2018-09-07 03:31:43', '2018-09-07 03:31:43');
+INSERT INTO `menu` VALUES (23, '工资记录', '\\wage', 15, '2018-09-07 03:32:08', '2018-09-07 07:11:11');
+INSERT INTO `menu` VALUES (24, '消费记录', '\\consumption', 16, '2018-09-07 03:32:22', '2018-09-07 07:11:11');
 
 -- ----------------------------
 -- Table structure for user
@@ -336,7 +388,7 @@ INSERT INTO `user` VALUES (6, '4', NULL, NULL, '', 6, NULL, '2018-08-04 07:40:27
 INSERT INTO `user` VALUES (10, '新登录用户 700', '96e79218965eb72c92a549dd5a330112', NULL, '1', 1, NULL, '2018-08-04 14:34:18', '2018-08-22 07:54:09', 2);
 INSERT INTO `user` VALUES (11, '新登录用户 346', NULL, NULL, '', 4, NULL, '2018-08-04 14:34:18', '2018-08-21 08:26:48', 1);
 INSERT INTO `user` VALUES (12, '新登录用户 275', NULL, NULL, '', 7, NULL, '2018-08-04 14:34:18', '2018-08-21 08:26:48', 4);
-INSERT INTO `user` VALUES (13, '新登录用户 23475', NULL, NULL, NULL, 10, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL);
+INSERT INTO `user` VALUES (13, '新登录用户 23475', NULL, NULL, '1', 10, NULL, '0000-00-00 00:00:00', '2018-08-31 09:32:03', NULL);
 
 -- ----------------------------
 -- Table structure for user_type
@@ -416,6 +468,13 @@ CREATE TABLE `wage`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `wage_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `wage_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of wage
+-- ----------------------------
+INSERT INTO `wage` VALUES (1, 2000.0000, 3000.0000, NULL, '2018-09-07 18:13:01', '2018-09-07 18:13:04', 2, 5);
+INSERT INTO `wage` VALUES (2, 10.0000, 30.0000, NULL, '2018-09-01 18:13:54', '2018-09-01 18:14:01', 2, 1);
+INSERT INTO `wage` VALUES (3, 30.0000, 40.0000, NULL, '2018-09-02 18:14:05', '2018-09-03 18:14:09', 4, 5);
 
 SET FOREIGN_KEY_CHECKS = 1;

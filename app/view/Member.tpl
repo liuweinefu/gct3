@@ -71,7 +71,7 @@
                     phone: '00000000000',
                     otherphone: '0000',
                     remark: '备注' + Math.round(Math.random() * 1000),
-                    card_id: newRowIndex ? newRowIndex : 0,
+                    //card_id: newRowIndex ? newRowIndex : 0,
                 };
             };
             view.currentRow = null;
@@ -92,9 +92,9 @@
                         //     }
                         // });
 
-                        row.card_id = 1;
-                        row.Card.card_number = '卡号不能为空';
-                        row.Card.name = '卡号不能为空';
+                        row.card_id = null;
+                        row.Card.card_number = '卡号为空';
+                        row.Card.name = '卡号为空';
                     } else {
                         row.Card.card_number = selectedCard.card_number;
                         row.Card.name = selectedCard.name;
@@ -194,7 +194,7 @@
                                 { field: 'card_number', title: '会员卡号', width: 100 },
                                 { field: 'name', title: '会员卡主名', width: 165 },
                             ]],
-                            reversed: true,
+                            //reversed: true,
                             sortName: 'card_number',
                             //避免出现滑条，造成选择的时候无法选中
                             pagination: true,
@@ -205,6 +205,7 @@
                             rownumbers: true,
                             onLoadSuccess: function (data) {
                                 $(this).datagrid('selectRow', 0);
+
                                 //$(this).focus();
                                 // $(this).datagrid('getPager').select();
                                 // $(this).datagrid('getPanel').focus();
@@ -215,13 +216,13 @@
                                 if (cell) {
                                     value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
                                 }
-
-                                $(this).combogrid('grid').datagrid('load', {
-                                    name: 'id',
-                                    value: value,
-                                    isEq: true
-                                })
-
+                                if (value) {
+                                    $(this).combogrid('grid').datagrid('load', {
+                                        name: 'id',
+                                        value: value,
+                                        isEq: true
+                                    })
+                                }
                                 //$(this).combogrid('textbox').select();
                             },
 

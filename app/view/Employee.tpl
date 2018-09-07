@@ -81,8 +81,8 @@
                         index: index,
                         field: 'employee_type_id'
                     });
-                    if (!row.employeeType) { row.employeeType = {}; }
-                    row.employeeType.name = $(ed.target).combobox('getText');
+                    if (!row.EmployeeType) { row.EmployeeType = {}; }
+                    row.EmployeeType.name = $(ed.target).combobox('getText');
 
                     //row.employeeType.name = $(ed.target).combobox('getText');
                     // if ($(ed.target).combobox('getText').length!=0) { 
@@ -189,7 +189,7 @@
                             textField: 'name',
                             data: employeeType,
                             panelMaxHeight: 265,
-                            // panelHeight: employeeType.length * 20 + 15,
+                            panelHeight: employeeType.length * 30 + 15,
                             // onShowPanel: function () {
                             //     $(this).combobox('loadData', employeeType);
                             //     $(this).combobox('panel').panel('resize', {
