@@ -10,8 +10,9 @@ class ConsumptionController extends Controller {
             modelName: 'Consumption',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],             // noUpdateAttributes: [],
-            // includeModelNameArray:['User','UserType']
+            // updateAttributes: [],             
+            // noUpdateAttributes: [],
+            includeModelNameArray: ['Card', 'Commodity', 'User', 'Member', 'Employee', 'Wage']
             // tplName: 'User',
         }
 

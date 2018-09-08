@@ -186,7 +186,7 @@
                 }, {
                     field: 'sn',
                     title: '排序号',
-                    width: 20,
+                    width: 35,
                     sortable: true,
                     editor: {
                         type: 'textbox',
@@ -197,6 +197,24 @@
                     title: '用户名',
                     sortable: true,
                     width: 60,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'location',
+                    title: '店铺',
+                    width: 60,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'phone',
+                    title: '电话',
+                    width: 60,
+                    sortable: true,
                     editor: {
                         type: 'textbox',
                         options: {}

@@ -31,6 +31,10 @@ module.exports = app => {
             //allowNull: false,
             //defaultValue: md5('888888'),
         },
+        phone: {
+            type: STRING(11),
+            allowNull: true,
+        },
         remark: {
             type: STRING(255)
         },

@@ -185,11 +185,11 @@
                     hidden: true,
                 }, {
                     field: 'action_list',
-                    title: '列表记录',
+                    title: '结算记录',
                     //width: 90,
                     formatter: function (value, row, index) {
                         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>列表记录</button>';
+                        return '<button>结算记录</button>';
                     },
                 }, {
                     field: 'action_delete',

@@ -18,7 +18,7 @@ module.exports = app => {
         name: {
             type: STRING(16),
             allowNull: false,
-            unique: true
+            //unique: true
         },
         router: {
             type: STRING(255)

@@ -68,7 +68,7 @@
                     stocks: 10000,
                     remark: '备注' + Math.round(Math.random() * 1000),
                     sn: newRowIndex ? newRowIndex : 0,
-                    commodity_type_id: 1
+                    //commodity_type_id: 1
                 };
             };
             view.currentRow = null;
@@ -201,7 +201,7 @@
                             textField: 'name',
                             data: commodityType,
                             panelMaxHeight: 265,
-                            // panelHeight: commodityType.length * 20 + 15,
+                            panelHeight: commodityType.length * 30 + 15,
                             // onShowPanel: function () {
                             //     $(this).combobox('loadData', commodityType);
                             //     $(this).combobox('panel').panel('resize', {
