@@ -50,7 +50,7 @@ var buttonFunctionMaker = function (page) {
         page.getTableDiv().datagrid('options').columns.forEach(item => {
             item.forEach(column => {
                 if (column.field.includes('action_')) { return; }
-                if (column.field.includes('_at')) { return; }
+                // if (column.field.includes('_at')) { return; }
                 //if (replace && !column.editor) { return; }
                 if (!column.editor) { return; }
                 if (column.field && column.title && !column.hidden) {
