@@ -25,11 +25,11 @@ module.exports = app => {
             allowNull: false,
             defaultValue: 1,
         },
-        is_discount: {
-            type: BOOLEAN,
-            allowNull: false,
-            defaultValue: true,
-        },
+        // is_discount: {
+        //     type: BOOLEAN,
+        //     allowNull: false,
+        //     defaultValue: true,
+        // },
         is_cash: {
             type: BOOLEAN,
             allowNull: false,
@@ -58,7 +58,6 @@ module.exports = app => {
         Consumption.belongsTo(Member);
         Consumption.belongsTo(Employee);
         Consumption.belongsTo(Commodity);
-
         Consumption.belongsTo(Wage);
     };
 

@@ -185,7 +185,7 @@
                             mode: 'remote',
                             url: '/card/findAll',
                             panelWidth: 300,
-                            panelMaxHeight: 265,
+                            //panelMaxHeight: 265,
                             //panelHeight: 200,
                             idField: 'id',
                             textField: 'card_number',

@@ -21,7 +21,7 @@ module.exports = app => {
             unique: true
         },
         price: {
-            type: DECIMAL(16,4),
+            type: DECIMAL(16, 4),
             allowNull: false,
             defaultValue: 0.00,
         },
@@ -47,9 +47,8 @@ module.exports = app => {
 
     Commodity.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { Commodity, CommodityType, CommodityWarehousing, Consumption } = app.model;
+        const { Commodity, CommodityType, Consumption } = app.model;
         Commodity.belongsTo(CommodityType);
-        Commodity.hasMany(CommodityWarehousing);
         Commodity.hasMany(Consumption);
     };
 
