@@ -245,7 +245,7 @@
                     //field: 'UserType.name',user_type_id
                     field: 'card_id',
                     title: '会员卡号',
-                    width: 680,
+                    width: 50,
                     sortable: true,
                     formatter: function (value, row, index) {
                         return row.Card ? row.Card.card_number : '';

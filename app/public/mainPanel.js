@@ -406,7 +406,7 @@ var buttonFunctionMaker = function (page) {
                     });
                     if (ed.type == 'combobox') {
                         row.viewValue = $(ed.target).combobox('getText')
-                    } if (ed.type == 'combogrid') {
+                    } else if (ed.type == 'combogrid') {
                         row.viewValue = $(ed.target).combogrid('getText')
                     } else {
                         row.viewValue = null;
