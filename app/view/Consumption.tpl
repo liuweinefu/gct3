@@ -82,6 +82,7 @@
                     $(this).datagrid('cancelEdit', index);
                     return;
                 },
+
                 multiSort: true,
                 remoteSort: true,
 
@@ -99,11 +100,14 @@
                 }, {
                     field: 'price',
                     title: '消费金额',
-                    width: 20,
+                    width: 50,
                     sortable: true,
                     editor: {
                         type: 'textbox',
                         options: {}
+                    },
+                    formatter: function (value, row, index) {
+                        return '￥' + Number.parseFloat(value);
                     }
                 }, {
                     field: 'quantity',
@@ -116,8 +120,22 @@
                     sortable: true,
                     width: 60,
                     editor: {
-                        type: 'textbox',
-                        options: {}
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                            panelMaxHeight: 265,
+                            panelHeight: 75,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', userType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: userType.length * 20 + 15
+                            //     });
+                            // }
+                        }
                     },
                     formatter: function (value, row, index) {
                         if (Number.parseInt(value) === 1) {
@@ -132,8 +150,22 @@
                     sortable: true,
                     width: 60,
                     editor: {
-                        type: 'textbox',
-                        options: {}
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                            panelMaxHeight: 265,
+                            panelHeight: 75,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', userType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: userType.length * 20 + 15
+                            //     });
+                            // }
+                        }
                     },
                     formatter: function (value, row, index) {
                         if (Number.parseInt(value) === 1) {
@@ -151,22 +183,6 @@
                         type: 'textbox',
                         options: {}
                     }
-                }, {
-                    field: 'updated_at',
-                    title: '最后更新时间',
-                    //width: 100,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        if (!Number.isNaN(Date.parse(value))) {
-                            return new Date(Date.parse(value)).toLocaleString();
-                        } else {
-                            return '';
-                        }
-                    },
-                    editor: {
-                        type: 'datetimebox',
-                        options: {}
-                    },
                 }, {
                     //field: 'UserType.name',user_type_id
                     field: 'commodity_id',
@@ -193,6 +209,65 @@
                             ]],
                             //reversed: true,
                             sortName: 'sn',
+                            //避免出现滑条，造成选择的时候无法选中
+                            pagination: true,
+                            pageSize: 6,
+                            pageList: [6],
+                            //pagePosition: 'top',
+
+                            rownumbers: true,
+                            onLoadSuccess: function (data) {
+                                $(this).datagrid('selectRow', 0);
+
+                                //$(this).focus();
+                                // $(this).datagrid('getPager').select();
+                                // $(this).datagrid('getPanel').focus();
+                            },
+                            onShowPanel: function () {
+                                var value = '';
+                                var cell = view.getTableDiv().datagrid('cell');
+                                if (cell) {
+                                    value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
+                                }
+                                if (value) {
+                                    $(this).combogrid('grid').datagrid('load', {
+                                        name: 'id',
+                                        value: value,
+                                        isEq: true
+                                    })
+                                }
+                                //$(this).combogrid('textbox').select();
+                            },
+
+                        }
+                    }
+                }, {
+                    //field: 'UserType.name',user_type_id
+                    field: 'card_id',
+                    title: '会员卡号',
+                    width: 680,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        return row.Card ? row.Card.card_number : '';
+                    },
+                    editor: {
+                        type: 'combogrid',
+                        options: {
+                            queryParams: { findBy: ['card_number', 'name'] },
+                            mode: 'remote',
+                            url: '/card/findAll',
+                            panelWidth: 300,
+                            //panelMaxHeight: 265,
+                            //panelHeight: 200,
+                            idField: 'id',
+                            textField: 'card_number',
+                            columns: [[
+                                // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
+                                { field: 'card_number', title: '会员卡号', width: 100 },
+                                { field: 'name', title: '会员卡主名', width: 165 },
+                            ]],
+                            //reversed: true,
+                            sortName: 'card_number',
                             //避免出现滑条，造成选择的时候无法选中
                             pagination: true,
                             pageSize: 6,
@@ -401,6 +476,22 @@
 
                         }
                     }
+                }, {
+                    field: 'updated_at',
+                    title: '最后更新时间',
+                    //width: 100,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (!Number.isNaN(Date.parse(value))) {
+                            return new Date(Date.parse(value)).toLocaleString();
+                        } else {
+                            return '';
+                        }
+                    },
+                    editor: {
+                        type: 'datetimebox',
+                        options: {}
+                    },
                 },
 
             ]];

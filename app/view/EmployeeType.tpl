@@ -124,7 +124,8 @@
                     editor: {
                         type: 'textbox',
                         options: {}
-                    }
+                    },
+
                 }, {
                     field: 'wage',
                     title: '工资',
