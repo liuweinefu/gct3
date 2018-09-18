@@ -29,10 +29,19 @@
                     view.getTableDiv().datagrid({
                         url: '/mix/findAll'
                     });
-                    view.getTableDiv().datagrid('load', {
-                        name: name,
-                        value: value
-                    });
+                    if (name == 'Card.card_number') {
+                        view.getTableDiv().datagrid('load', {
+                            isEq: true,
+                            name: name,
+                            value: value
+                        });
+                    } else {
+                        view.getTableDiv().datagrid('load', {
+                            name: name,
+                            value: value
+                        });
+                    }
+
                 },
             };
             // op.searchBoxOption.option = {
@@ -167,30 +176,56 @@
                 dialogDiv.dialog(dialogOp);
             };
             var pay = function () {
+                var memberName = view.currentRow.name;
+                var balance = view.currentRow.Card.balance;
+                var discount = view.currentRow.Card.CardType.discount;
 
                 console.log('pay');
                 if (view.dialogPage.payDiv) {
-                    view.dialogPage.payDiv.dialog('setTitle', `客户: ${view.currentRow.name}   余额：￥${view.currentRow.Card.balance}`);
-                    view.dialogPage.menuDiv.dialog('open', true);
+                    view.dialogPage.payDiv.dialog('setTitle', `客户:${memberName}   余额:￥${balance}  折扣:${discount}`);
+                    view.dialogPage.payDiv.dialog('open', true);
                     return;
                 }
                 var dialogDiv = $('<div></div>');
                 dialogDiv.appendTo(view.getDialogContainerDiv());
-                view.dialogPage.menuDiv = dialogDiv;
+                view.dialogPage.payDiv = dialogDiv;
 
                 //初始化内部菜单内容
-                var menuView = new lwTable(dialogDiv);
+                var payView = new lwTable(dialogDiv);
 
-                var menuViewOp = {};
-                menuViewOp.buttonOption = {};
 
-                menuViewOp.tableOption = {
+                payView.makeNewRow = (newRowIndex) => {
+                    return {
+                        card_number: newRowIndex ? newRowIndex : 9999,
+                        name: '新会员卡 ' + Math.round(Math.random() * 1000),
+                        balance: 0,
+                        phone: '00000000000',
+                        otherphone: '0000',
+                        remark: '备注' + Math.round(Math.random() * 1000),
+                    };
+                };
+
+
+                var payViewOp = {};
+                payViewOp.buttonOption = {
+                    insert: true,
+                    delete: true,
+                    // del: {
+                    //     text: '删除条件(<ins>D</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
+                    //     iconCls: 'icon-search',
+                    //     onClick: function () {
+                    //         console.log(view);
+                    //     }
+                    // },
+                };
+
+                payViewOp.tableOption = {
                     // idField: 'id',
                     // loadMsg: '数据加载中,请稍后',
                     // fit: true,
                     // fitColumns: true,
                     // singleSelect: true,
-                    url: '/menu/findAll',
+                    // url: '/menu/findAll',
                     // method: 'post',
                     // toolbar: '',
                     // striped: true,
@@ -201,25 +236,11 @@
                     // pageList: [50, 200, 500, 5000],
                     // sortName: 'sn',
                     // sortOrder: 'asc',
-                    // onLoadSuccess: menuViewTableOnLoadSuccess,
-                    onLoadSuccess: function (data) {
-                        $(this).datagrid('uncheckAll');
-                        var checkedRowArray = view.currentRow.Menus.map(menu => menu.id);
-                        var checkedIndexArray = checkedRowArray.map(row => $(this).datagrid('getRowIndex', row));
-                        checkedIndexArray.forEach(index => $(this).datagrid('checkRow', index));
-                    },
-                    onSelectCell: function (index, field) {
-                        var checkIndexArray = $(this).datagrid('getChecked').map(row => $(this).datagrid('getRowIndex', row));
-                        if (checkIndexArray.includes(index)) {
-                            $(this).datagrid('uncheckRow', index);
-                        } else {
-                            $(this).datagrid('checkRow', index);
-                        }
-                    },
+                    // onLoadSuccess: payViewTableOnLoadSuccess,
                     remoteSort: false,
                     multiSort: false,
                 };
-                menuViewOp.tableOption.columns = [[
+                payViewOp.tableOption.columns = [[
                     {
                         field: 'ck',
                         checkbox: true
@@ -229,23 +250,39 @@
                         title: '菜单ID',
                         hidden: true,
                     }, {
-                        field: 'sn',
-                        title: '排序号',
+                        field: 'employee_id',
+                        title: '技师',
                         width: 30,
                     }, {
-                        field: 'name',
+                        field: 'commodity_id',
                         title: '菜单名',
                         width: 60,
                     }, {
-                        field: 'router',
-                        title: 'url指向',
+                        field: 'unitPrice',
+                        title: '单价',
+                        width: 100,
+                    }, {
+                        field: 'quantity',
+                        title: '数量',
+                        width: 100,
+                    }, {
+                        field: 'whetherDiscount',
+                        title: '是否折扣',
+                        width: 100,
+                    }, {
+                        field: 'is_cash',
+                        title: '是否现金',
+                        width: 100,
+                    }, {
+                        field: 'price',
+                        title: '是否折扣',
                         width: 100,
                     }
                 ]];
-                // menuView.build(menuViewOp);
+                // payView.build(payViewOp);
                 //对话框设置
                 var dialogOp = {
-                    title: `为   ${view.currentRow.name}   进行菜单授权`,
+                    title: `客户:${memberName}   余额:￥${balance}  折扣:${discount}`,
                     width: 600,
                     top: 120,
                     height: 400,
@@ -255,29 +292,34 @@
                     //href: 'get_content.php',
                     modal: true,
                     onBeforeOpen: function () {
-                        menuView.build(menuViewOp);
+                        payView.build(payViewOp);
                     },
                     onOpen: function () {
-                        menuView.getTableDiv().datagrid('load');
+                        payView.getTableDiv().datagrid('loadData', {
+
+                        });
                     },
                     buttons: [{
                         text: '保存',
                         handler: function () {
-                            var sendObject = {
-                                currentRow: JSON.stringify(view.currentRow),
-                                menus: JSON.stringify(menuView.getTableDiv().datagrid('getChecked'))
-                            };
-                            $.post('userType/setMenus', sendObject)
-                                .done(function (data) {
-                                    dialogDiv.dialog('close');
-                                    //dialogDiv.dialog('destroy');
-                                    $.messager.alert('提示', data.message, 'info', function () {
-                                        view.getTableDiv().datagrid('reload');
-                                    });
-                                }).fail(function (err) {
-                                    //console.log(err);
-                                    $.messager.alert('失败', err.responseText, 'warning', function () { });
-                                });
+
+                            dialogDiv.dialog('close');
+
+                            // var sendObject = {
+                            //     currentRow: JSON.stringify(view.currentRow),
+                            //     menus: JSON.stringify(payView.getTableDiv().datagrid('getChecked'))
+                            // };
+                            // $.post('userType/setMenus', sendObject)
+                            //     .done(function (data) {
+                            //         dialogDiv.dialog('close');
+                            //         //dialogDiv.dialog('destroy');
+                            //         $.messager.alert('提示', data.message, 'info', function () {
+                            //             view.getTableDiv().datagrid('reload');
+                            //         });
+                            //     }).fail(function (err) {
+                            //         //console.log(err);
+                            //         $.messager.alert('失败', err.responseText, 'warning', function () { });
+                            //     });
                         },
                     }, {
                         text: '关闭',

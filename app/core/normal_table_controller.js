@@ -66,12 +66,12 @@ class NormalTableController extends Controller {
                     if (newModelNameString !== modelNameString) {
                         return {
                             model: ctx.model[modelName],
-                            include: [splitModelName(modelNameString)]
+                            include: [splitModelName(newModelNameString)]
                         };
                     } else {
                         return ctx.model[modelName];
                     }
-                }
+                };
 
                 op.includeModel = op.includeModelNameArray.map(modelName => {
                     return splitModelName(modelName);
