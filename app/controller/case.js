@@ -11,7 +11,7 @@ class CaseController extends Controller {
             // selectAttributes: [],
             // excludeAttributes: [],
             // updateAttributes: [],             // noUpdateAttributes: [],
-            // includeModelNameArray:['User','UserType']
+            // includeModelNameArray:['User','UserType'],//用'#'分割嵌套模型
             includeModelNameArray: ['Member'],
             // tplName: 'User',
         }

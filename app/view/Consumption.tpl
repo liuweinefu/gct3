@@ -85,7 +85,6 @@
 
                 multiSort: true,
                 remoteSort: true,
-
             };
 
             op.tableOption.columns = [[

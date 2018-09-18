@@ -1092,7 +1092,15 @@ var lwTable = function (anchorDiv) {
                 }
             }
         }
-        tableDiv.datagrid(tableOption).datagrid('enableCellEditing');
+
+        //根据listOnly属性判断是否开启cellEdit功能。
+        if (tableOption.listOnly) {
+            tableDiv.datagrid(tableOption);
+        } else {
+            tableDiv.datagrid(tableOption).datagrid('enableCellEditing');
+        }
+
+
 
     };
     //buildArray.push(_buildTable);

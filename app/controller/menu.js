@@ -10,8 +10,9 @@ class MenuController extends Controller {
             modelName: 'Menu',
             // selectAttributes: [],
             // excludeAttributes: [],
-            // updateAttributes: [],             // noUpdateAttributes: [],
-            // includeModelNameArray:['User','UserType']
+            // updateAttributes: [],             
+            // noUpdateAttributes: [],
+            // includeModelNameArray:['User','UserType'],//用'#'分割嵌套模型
             // tplName: 'User',
         }
 

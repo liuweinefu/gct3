@@ -56,10 +56,27 @@ class NormalTableController extends Controller {
 
 
             if (Array.isArray(op.includeModelNameArray)) {
-                if (op.includeModelNameArray.every(modelName => ctx.model[modelName] === undefined)) {
-                    throw new Error('includeModelName 无效');
+
+                var splitModelName = function (modelNameString) {
+                    var modelName = modelNameString.split('#', 1)[0];
+                    if (ctx.model[modelName] === undefined) {
+                        throw new Error(`includeModelName:${modelName} 无效`);
+                    }
+                    var newModelNameString = modelNameString.slice(modelNameString.indexOf('#') + 1);
+                    if (newModelNameString !== modelNameString) {
+                        return {
+                            model: ctx.model[modelName],
+                            include: [splitModelName(modelNameString)]
+                        };
+                    } else {
+                        return ctx.model[modelName];
+                    }
                 }
-                op.includeModel = op.includeModelNameArray.map(modelName => ctx.model[modelName])
+
+                op.includeModel = op.includeModelNameArray.map(modelName => {
+                    return splitModelName(modelName);
+                })
+
             }
             if (op.includeModelNameArray) {
                 delete op.includeModelNameArray;

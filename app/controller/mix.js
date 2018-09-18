@@ -12,8 +12,8 @@ class MemberController extends Controller {
             // excludeAttributes: [],
             // updateAttributes: [], 
             // noUpdateAttributes: [],
-            // includeModelNameArray:['User','UserType']
-            includeModelNameArray: ['Card'],
+            // includeModelNameArray:['User','UserType'],//用'#'分割嵌套模型,//用'#'分割嵌套模型
+            includeModelNameArray: ['Card#CardType'],
             tplName: 'Mix.tpl',
         }
 
