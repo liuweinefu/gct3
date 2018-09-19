@@ -196,7 +196,21 @@
                 payView.makeNewRow = () => {
                     var rows = payView.getTableDiv().datagrid('getRows');
                     if (rows.length == 0) {
-                        return {};
+                        return {
+                            // employee_id: 1,
+                            // commodity_id: 1,
+                            // unitPrice: 100,
+                            quantity: 1,
+                            whetherDiscount: '1',
+                            Employee: {
+                                name: '<div style="color:red">请选择技师</div>',
+                            },
+                            Commodity: {
+                                name: '<div style="color:red">请选择商品</div>',
+                            }
+                            // is_cash: 1,
+                            // price: 1,
+                        };
                     } else {
                         return Object.assign({}, rows[rows.length - 1]);
                     }
@@ -257,7 +271,7 @@
                             if (!row.Employee) { row.Employee = {}; }
                             if (!selectedRow) {
                                 row.employee_id = null;
-                                row.Employee.name = '<red>请选择技师</red>';
+                                row.Employee.name = '<div style="color:red">请选择技师</div>';
                             } else {
                                 row.Employee.name = selectedRow.name;
                             }
@@ -265,7 +279,7 @@
                             if (!row.Commodity) { row.Commodity = {}; }
                             if (!selectedRow) {
                                 row.commodity_id = null;
-                                row.Commodity.name = '<red>请选择商品</red>';
+                                row.Commodity.name = '<div style="color:red">请选择商品</div>';
                                 row.unitPrice = 0;
                                 row.price = 0;
                             } else {
@@ -318,28 +332,28 @@
 
                                 rownumbers: true,
                                 onLoadSuccess: function (data) {
-                                    // $(this).datagrid('selectRow', 0);
+                                    $(this).datagrid('selectRow', 0);
 
                                     //$(this).focus();
                                     // $(this).datagrid('getPager').select();
                                     // $(this).datagrid('getPanel').focus();
                                 },
                                 onShowPanel: function () {
-                                    // var value = '';
-                                    // var cell = payView.getTableDiv().datagrid('cell');
-                                    // if (cell) {
-                                    //     value = payView.getTableDiv().datagrid('getRows')[cell.index][cell.field];
-                                    // }
-                                    // if (value) {
-                                    //     $(this).combogrid('grid').datagrid('load', {
-                                    //         name: 'id',
-                                    //         value: value,
-                                    //         isEq: true
-                                    //     })
-                                    // } else {
-                                    //     $(this).combogrid('grid').datagrid('load')
-                                    // }
-                                    //$(this).combogrid('textbox').select();
+                                    var value = '';
+                                    var cell = payView.getTableDiv().datagrid('cell');
+                                    if (cell) {
+                                        value = payView.getTableDiv().datagrid('getRows')[cell.index][cell.field];
+                                    }
+                                    if (value) {
+                                        $(this).combogrid('grid').datagrid('load', {
+                                            name: 'id',
+                                            value: value,
+                                            isEq: true
+                                        })
+                                    } else {
+                                        $(this).combogrid('grid').datagrid('load')
+                                    }
+                                    $(this).combogrid('textbox').select();
                                 },
 
                             }
@@ -516,6 +530,12 @@
                                 // unitPrice: 100,
                                 quantity: 1,
                                 whetherDiscount: '1',
+                                Employee: {
+                                    name: '<div style="color:red">请选择技师</div>',
+                                },
+                                Commodity: {
+                                    name: '<div style="color:red">请选择商品</div>',
+                                }
                                 // is_cash: 1,
                                 // price: 1,
                             }],
