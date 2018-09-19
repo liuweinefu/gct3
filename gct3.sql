@@ -11,7 +11,7 @@
  Target Server Version : 100108
  File Encoding         : 65001
 
- Date: 17/09/2018 14:51:32
+ Date: 19/09/2018 17:31:44
 */
 
 SET NAMES utf8mb4;
@@ -164,14 +164,31 @@ CREATE TABLE `commodity`  (
   UNIQUE INDEX `name`(`name`) USING BTREE,
   INDEX `commodity_type_id`(`commodity_type_id`) USING BTREE,
   CONSTRAINT `commodity_ibfk_1` FOREIGN KEY (`commodity_type_id`) REFERENCES `commodity_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of commodity
 -- ----------------------------
-INSERT INTO `commodity` VALUES (1, '足底', 230.0000, 10000, '', 1, '2018-09-08 16:02:53', '2018-09-08 16:06:14', 1);
-INSERT INTO `commodity` VALUES (2, '针灸', 80.0000, 10000, '', 2, '2018-09-08 16:03:13', '2018-09-08 16:06:14', 2);
-INSERT INTO `commodity` VALUES (3, '红酒', 100.0000, 10000, '', 3, '2018-09-08 16:03:29', '2018-09-08 16:06:14', 3);
+INSERT INTO `commodity` VALUES (1, '足底', 230.0000, 10000, '', 18, '2018-09-08 16:02:53', '2018-09-19 09:18:57', 1);
+INSERT INTO `commodity` VALUES (2, '针灸', 80.0000, 10000, '', 19, '2018-09-08 16:03:13', '2018-09-19 09:18:57', 2);
+INSERT INTO `commodity` VALUES (3, '红酒', 100.0000, 10000, '', 20, '2018-09-08 16:03:29', '2018-09-19 09:18:57', 3);
+INSERT INTO `commodity` VALUES (4, '新商品 120', 10000.0000, 10000, '备注807', 17, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (5, '新商品 214', 10000.0000, 10000, '备注305', 16, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (6, '新商品 102', 10000.0000, 10000, '备注861', 15, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (7, '新商品 896', 10000.0000, 10000, '备注152', 14, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (8, '新商品 58', 10000.0000, 10000, '备注469', 13, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (9, '新商品 561', 10000.0000, 10000, '备注304', 12, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (10, '新商品 361', 10000.0000, 10000, '备注755', 11, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (11, '新商品 816', 10000.0000, 10000, '备注865', 10, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (12, '新商品 492', 10000.0000, 10000, '备注599', 9, '2018-09-19 09:18:47', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (13, '新商品 978', 10000.0000, 10000, '备注905', 2, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (14, '新商品 388', 10000.0000, 10000, '备注330', 3, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (15, '新商品 469', 10000.0000, 10000, '备注584', 4, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (16, '新商品 398', 10000.0000, 10000, '备注112', 5, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (17, '新商品 797', 10000.0000, 10000, '备注782', 6, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (18, '新商品 550', 10000.0000, 10000, '备注563', 7, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (19, '新商品 343', 10000.0000, 10000, '备注348', 8, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
+INSERT INTO `commodity` VALUES (20, '新商品 255', 10000.0000, 10000, '备注194', 1, '2018-09-19 09:18:57', '2018-09-19 09:18:57', NULL);
 
 -- ----------------------------
 -- Table structure for commodity_type
