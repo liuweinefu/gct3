@@ -180,7 +180,7 @@
                 var balance = view.currentRow.Card.balance;
                 var discount = view.currentRow.Card.CardType.discount;
 
-                console.log('pay');
+
                 if (view.dialogPage.payDiv) {
                     view.dialogPage.payDiv.dialog('setTitle', `客户:${memberName}   余额:￥${balance}  折扣:${discount}`);
                     view.dialogPage.payDiv.dialog('open', true);
@@ -193,23 +193,24 @@
                 //初始化内部菜单内容
                 var payView = new lwTable(dialogDiv);
 
-
-                payView.makeNewRow = (newRowIndex) => {
-                    return {
-                        card_number: newRowIndex ? newRowIndex : 9999,
-                        name: '新会员卡 ' + Math.round(Math.random() * 1000),
-                        balance: 0,
-                        phone: '00000000000',
-                        otherphone: '0000',
-                        remark: '备注' + Math.round(Math.random() * 1000),
-                    };
+                payView.makeNewRow = () => {
+                    var rows = payView.getTableDiv().datagrid('getRows');
+                    if (rows.length == 0) {
+                        return {};
+                    } else {
+                        return Object.assign({}, rows[rows.length - 1]);
+                    }
                 };
 
 
                 var payViewOp = {};
                 payViewOp.buttonOption = {
-                    insert: true,
-                    delete: true,
+                    footAdd: {
+                        text: '添加商品(<ins>A</ins>)',
+                    },
+                    delete: {
+                        text: '删除商品(<ins>D</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
+                    },
                     // del: {
                     //     text: '删除条件(<ins>D</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
                     //     iconCls: 'icon-search',
@@ -229,8 +230,8 @@
                     // method: 'post',
                     // toolbar: '',
                     // striped: true,
+                    rownumbers: true,
                     pagination: false,
-                    // rownumbers: true,
                     // pageNumber: 1,
                     // pageSize: '50',
                     // pageList: [50, 200, 500, 5000],
@@ -239,51 +240,263 @@
                     // onLoadSuccess: payViewTableOnLoadSuccess,
                     remoteSort: false,
                     multiSort: false,
+                    onEndEdit: function (index, row, changes) {
+                        var key = Object.keys(changes)[0];
+                        if (key == 'quantity' || key == 'whetherDiscount') {
+                            row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
+                        };
+                        if (key === undefined || !key.includes('_id')) {
+                            return;
+                        };
+                        var ed = $(this).datagrid('getEditor', {
+                            index: index,
+                            field: key
+                        });
+                        var selectedRow = $(ed.target).combogrid('grid').datagrid('getSelected');
+                        if (key === 'employee_id') {
+                            if (!row.Employee) { row.Employee = {}; }
+                            if (!selectedRow) {
+                                row.employee_id = null;
+                                row.Employee.name = '<red>请选择技师</red>';
+                            } else {
+                                row.Employee.name = selectedRow.name;
+                            }
+                        } else if (key === 'commodity_id') {
+                            if (!row.Commodity) { row.Commodity = {}; }
+                            if (!selectedRow) {
+                                row.commodity_id = null;
+                                row.Commodity.name = '<red>请选择商品</red>';
+                                row.unitPrice = 0;
+                                row.price = 0;
+                            } else {
+                                row.unitPrice = selectedRow.price;
+                                row.Commodity.name = selectedRow.name;
+                                row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
+                            }
+                        }
+                    },
                 };
                 payViewOp.tableOption.columns = [[
                     {
                         field: 'ck',
                         checkbox: true
                     },
+                    //  {
+                    //     field: 'id',
+                    //     hidden: true,
+                    // },
                     {
-                        field: 'id',
-                        title: '菜单ID',
-                        hidden: true,
-                    }, {
                         field: 'employee_id',
                         title: '技师',
-                        width: 30,
+                        width: 100,
+                        formatter: function (value, row, index) {
+                            return row.Employee ? row.Employee.name : '';
+                        },
+                        editor: {
+                            type: 'combogrid',
+                            options: {
+                                // queryParams: { findBy: ['card_number', 'name'] },
+                                mode: 'remote',
+                                url: '/employee/findAll',
+                                panelWidth: 300,
+                                //panelMaxHeight: 265,
+                                //panelHeight: 200,
+                                idField: 'id',
+                                textField: 'name',
+                                columns: [[
+                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
+                                    // { field: 'card_number', title: '会员卡号', width: 100 },
+                                    { field: 'name', title: '雇员名', width: 165 },
+                                ]],
+                                //reversed: true,
+                                sortName: 'sn',
+                                //避免出现滑条，造成选择的时候无法选中
+                                pagination: true,
+                                pageSize: 6,
+                                pageList: [6],
+                                //pagePosition: 'top',
+
+                                rownumbers: true,
+                                onLoadSuccess: function (data) {
+                                    // $(this).datagrid('selectRow', 0);
+
+                                    //$(this).focus();
+                                    // $(this).datagrid('getPager').select();
+                                    // $(this).datagrid('getPanel').focus();
+                                },
+                                onShowPanel: function () {
+                                    // var value = '';
+                                    // var cell = payView.getTableDiv().datagrid('cell');
+                                    // if (cell) {
+                                    //     value = payView.getTableDiv().datagrid('getRows')[cell.index][cell.field];
+                                    // }
+                                    // if (value) {
+                                    //     $(this).combogrid('grid').datagrid('load', {
+                                    //         name: 'id',
+                                    //         value: value,
+                                    //         isEq: true
+                                    //     })
+                                    // } else {
+                                    //     $(this).combogrid('grid').datagrid('load')
+                                    // }
+                                    //$(this).combogrid('textbox').select();
+                                },
+
+                            }
+                        }
                     }, {
                         field: 'commodity_id',
-                        title: '菜单名',
-                        width: 60,
+                        title: '商品名',
+                        width: 100,
+                        formatter: function (value, row, index) {
+                            return row.Commodity ? row.Commodity.name : '';
+                        },
+                        editor: {
+                            type: 'combogrid',
+                            options: {
+                                //queryParams: { findBy: ['card_number', 'name'] },
+                                mode: 'remote',
+                                url: '/commodity/findAll',
+                                panelWidth: 300,
+                                //panelMaxHeight: 265,
+                                //panelHeight: 200,
+                                idField: 'id',
+                                textField: 'name',
+                                columns: [[
+                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                                
+                                    { field: 'name', title: '商品名', width: 165 },
+                                    { field: 'price', title: '售价', width: 65 },
+                                ]],
+                                //reversed: true,
+                                sortName: 'sn',
+                                //避免出现滑条，造成选择的时候无法选中
+                                pagination: true,
+                                pageSize: 6,
+                                pageList: [6],
+                                //pagePosition: 'top',
+
+                                rownumbers: true,
+                                onLoadSuccess: function (data) {
+                                    $(this).datagrid('selectRow', 0);
+
+                                    //$(this).focus();
+                                    // $(this).datagrid('getPager').select();
+                                    // $(this).datagrid('getPanel').focus();
+                                },
+                                onShowPanel: function () {
+                                    var value = '';
+                                    var cell = view.getTableDiv().datagrid('cell');
+                                    if (cell) {
+                                        value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
+                                    }
+                                    if (value) {
+                                        $(this).combogrid('grid').datagrid('load', {
+                                            name: 'id',
+                                            value: value,
+                                            isEq: true
+                                        })
+                                    }
+                                    //$(this).combogrid('textbox').select();
+                                },
+
+                            }
+                        }
+
                     }, {
                         field: 'unitPrice',
                         title: '单价',
-                        width: 100,
+                        width: 80,
+                        formatter: function (value, row, index) {
+                            return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                        }
                     }, {
                         field: 'quantity',
                         title: '数量',
                         width: 100,
+                        editor: {
+                            type: 'numberbox',
+                            options: {
+                                //prefix: '￥',
+                                max: 500,
+                                min: 1,
+                                precision: 0
+                            }
+                        },
                     }, {
                         field: 'whetherDiscount',
                         title: '是否折扣',
-                        width: 100,
+                        width: 60,
+                        editor: {
+                            type: 'combobox',
+                            options: {
+                                //panelWidth: 160,                    
+                                editable: false,
+                                valueField: 'id',
+                                textField: 'name',
+                                data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                                panelMaxHeight: 265,
+                                panelHeight: 75,
+                            }
+                        },
+                        formatter: function (value, row, index) {
+                            if (Number.parseInt(value) === 1) {
+                                return '是'
+                            } else {
+                                return '否';
+                            }
+                        },
                     }, {
                         field: 'is_cash',
                         title: '是否现金',
-                        width: 100,
+                        width: 60,
+                        editor: {
+                            type: 'combobox',
+                            options: {
+                                //panelWidth: 160,                    
+                                editable: false,
+                                valueField: 'id',
+                                textField: 'name',
+                                data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                                panelMaxHeight: 265,
+                                panelHeight: 75,
+                                // onShowPanel: function () {
+                                //     $(this).combobox('loadData', userType);
+                                //     $(this).combobox('panel').panel('resize', {
+                                //         height: userType.length * 20 + 15
+                                //     });
+                                // }
+                            }
+                        },
+                        formatter: function (value, row, index) {
+                            if (Number.parseInt(value) === 1) {
+                                return '是'
+                            } else {
+                                return '否';
+                            }
+                        },
                     }, {
                         field: 'price',
-                        title: '是否折扣',
+                        title: '实收价格',
                         width: 100,
-                    }
+                        formatter: function (value, row, index) {
+                            return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                        }
+                    }, {
+                        field: 'remark',
+                        title: '备注',
+                        width: 100,
+                        sortable: true,
+                        editor: {
+                            type: 'textbox',
+                            options: {}
+                        }
+                    },
                 ]];
                 // payView.build(payViewOp);
                 //对话框设置
                 var dialogOp = {
-                    title: `客户:${memberName}   余额:￥${balance}  折扣:${discount}`,
-                    width: 600,
+                    title: `客户:${memberName}    余额:￥${balance}    折扣:${discount}`,
+                    width: 800,
                     top: 120,
                     height: 400,
                     closed: false,
@@ -295,8 +508,18 @@
                         payView.build(payViewOp);
                     },
                     onOpen: function () {
+                        // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
                         payView.getTableDiv().datagrid('loadData', {
-
+                            rows: [{
+                                // employee_id: 1,
+                                // commodity_id: 1,
+                                // unitPrice: 100,
+                                quantity: 1,
+                                whetherDiscount: '1',
+                                // is_cash: 1,
+                                // price: 1,
+                            }],
+                            total: 1
                         });
                     },
                     buttons: [{
@@ -332,10 +555,10 @@
                 dialogDiv.dialog(dialogOp);
             }
             var recharge = function () {
-                console.log('recharge');
+                //console.log('recharge');
             }
             var printCase = function () {
-                console.log('print');
+                //console.log('print');
             }
             op.tableOption = {
                 //url: '',

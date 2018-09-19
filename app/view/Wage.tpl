@@ -85,90 +85,9 @@
                 //     // }
                 // },
 
-                onClickCell: function (index, field, value) {
-                    $(this).datagrid('cancelEdit', index);
-                    return;
-
-
-                    if (field === 'updated_at') {
-                        $(this).datagrid('cancelEdit', index);
-                        return;
-                    }
-
-                    if (field !== 'action_pass') { return; }
-
-                    view.currentRow = view.getTableDiv().datagrid('getRows')[index];
-                    if (!view.currentRow.id) {
-                        $.messager.alert('提示', '请先保存再设置密码', 'info');
-                        return;
-                    }
-                    if (view.dialogPage.passDiv) {
-                        view.dialogPage.passDiv.dialog('setTitle', `修改   ${view.currentRow.name}   的密码`);
-                        view.dialogPage.passDiv.dialog('open', true);
-                        return;
-                    }
-                    var dialogDiv = $('<div></div>');
-                    var passwordboxDiv = $('<div></div>');
-                    passwordboxDiv.appendTo(dialogDiv);
-                    dialogDiv.appendTo(view.getDialogContainerDiv());
-                    view.dialogPage.passDiv = dialogDiv;
-
-                    var dialogOp = {
-                        title: `修改   ${view.currentRow.name}   的密码`,
-                        width: 400,
-                        top: 120,
-                        //height: 120,
-                        closed: false,
-                        cache: false,
-                        //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
-                        //href: 'get_content.php',
-                        modal: true,
-                        onBeforeOpen: function () {
-                            passwordboxDiv.passwordbox({
-                                width: '100%',
-                                height: 45,
-                                prompt: '请输入密码',
-                                iconWidth: 28,
-                                showEye: true
-                            });
-                        },
-                        onOpen: function () {
-                            passwordboxDiv.textbox('clear');
-                            //设置焦点                            
-                            passwordboxDiv.textbox('textbox').focus();
-                        },
-                        buttons: [{
-                            text: '保存',
-                            handler: function () {
-                                var value = passwordboxDiv.textbox('getValue');
-                                $.post('wage/resetPass', {
-                                    id: view.currentRow.id,
-                                    pass: value
-                                }).done(function (data) {
-                                    dialogDiv.dialog('close');
-                                    //dialogDiv.dialog('destroy');
-                                    $.messager.alert('提示', data.message, 'info', function () {
-                                    });
-                                }).fail(function (err) {
-                                    //console.log(err);
-                                    $.messager.alert('失败', err.responseText, 'warning', function () {
-                                        //重置焦点
-                                        passwordboxDiv.textbox('textbox').focus();
-                                    });
-                                });
-                            },
-                        }, {
-                            text: '关闭',
-                            handler: function () {
-                                //dialogDiv.dialog('destroy');
-                                dialogDiv.dialog('close');
-                            }
-                        }]
-                    };
-                    dialogDiv.dialog(dialogOp);
-
-                },
-
+                singleSelect: true,
+                //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
+                listOnly: true,
                 multiSort: true,
                 remoteSort: true,
 

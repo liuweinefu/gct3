@@ -74,14 +74,17 @@
             // };
             // view.currentRow = null;
             op.tableOption = {
-                onClickCell: function (index, field, value) {
-                    // if (field === 'updated_at') {
-                    //     $(this).datagrid('cancelEdit', index);
-                    //     return;
-                    // }
-                    $(this).datagrid('cancelEdit', index);
-                    return;
-                },
+                // onClickCell: function (index, field, value) {
+                //     // if (field === 'updated_at') {
+                //     //     $(this).datagrid('cancelEdit', index);
+                //     //     return;
+                //     // }
+                //     $(this).datagrid('cancelEdit', index);
+                //     return;
+                // },
+                singleSelect: true,
+                //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
+                listOnly: true,
 
                 multiSort: true,
                 remoteSort: true,
@@ -106,7 +109,7 @@
                         options: {}
                     },
                     formatter: function (value, row, index) {
-                        return '￥' + Number.parseFloat(value);
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
                     field: 'quantity',
