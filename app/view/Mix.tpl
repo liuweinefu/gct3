@@ -202,6 +202,7 @@
                             // unitPrice: 100,
                             quantity: 1,
                             whetherDiscount: '1',
+                            is_cash: '0',
                             Employee: {
                                 name: '<div style="color:red">请选择技师</div>',
                             },
@@ -212,7 +213,7 @@
                             // price: 1,
                         };
                     } else {
-                        return Object.assign({}, rows[rows.length - 1]);
+                        return Object.assign(Object.assign({}, rows[rows.length - 1]), { commodity_id: null, Commodity: null });
                     }
                 };
 
@@ -254,6 +255,7 @@
                     // onLoadSuccess: payViewTableOnLoadSuccess,
                     remoteSort: false,
                     multiSort: false,
+                    showFooter: true,
                     onEndEdit: function (index, row, changes) {
                         var key = Object.keys(changes)[0];
                         if (key == 'quantity' || key == 'whetherDiscount') {
@@ -288,8 +290,22 @@
                                 row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
                             }
                         }
+                        var gridData = $(this).datagrid('getData');
+                        gridData.footer[0].price = Number.parseFloat(
+                            gridData.rows
+                                .map((row) => row.price)
+                                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                                    return Number.parseFloat(accumulator) + Number.parseFloat(currentValue);
+                                }))
+                            .toFixed(2);
+                        // obj.footer[0] = { price: 1000 };
+                        $(this).datagrid('loadData', gridData);
                     },
                 };
+
+                var combogridOnLoadSuccess = combogridEvents(payView).onLoadSuccess;
+                var combogridOnShowPanel = combogridEvents(payView).onShowPanel;
+                // var combogridEventsObj =  combogridEvents(payView);
                 payViewOp.tableOption.columns = [[
                     {
                         field: 'ck',
@@ -300,65 +316,6 @@
                     //     hidden: true,
                     // },
                     {
-                        field: 'employee_id',
-                        title: '技师',
-                        width: 100,
-                        formatter: function (value, row, index) {
-                            return row.Employee ? row.Employee.name : '';
-                        },
-                        editor: {
-                            type: 'combogrid',
-                            options: {
-                                // queryParams: { findBy: ['card_number', 'name'] },
-                                mode: 'remote',
-                                url: '/employee/findAll',
-                                panelWidth: 300,
-                                //panelMaxHeight: 265,
-                                //panelHeight: 200,
-                                idField: 'id',
-                                textField: 'name',
-                                columns: [[
-                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
-                                    // { field: 'card_number', title: '会员卡号', width: 100 },
-                                    { field: 'name', title: '雇员名', width: 165 },
-                                ]],
-                                //reversed: true,
-                                sortName: 'sn',
-                                //避免出现滑条，造成选择的时候无法选中
-                                pagination: true,
-                                pageSize: 6,
-                                pageList: [6],
-                                //pagePosition: 'top',
-
-                                rownumbers: true,
-                                onLoadSuccess: function (data) {
-                                    $(this).datagrid('selectRow', 0);
-
-                                    //$(this).focus();
-                                    // $(this).datagrid('getPager').select();
-                                    // $(this).datagrid('getPanel').focus();
-                                },
-                                onShowPanel: function () {
-                                    var value = '';
-                                    var cell = payView.getTableDiv().datagrid('cell');
-                                    if (cell) {
-                                        value = payView.getTableDiv().datagrid('getRows')[cell.index][cell.field];
-                                    }
-                                    if (value) {
-                                        $(this).combogrid('grid').datagrid('load', {
-                                            name: 'id',
-                                            value: value,
-                                            isEq: true
-                                        })
-                                    } else {
-                                        $(this).combogrid('grid').datagrid('load')
-                                    }
-                                    $(this).combogrid('textbox').select();
-                                },
-
-                            }
-                        }
-                    }, {
                         field: 'commodity_id',
                         title: '商品名',
                         width: 100,
@@ -390,29 +347,8 @@
                                 //pagePosition: 'top',
 
                                 rownumbers: true,
-                                onLoadSuccess: function (data) {
-                                    $(this).datagrid('selectRow', 0);
-
-                                    //$(this).focus();
-                                    // $(this).datagrid('getPager').select();
-                                    // $(this).datagrid('getPanel').focus();
-                                },
-                                onShowPanel: function () {
-                                    var value = '';
-                                    var cell = view.getTableDiv().datagrid('cell');
-                                    if (cell) {
-                                        value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
-                                    }
-                                    if (value) {
-                                        $(this).combogrid('grid').datagrid('load', {
-                                            name: 'id',
-                                            value: value,
-                                            isEq: true
-                                        })
-                                    }
-                                    //$(this).combogrid('textbox').select();
-                                },
-
+                                onLoadSuccess: combogridOnLoadSuccess,
+                                onShowPanel: combogridOnShowPanel,
                             }
                         }
 
@@ -504,6 +440,42 @@
                             type: 'textbox',
                             options: {}
                         }
+                    }, {
+                        field: 'employee_id',
+                        title: '技师',
+                        width: 100,
+                        formatter: function (value, row, index) {
+                            return row.Employee ? row.Employee.name : '';
+                        },
+                        editor: {
+                            type: 'combogrid',
+                            options: {
+                                // queryParams: { findBy: ['card_number', 'name'] },
+                                mode: 'remote',
+                                url: '/employee/findAll',
+                                panelWidth: 300,
+                                //panelMaxHeight: 265,
+                                //panelHeight: 200,
+                                idField: 'id',
+                                textField: 'name',
+                                columns: [[
+                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
+                                    // { field: 'card_number', title: '会员卡号', width: 100 },
+                                    { field: 'name', title: '雇员名', width: 165 },
+                                ]],
+                                //reversed: true,
+                                sortName: 'sn',
+                                //避免出现滑条，造成选择的时候无法选中
+                                pagination: true,
+                                pageSize: 6,
+                                pageList: [6],
+                                //pagePosition: 'top',
+
+                                rownumbers: true,
+                                onLoadSuccess: combogridOnLoadSuccess,
+                                onShowPanel: combogridOnShowPanel
+                            }
+                        }
                     },
                 ]];
                 // payView.build(payViewOp);
@@ -524,21 +496,8 @@
                     onOpen: function () {
                         // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
                         payView.getTableDiv().datagrid('loadData', {
-                            rows: [{
-                                // employee_id: 1,
-                                // commodity_id: 1,
-                                // unitPrice: 100,
-                                quantity: 1,
-                                whetherDiscount: '1',
-                                Employee: {
-                                    name: '<div style="color:red">请选择技师</div>',
-                                },
-                                Commodity: {
-                                    name: '<div style="color:red">请选择商品</div>',
-                                }
-                                // is_cash: 1,
-                                // price: 1,
-                            }],
+                            footer: [{ price: 0 }],
+                            rows: [payView.makeNewRow()],
                             total: 1
                         });
                     },
@@ -609,6 +568,8 @@
 
             };
 
+            var combogridOnLoadSuccess = combogridEvents(view).onLoadSuccess;
+            var combogridOnShowPanel = combogridEvents(view).onShowPanel;
             op.tableOption.columns = [[
                 // {
                 //     field: 'ck',
@@ -685,29 +646,8 @@
                             //pagePosition: 'top',
 
                             rownumbers: true,
-                            onLoadSuccess: function (data) {
-                                $(this).datagrid('selectRow', 0);
-
-                                //$(this).focus();
-                                // $(this).datagrid('getPager').select();
-                                // $(this).datagrid('getPanel').focus();
-                            },
-                            onShowPanel: function () {
-                                var value = '';
-                                var cell = view.getTableDiv().datagrid('cell');
-                                if (cell) {
-                                    value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
-                                }
-                                if (value) {
-                                    $(this).combogrid('grid').datagrid('load', {
-                                        name: 'id',
-                                        value: value,
-                                        isEq: true
-                                    })
-                                }
-                                //$(this).combogrid('textbox').select();
-                            },
-
+                            onLoadSuccess: combogridOnLoadSuccess,
+                            onShowPanel: combogridOnShowPanel,
                         }
                     }
                 }, {

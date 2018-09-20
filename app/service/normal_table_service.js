@@ -309,12 +309,12 @@ class NormalTableService extends Service {
             };
         }
         //combo组件发回的查询如果为空,不进行查询动作
-        if (B.q === '') {
-            return {
-                count: 0,
-                rows: [],
-            };
-        }
+        // if (B.q === '') {
+        //     return {
+        //         count: 0,
+        //         rows: [],
+        //     };
+        // }
 
         if (B.q) {
             C.where = this._comboWhere(B.q);

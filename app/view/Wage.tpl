@@ -92,7 +92,8 @@
                 remoteSort: true,
 
             };
-
+            var combogridOnLoadSuccess = combogridEvents(view).onLoadSuccess;
+            var combogridOnShowPanel = combogridEvents(view).onShowPanel;
             op.tableOption.columns = [[
                 // {
                 //     field: 'ck',
@@ -153,29 +154,8 @@
                             //pagePosition: 'top',
 
                             rownumbers: true,
-                            onLoadSuccess: function (data) {
-                                $(this).datagrid('selectRow', 0);
-
-                                //$(this).focus();
-                                // $(this).datagrid('getPager').select();
-                                // $(this).datagrid('getPanel').focus();
-                            },
-                            onShowPanel: function () {
-                                var value = '';
-                                var cell = view.getTableDiv().datagrid('cell');
-                                if (cell) {
-                                    value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
-                                }
-                                if (value) {
-                                    $(this).combogrid('grid').datagrid('load', {
-                                        name: 'name',
-                                        value: value,
-                                        isEq: true
-                                    })
-                                }
-                                //$(this).combogrid('textbox').select();
-                            },
-
+                            onLoadSuccess: combogridOnLoadSuccess,
+                            onShowPanel: combogridOnShowPanel,
                         }
                     }
                 }, {
@@ -213,29 +193,8 @@
                             //pagePosition: 'top',
 
                             rownumbers: true,
-                            onLoadSuccess: function (data) {
-                                $(this).datagrid('selectRow', 0);
-
-                                //$(this).focus();
-                                // $(this).datagrid('getPager').select();
-                                // $(this).datagrid('getPanel').focus();
-                            },
-                            onShowPanel: function () {
-                                var value = '';
-                                var cell = view.getTableDiv().datagrid('cell');
-                                if (cell) {
-                                    value = view.getTableDiv().datagrid('getRows')[cell.index][cell.field];
-                                }
-                                if (value) {
-                                    $(this).combogrid('grid').datagrid('load', {
-                                        name: 'name',
-                                        value: value,
-                                        isEq: true
-                                    })
-                                }
-                                //$(this).combogrid('textbox').select();
-                            },
-
+                            onLoadSuccess: combogridOnLoadSuccess,
+                            onShowPanel: combogridOnShowPanel,
                         }
                     }
                 }, {

@@ -1,3 +1,30 @@
+var combogridEvents = function (page) {
+    return {
+        onLoadSuccess: function () {
+            $(this).datagrid('selectRow', 0);
+        },
+        onShowPanel: function () {
+            var value = '';
+            var cell = page.getTableDiv().datagrid('cell');
+            if (cell) {
+                value = page.getTableDiv().datagrid('getRows')[cell.index][cell.field];
+            }
+            if (value) {
+                $(this).combogrid('grid').datagrid('load', {
+                    name: 'id',
+                    value: value,
+                    isEq: true
+                })
+            }
+            // else {
+            //     $(this).combogrid('grid').datagrid('load')
+            // }
+            //$(this).combogrid('textbox').select();
+        },
+
+    }
+};
+
 var tableEvents = function () {
     return {
         onLoadError: function (XMLHttpRequest, textStatus, errorThrown) {
