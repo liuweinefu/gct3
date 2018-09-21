@@ -177,12 +177,12 @@
             };
             var pay = function () {
                 var memberName = view.currentRow.name;
-                var balance = view.currentRow.Card.balance;
-                var discount = view.currentRow.Card.CardType.discount;
-
+                var balance = Number.parseFloat(view.currentRow.Card.balance).toFixed(2);
+                var discount = Number.parseFloat(view.currentRow.Card.CardType.discount * 100).toFixed(2) + '%';
+                var dialogTitle = `客户:<span style="color:LightCoral">${memberName}</span>&nbsp;&nbsp;&nbsp;&nbsp;余额:<span style="color:LightCoral">${balance}</span>&nbsp;&nbsp;&nbsp;&nbsp;折扣:<span style="color:LightCoral">${discount}</span>`;
 
                 if (view.dialogPage.payDiv) {
-                    view.dialogPage.payDiv.dialog('setTitle', `客户:${memberName}   余额:￥${balance}  折扣:${discount}`);
+                    view.dialogPage.payDiv.dialog('setTitle', dialogTitle);
                     view.dialogPage.payDiv.dialog('open', true);
                     return;
                 }
@@ -224,8 +224,8 @@
                     }
                 };
 
-
                 var payViewOp = {};
+
                 payViewOp.buttonOption = {
                     footAdd: {
                         text: '添加商品(<ins>A</ins>)',
@@ -308,7 +308,7 @@
 
                 var combogridOnLoadSuccess = combogridEvents(payView).onLoadSuccess;
                 var combogridOnShowPanel = combogridEvents(payView).onShowPanel;
-                // var combogridEventsObj =  combogridEvents(payView);
+
                 payViewOp.tableOption.columns = [[
                     {
                         field: 'ck',
@@ -489,10 +489,10 @@
                         }
                     },
                 ]];
-                // payView.build(payViewOp);
+
                 //对话框设置
                 var dialogOp = {
-                    title: `客户:${memberName}    余额:￥${balance}    折扣:${discount}`,
+                    title: dialogTitle,
                     width: 800,
                     top: 120,
                     height: 400,
@@ -545,7 +545,79 @@
                 dialogDiv.dialog(dialogOp);
             }
             var recharge = function () {
-                //console.log('recharge');
+                // view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                // if (!view.currentRow.id) {
+                //     $.messager.alert('提示', '请先保存再设置密码', 'info');
+                //     return;
+                // }
+                var dialogTitle = `为会员：  ${view.currentRow.name}  充值`;
+                if (view.dialogPage.rechargeDiv) {
+                    view.dialogPage.rechargeDiv.dialog('setTitle', dialogTitle);
+                    view.dialogPage.rechargeDiv.dialog('open', true);
+                    return;
+                }
+                var dialogDiv = $('<div></div>');
+                var numberboxDiv = $('<div></div>');
+                numberboxDiv.appendTo(dialogDiv);
+                dialogDiv.appendTo(view.getDialogContainerDiv());
+                view.dialogPage.rechargeDiv = dialogDiv;
+
+                var dialogOp = {
+                    title: dialogTitle,
+                    width: 400,
+                    top: 120,
+                    //height: 120,
+                    closed: false,
+                    cache: false,
+                    //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
+                    //href: 'get_content.php',
+                    modal: true,
+                    onBeforeOpen: function () {
+                        numberboxDiv.numberbox({
+                            width: '100%',
+                            height: 45,
+                            prompt: `请输入充值金额（${dialogTitle}）`,
+                            iconWidth: 28,
+                            min: 0,
+                            max: 100000,
+                            precision: 2,
+                        });
+                    },
+                    onOpen: function () {
+                        numberboxDiv.textbox('clear');
+                        //设置焦点                            
+                        numberboxDiv.textbox('textbox').focus();
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: function () {
+                            // var value = passwordboxDiv.textbox('getValue');
+                            // $.post('user/resetPass', {
+                            //     id: view.currentRow.id,
+                            //     pass: value
+                            // }).done(function (data) {
+                            //     dialogDiv.dialog('close');
+                            //     //dialogDiv.dialog('destroy');
+                            //     $.messager.alert('提示', data.message, 'info', function () {
+                            //     });
+                            // }).fail(function (err) {
+                            //     //console.log(err);
+                            //     $.messager.alert('失败', err.responseText, 'warning', function () {
+                            //         //重置焦点
+                            //         passwordboxDiv.textbox('textbox').focus();
+                            //     });
+                            // });
+                            dialogDiv.dialog('close');
+                        },
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            //dialogDiv.dialog('destroy');
+                            dialogDiv.dialog('close');
+                        }
+                    }]
+                };
+                dialogDiv.dialog(dialogOp);
             }
             var printCase = function () {
                 //console.log('print');
