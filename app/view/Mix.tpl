@@ -213,7 +213,14 @@
                             // price: 1,
                         };
                     } else {
-                        return Object.assign(Object.assign({}, rows[rows.length - 1]), { commodity_id: null, Commodity: null });
+                        var lastRow = rows[rows.length - 1];
+                        return {
+                            employee_id: lastRow.employee_id,
+                            Employee: lastRow.Employee,
+                            quantity: 1,
+                            whetherDiscount: '1',
+                            is_cash: '0',
+                        }
                     }
                 };
 
@@ -258,44 +265,40 @@
                     showFooter: true,
                     onEndEdit: function (index, row, changes) {
                         var key = Object.keys(changes)[0];
-                        if (key == 'quantity' || key == 'whetherDiscount') {
-                            row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
-                        };
-                        if (key === undefined || !key.includes('_id')) {
-                            return;
-                        };
-                        var ed = $(this).datagrid('getEditor', {
-                            index: index,
-                            field: key
-                        });
-                        var selectedRow = $(ed.target).combogrid('grid').datagrid('getSelected');
-                        if (key === 'employee_id') {
-                            if (!row.Employee) { row.Employee = {}; }
-                            if (!selectedRow) {
-                                row.employee_id = null;
-                                row.Employee.name = '<div style="color:red">请选择技师</div>';
-                            } else {
-                                row.Employee.name = selectedRow.name;
+
+                        if (key && key.includes('_id')) {
+                            var ed = $(this).datagrid('getEditor', {
+                                index: index,
+                                field: key
+                            });
+                            var selectedRow = $(ed.target).combogrid('grid').datagrid('getSelected');
+                            if (key === 'employee_id') {
+                                if (!selectedRow) {
+                                    row.employee_id = null;
+                                    row.Employee = { name: '<div style="color:red">请选择技师</div>' };
+                                } else {
+                                    row.Employee = { name: selectedRow.name };
+                                }
+                            } else if (key === 'commodity_id') {
+                                if (!selectedRow) {
+                                    row.commodity_id = null;
+                                    row.Commodity = { name: '<div style="color:red">请选择商品</div>' };
+                                } else {
+                                    row.unitPrice = selectedRow.price;
+                                    row.Commodity = { name: selectedRow.name };
+                                }
                             }
-                        } else if (key === 'commodity_id') {
-                            if (!row.Commodity) { row.Commodity = {}; }
-                            if (!selectedRow) {
-                                row.commodity_id = null;
-                                row.Commodity.name = '<div style="color:red">请选择商品</div>';
-                                row.unitPrice = 0;
-                                row.price = 0;
-                            } else {
-                                row.unitPrice = selectedRow.price;
-                                row.Commodity.name = selectedRow.name;
-                                row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
-                            }
-                        }
+                        };
+
+                        //重置价格
+                        row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
+
                         var gridData = $(this).datagrid('getData');
                         gridData.footer[0].price = Number.parseFloat(
                             gridData.rows
-                                .map((row) => row.price)
+                                .map((row) => Number.isNaN(Number.parseFloat(row.price)) ? 0 : Number.parseFloat(row.price))
                                 .reduce(function (accumulator, currentValue, currentIndex, array) {
-                                    return Number.parseFloat(accumulator) + Number.parseFloat(currentValue);
+                                    return accumulator + currentValue;
                                 }))
                             .toFixed(2);
                         // obj.footer[0] = { price: 1000 };
@@ -311,10 +314,10 @@
                         field: 'ck',
                         checkbox: true
                     },
-                    //  {
-                    //     field: 'id',
-                    //     hidden: true,
-                    // },
+                    {
+                        field: 'id',
+                        hidden: true,
+                    },
                     {
                         field: 'commodity_id',
                         title: '商品名',
@@ -357,7 +360,11 @@
                         title: '单价',
                         width: 80,
                         formatter: function (value, row, index) {
-                            return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                            if (value) {
+                                return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                            } else {
+                                return '';
+                            }
                         }
                     }, {
                         field: 'quantity',
@@ -389,10 +396,10 @@
                             }
                         },
                         formatter: function (value, row, index) {
-                            if (Number.parseInt(value) === 1) {
-                                return '是'
-                            } else {
-                                return '否';
+                            switch (value) {
+                                case '1': return '是';
+                                case '0': return '否';
+                                default: return '';
                             }
                         },
                     }, {
@@ -418,10 +425,10 @@
                             }
                         },
                         formatter: function (value, row, index) {
-                            if (Number.parseInt(value) === 1) {
-                                return '是'
-                            } else {
-                                return '否';
+                            switch (value) {
+                                case '1': return '是';
+                                case '0': return '否';
+                                default: return '';
                             }
                         },
                     }, {
@@ -429,7 +436,11 @@
                         title: '实收价格',
                         width: 100,
                         formatter: function (value, row, index) {
-                            return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                            if (value) {
+                                return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                            } else {
+                                return '';
+                            }
                         }
                     }, {
                         field: 'remark',
@@ -496,7 +507,7 @@
                     onOpen: function () {
                         // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
                         payView.getTableDiv().datagrid('loadData', {
-                            footer: [{ price: 0 }],
+                            footer: [{ Commodity: { name: '合计' }, price: 0 }],
                             rows: [payView.makeNewRow()],
                             total: 1
                         });
