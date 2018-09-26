@@ -515,6 +515,40 @@
                     buttons: [{
                         text: '保存',
                         handler: function () {
+                            //结束编辑
+                            var tableDiv = payView.getTableDiv();
+                            if (tableDiv.datagrid('cell')) {
+                                tableDiv.datagrid('endEdit', tableDiv.datagrid('cell').index);
+                            }
+                            tableDiv.datagrid('loading');
+
+                            var postData = tableDiv.datagrid('getData');
+                            var rows = postData.rows;
+                            var errorMessage = '';
+                            if (rows === undefined || rows.length == 0) {
+                                errorMessage = '无有效商品信息';
+                            }
+
+                            if (rows.some(row => {
+                                if (!row.commodity_id) {
+                                    errorMessage = '商品信息错误';
+                                    return true;
+                                }
+                                if (row.quantity < 1 || row.quantity > 500) {
+                                    errorMessage = '商品数量超范围';
+                                    return true;
+                                }
+                                if (!row.employee_id) {
+                                    errorMessage = '技师信息错误';
+                                    return true;
+                                }
+                            })) {
+                                console.log('弹出对话框提示错误')
+                            }
+
+                            console.log(postData.footer[0].price);
+
+
 
                             dialogDiv.dialog('close');
 
