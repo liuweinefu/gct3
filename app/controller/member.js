@@ -21,5 +21,6 @@ class MemberController extends Controller {
         ctx.controllerOption.name = controllerName;
         super(ctx);
     }
+
 }
 module.exports = MemberController;

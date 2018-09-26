@@ -139,7 +139,14 @@
                     buttons: [{
                         text: '保存',
                         handler: function () {
+                            var value = passwordboxDiv.textbox('getValue');
+                            $.post('mix/checkPass', {
+                                id: view.currentRow.id,
+                                pass: value
+                            }).done(function (data) {
 
+                            })
+                            view.currentRow.passed = ture;
                             view.currentRow.actionFunc();
 
                             // dialogDiv.dialog('close');
@@ -179,7 +186,9 @@
                 var memberName = view.currentRow.name;
                 var balance = Number.parseFloat(view.currentRow.Card.balance).toFixed(2);
                 var discount = Number.parseFloat(view.currentRow.Card.CardType.discount * 100).toFixed(2) + '%';
-                var dialogTitle = `客户:<span style="color:LightCoral">${memberName}</span>&nbsp;&nbsp;&nbsp;&nbsp;余额:<span style="color:LightCoral">${balance}</span>&nbsp;&nbsp;&nbsp;&nbsp;折扣:<span style="color:LightCoral">${discount}</span>`;
+                var dialogTitle = `客户:<span style="color:LightCoral">${memberName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                   余额:<span style="color:LightCoral">${balance}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                   折扣:<span style="color:LightCoral">${discount}</span>`;
 
                 if (view.dialogPage.payDiv) {
                     view.dialogPage.payDiv.dialog('setTitle', dialogTitle);
