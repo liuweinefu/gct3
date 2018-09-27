@@ -32,6 +32,7 @@ module.exports = app => {
   router.post('/userType/setMenus', controller.userType.setMenus);
 
   router.post('/card/resetPass', controller.card.resetPass);
+  router.post('/card/verifyPass', controller.card.verifyPass);
 
   // router.get('/user', controller.user.getTpl);
   // router.post('/user/findAll', controller.user.findAll);

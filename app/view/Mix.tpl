@@ -140,14 +140,15 @@
                         text: '保存',
                         handler: function () {
                             var value = passwordboxDiv.textbox('getValue');
-                            $.post('mix/checkPass', {
-                                id: view.currentRow.id,
+                            $.post('card/verifyPass', {
+                                id: view.currentRow.Card.id,
                                 pass: value
                             }).done(function (data) {
+                                console.log(data);
 
                             })
-                            view.currentRow.passed = ture;
-                            view.currentRow.actionFunc();
+                            // view.currentRow.passed = ture;
+                            // view.currentRow.actionFunc();
 
                             // dialogDiv.dialog('close');
 

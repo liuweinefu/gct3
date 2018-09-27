@@ -13,3 +13,10 @@ exports.sequelize = {
     package: 'egg-sequelize'
 };
 
+// exports.session = true; 
+exports.session = {
+    maxAge: 24 * 3600 * 1000, // ms
+    key: 'EGG_SESS_NEFU_JOB',
+    httpOnly: true,
+    encrypt: true,
+};
