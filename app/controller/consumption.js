@@ -21,5 +21,18 @@ class ConsumptionController extends Controller {
         ctx.controllerOption.name = controllerName;
         super(ctx);
     }
+    async settlement() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        const O = ctx.controllerOption;
+        const S = ctx.session;
+        if (S.has) { }
+
+
+
+
+    }
 }
 module.exports = ConsumptionController;

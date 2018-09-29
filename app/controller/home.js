@@ -17,7 +17,7 @@ class HomeController extends Controller {
         await ctx.render('index.tpl', dataList);
     }
     async getMenu() {
-        console.log('here');
+        console.log('home->getMenu');
 
         //ctx.redirect(`http://job.nefu.edu.cn/`);
         //this.ctx.body = 'hi, user';

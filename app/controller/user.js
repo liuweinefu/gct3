@@ -23,26 +23,26 @@ class UserController extends Controller {
         super(ctx);
     }
 
-    async resetPass() {
-        const { ctx } = this;
-        const B = ctx.request.body;
-        //const C = ctx.condition = {};
-        const M = ctx.model;
-        const O = ctx.controllerOption;
-        if (!B.pass || B.pass.length < 6) {
-            ctx.response.body = {
-                message: `密码长度不够`,
-            };
-        } else {
-            // var updateLength = await M[O.modelName].update({ pass: md5(B.pass) }, { where: { id: B.id } });
-            var user = await M[O.modelName].findOne({ where: { id: B.id } });
-            user.pass = md5(B.pass);
-            user = await user.save();
-            ctx.response.body = {
-                message: `${user.name}的密码保存成功`,
-            };
-        }
+    // async resetPass() {
+    //     const { ctx } = this;
+    //     const B = ctx.request.body;
+    //     //const C = ctx.condition = {};
+    //     const M = ctx.model;
+    //     const O = ctx.controllerOption;
+    //     if (!B.pass || B.pass.length < 6) {
+    //         ctx.response.body = {
+    //             message: `密码长度不够`,
+    //         };
+    //     } else {
+    //         // var updateLength = await M[O.modelName].update({ pass: md5(B.pass) }, { where: { id: B.id } });
+    //         var user = await M[O.modelName].findOne({ where: { id: B.id } });
+    //         user.pass = md5(B.pass);
+    //         user = await user.save();
+    //         ctx.response.body = {
+    //             message: `${user.name}的密码保存成功`,
+    //         };
+    //     }
 
-    }
+    // }
 }
 module.exports = UserController;

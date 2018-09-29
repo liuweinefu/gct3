@@ -31,50 +31,46 @@ class CardController extends Controller {
         const O = ctx.controllerOption;
         const S = ctx.session;
 
-        if (!B.pass || B.pass.length < 6) {
-            ctx.response.body = {
-                message: `密码长度不够`,
-            };
-        } else {
-            // var updateLength = await M[O.modelName].update({ pass: md5(B.pass) }, { where: { id: B.id } });
-            var card = await M[O.modelName].findOne({ where: { id: B.id } });
-            if (card.pass === md5(B.pass)) {
+
+        S.hadPass = false;
+
+
+        if (B.id) {
+            let card = await M[O.modelName].findOne({ where: { id: B.id } });
+            if (!card.pass || card.pass === md5(B.pass)) {
                 S.hadPass = true;
-                ctx.response.body = {
-                    message: `${card.name}的密码通过`,
-                };
-            } else {
-                S.hadPass = false;
-                ctx.response.body = {
-                    message: `${card.name}的密码错误`,
-                };
             }
         }
 
-    }
-
-    async resetPass() {
-
-        const { ctx } = this;
-        const B = ctx.request.body;
-        //const C = ctx.condition = {};
-        const M = ctx.model;
-        const O = ctx.controllerOption;
-
-        if (!B.pass || B.pass.length < 6) {
-            ctx.response.body = {
-                message: `密码长度不够`,
-            };
-        } else {
-            // var updateLength = await M[O.modelName].update({ pass: md5(B.pass) }, { where: { id: B.id } });
-            var card = await M[O.modelName].findOne({ where: { id: B.id } });
-            card.pass = md5(B.pass);
-            card = await card.save();
-            ctx.response.body = {
-                message: `${card.name}的密码保存成功`,
-            };
-        }
+        ctx.response.body = {
+            passed: S.hadPass,
+        };
 
     }
+
+    // async resetPass() {
+
+    //     const { ctx } = this;
+    //     const B = ctx.request.body;
+    //     //const C = ctx.condition = {};
+    //     const M = ctx.model;
+    //     const O = ctx.controllerOption;
+
+    //     var message = '';
+    //     if (!B.id || !B.pass) {
+    //         message = 'ID或密码不能为空';
+    //     } else if (B.pass.length < 6) {
+    //         message = '密码长度不够';
+    //     } else {
+    //         var card = await M[O.modelName].findOne({ where: { id: B.id } });
+    //         card.pass = md5(B.pass);
+    //         card = await card.save();
+    //         message = `${card.name}的密码保存成功`;
+    //     }
+    //     ctx.response.body = {
+    //         message: message,
+    //     };
+
+    // }
 }
 module.exports = CardController;

@@ -1,3 +1,4 @@
+const md5 = require('md5');
 const { Controller } = require('egg');
 class NormalTableController extends Controller {
     constructor(ctx) {
@@ -147,12 +148,32 @@ class NormalTableController extends Controller {
         };
     }
 
-    // success(data) {
-    //     this.ctx.body = {
-    //         success: true,
-    //         data,
-    //     };
-    // }
+
+    //如有pass字段可进行重置
+    async resetPass() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        const O = ctx.controllerOption;
+
+        var message = '';
+        if (!B.id || typeof B.pass !== 'string') {
+            message = 'ID或密码无效';
+        } else if (B.pass.length > 0 && B.pass.length < 6) {
+            message = '密码长度不够';
+        } else {
+            let model = await M[O.modelName].findOne({ where: { id: B.id } });
+            model.pass = B.pass.length === 0 ? '' : md5(B.pass);
+            model = await model.save();
+            message = `${model.name}的密码保存成功`;
+        }
+        ctx.response.body = {
+            message: message,
+        };
+
+    }
+
 
     //404错误
     notFound(msg) {

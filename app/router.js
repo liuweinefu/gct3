@@ -9,6 +9,11 @@ module.exports = app => {
   // router.get('/', controller.home.index);
   // router.get('/list', controller.home.list);
   // router.post('/getMenu', controller.home.getMenu);
+  router.use('/*', async function (ctx, next) {
+    console.log('abc');
+    await next();
+
+  });
   router.get('/', controller.home.index);
   router.post('/getMenu', controller.home.getMenu);
 

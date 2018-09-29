@@ -100,7 +100,15 @@
 
             //表格设置**************************************************
             view.currentRow = null;
-            var getPass = function () {
+            var empower = function () {
+                //检测是否已授权
+                if (view.currentRow.passed === true) {
+                    view.currentRow.actionFunc();
+                    return;
+                }
+
+
+                //
                 if (view.dialogPage.passDiv) {
                     view.dialogPage.passDiv.dialog('setTitle', `请输入   ${view.currentRow.name}   的密码`);
                     view.dialogPage.passDiv.dialog('open', true);
@@ -144,13 +152,22 @@
                                 id: view.currentRow.Card.id,
                                 pass: value
                             }).done(function (data) {
-                                console.log(data);
-
+                                if (data.passed) {
+                                    dialogDiv.dialog('close');
+                                    view.currentRow.passed = true;
+                                    view.currentRow.actionFunc();
+                                } else {
+                                    $.messager.alert('提示', '密码错误请重新输入', 'info', function () {
+                                        //passwordboxDiv.textbox('textbox').focus();
+                                        view.currentRow.passed = false;
+                                        passwordboxDiv.textbox('textbox').select();
+                                    });
+                                }
                             })
                             // view.currentRow.passed = ture;
-                            // view.currentRow.actionFunc();
 
-                            // dialogDiv.dialog('close');
+
+
 
                             // var value = passwordboxDiv.textbox('getValue');
                             // $.post('mix/checkPass', {
@@ -184,6 +201,9 @@
                 dialogDiv.dialog(dialogOp);
             };
             var pay = function () {
+                if (!view.currentRow) {
+                    return;
+                }
                 var memberName = view.currentRow.name;
                 var balance = Number.parseFloat(view.currentRow.Card.balance).toFixed(2);
                 var discount = Number.parseFloat(view.currentRow.Card.CardType.discount * 100).toFixed(2) + '%';
@@ -218,7 +238,8 @@
                             },
                             Commodity: {
                                 name: '<div style="color:red">请选择商品</div>',
-                            }
+                            },
+                            id: Math.random(),
                             // is_cash: 1,
                             // price: 1,
                         };
@@ -226,12 +247,31 @@
                         var lastRow = rows[rows.length - 1];
                         return {
                             employee_id: lastRow.employee_id,
-                            Employee: lastRow.Employee,
+                            Employee: Object.assign({}, lastRow.Employee),
                             quantity: 1,
                             whetherDiscount: '1',
                             is_cash: '0',
+                            id: Math.random(),
                         }
                     }
+                };
+
+                var refreshFooter = function () {
+                    var tableDiv = payView.getTableDiv();
+                    var gridData = tableDiv.datagrid('getData');
+                    gridData.footer[0].price = 0.00
+                    if (gridData.rows.length > 0) {
+                        gridData.footer[0].price = Number.parseFloat(
+                            gridData.rows
+                                .map((row) => Number.isNaN(Number.parseFloat(row.price)) ? 0 : Number.parseFloat(row.price))
+                                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                                    return accumulator + currentValue;
+                                }))
+                            .toFixed(2);
+                    }
+
+                    // obj.footer[0] = { price: 1000 };
+                    tableDiv.datagrid('loadData', gridData);
                 };
 
                 var payViewOp = {};
@@ -242,6 +282,22 @@
                     },
                     delete: {
                         text: '删除商品(<ins>D</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
+                        iconCls: 'icon-search',
+                        onClick: function () {
+                            //结束编辑
+                            var tableDiv = payView.getTableDiv();
+                            if (tableDiv.datagrid('cell')) {
+                                tableDiv.datagrid('endEdit', tableDiv.datagrid('cell').index);
+                            }
+                            if (tableDiv.datagrid('getChecked').length === 0) {
+                                $.messager.alert('信息', '无选中条件', 'info', function () {
+                                });
+                                return;
+                            }
+                            tableDiv.datagrid('getChecked').map(row => tableDiv.datagrid('getRowIndex', row)).sort((a, b) => b - a).forEach(index => tableDiv.datagrid('deleteRow', index));
+                            //searchBoxDiv.textbox('textbox').focus();//重置焦点
+                            refreshFooter();
+                        },
                     },
                     // del: {
                     //     text: '删除条件(<ins>D</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
@@ -303,16 +359,8 @@
                         //重置价格
                         row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
 
-                        var gridData = $(this).datagrid('getData');
-                        gridData.footer[0].price = Number.parseFloat(
-                            gridData.rows
-                                .map((row) => Number.isNaN(Number.parseFloat(row.price)) ? 0 : Number.parseFloat(row.price))
-                                .reduce(function (accumulator, currentValue, currentIndex, array) {
-                                    return accumulator + currentValue;
-                                }))
-                            .toFixed(2);
-                        // obj.footer[0] = { price: 1000 };
-                        $(this).datagrid('loadData', gridData);
+                        //重置汇总
+                        refreshFooter();
                     },
                 };
 
@@ -347,7 +395,7 @@
                                 idField: 'id',
                                 textField: 'name',
                                 columns: [[
-                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                                
+                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                               
                                     { field: 'name', title: '商品名', width: 165 },
                                     { field: 'price', title: '售价', width: 65 },
                                 ]],
@@ -505,7 +553,7 @@
                     title: dialogTitle,
                     width: 800,
                     top: 120,
-                    height: 400,
+                    height: 500,
                     closed: false,
                     cache: false,
                     //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
@@ -525,20 +573,19 @@
                     buttons: [{
                         text: '保存',
                         handler: function () {
-                            //结束编辑
                             var tableDiv = payView.getTableDiv();
+                            //结束编辑
                             if (tableDiv.datagrid('cell')) {
                                 tableDiv.datagrid('endEdit', tableDiv.datagrid('cell').index);
                             }
-                            tableDiv.datagrid('loading');
-
-                            var postData = tableDiv.datagrid('getData');
-                            var rows = postData.rows;
+                            //校验数据
+                            var rows = tableDiv.datagrid('getData').rows;
                             var errorMessage = '';
                             if (rows === undefined || rows.length == 0) {
                                 errorMessage = '无有效商品信息';
+                                $.messager.alert('提示', errorMessage, 'info', function () { });
+                                return;
                             }
-
                             if (rows.some(row => {
                                 if (!row.commodity_id) {
                                     errorMessage = '商品信息错误';
@@ -553,14 +600,39 @@
                                     return true;
                                 }
                             })) {
-                                console.log('弹出对话框提示错误')
+                                $.messager.alert('提示', errorMessage, 'info', function () { });
+                                return;
                             }
 
-                            console.log(postData.footer[0].price);
+                            //发送
+                            $.messager.alert('提示', `请支付：${tableDiv.datagrid('getData').footer[0].price}`, 'info', function () {
+                                var sendObject = {
+                                    currentRow: JSON.stringify(view.currentRow),
+                                    menus: JSON.stringify(tableDiv.datagrid('getData'))
+                                };
+                                $.post('userType/setMenus', sendObject)
+                                    .done(function (data) {
+                                        dialogDiv.dialog('close');
+                                        //dialogDiv.dialog('destroy');
+                                        $.messager.alert('提示', data.message, 'info', function () {
+                                            view.getTableDiv().datagrid('reload');
+                                        });
+                                    }).fail(function (err) {
+                                        //console.log(err);
+                                        $.messager.alert('失败', err.responseText, 'warning', function () { });
+                                    });
+
+                            });
 
 
 
-                            dialogDiv.dialog('close');
+
+
+
+
+
+
+                            // dialogDiv.dialog('close');
 
                             // var sendObject = {
                             //     currentRow: JSON.stringify(view.currentRow),
@@ -688,7 +760,7 @@
                             view.currentRow.actionFunc = printCase;
                             break;
                     }
-                    getPass();
+                    empower();
                 },
 
 
