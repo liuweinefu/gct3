@@ -10,8 +10,14 @@ module.exports = app => {
   // router.get('/list', controller.home.list);
   // router.post('/getMenu', controller.home.getMenu);
   router.use('/*', async function (ctx, next) {
-    console.log('abc');
-    await next();
+    const SS = ctx.session;
+    if (!SS.islogin) {
+      console.log('no login');
+    } else {
+      await next();
+    }
+
+
 
   });
   router.get('/', controller.home.index);

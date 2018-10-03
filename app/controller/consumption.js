@@ -27,8 +27,8 @@ class ConsumptionController extends Controller {
         //const C = ctx.condition = {};
         const M = ctx.model;
         const O = ctx.controllerOption;
-        const S = ctx.session;
-        if (S.has) { }
+        const SS = ctx.session;
+        if (SS.has) { }
 
 
 
