@@ -11,8 +11,13 @@ module.exports = app => {
   // router.post('/getMenu', controller.home.getMenu);
   router.use('/*', async function (ctx, next) {
     const SS = ctx.session;
-    if (!SS.islogin) {
+    if (ctx.path === '/' && ctx.method === 'GET') {
+      await next();
+      // } else if (!SS.islogin) {
+    } else if (ctx.path === '/card/findAll') {
       console.log('no login');
+
+      ctx.status = 401;
     } else {
       await next();
     }

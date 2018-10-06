@@ -212,6 +212,12 @@
 
             };
             var buildMain = function () {
+                $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+                    console.log('触发登录模块' + jqXHR.status);
+                    console.log('触发登录模块' + jqXHR.status);
+                });
+
+
                 $.post('/getMenu')
                     .done(init)
                     .fail(setLogin);

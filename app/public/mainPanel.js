@@ -27,18 +27,19 @@ var combogridEvents = function (page) {
 
 var tableEvents = function () {
     return {
-        onLoadError: function (XMLHttpRequest, textStatus, errorThrown) {
-            var message = '数据无效';
-            if (XMLHttpRequest.responseText) {
-                message = XMLHttpRequest.responseText;
-            }
-            if (XMLHttpRequest.responseJSON && XMLHttpRequest.responseJSON.errMessage) {
-                message = XMLHttpRequest.responseJSON.errMessage;
-            }
-            $.messager.alert('信息', message, 'info', function () {
-                //dialogDiv.dialog('close', true);
-            });
-        },
+        //由全局ajaxError函数接管，目前用于权限检测失败后的登录组件调用
+        // onLoadError: function (XMLHttpRequest, textStatus, errorThrown) {
+        //     var message = '数据无效';
+        //     if (XMLHttpRequest.responseText) {
+        //         message = XMLHttpRequest.responseText;
+        //     }
+        //     if (XMLHttpRequest.responseJSON && XMLHttpRequest.responseJSON.errMessage) {
+        //         message = XMLHttpRequest.responseJSON.errMessage;
+        //     }
+        //     $.messager.alert('信息', message + '请登录', 'info', function () {
+        //         //dialogDiv.dialog('close', true);
+        //     });
+        // },
         onCellEdit: function (index, field, value) {
             let editor = $(this).datagrid('getEditor', {
                 index: index,
