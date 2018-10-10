@@ -11,6 +11,8 @@ module.exports = app => {
   // router.post('/getMenu', controller.home.getMenu);
 
   router.get('/', controller.home.index);
+  router.get('/captcha', controller.home.captcha);
+  router.post('/verify', controller.home.verify);
 
   router.use('/*', async function (ctx, next) {
     console.log(ctx.path);

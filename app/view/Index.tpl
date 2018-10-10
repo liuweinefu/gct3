@@ -209,7 +209,12 @@
                 passDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
                 passDiv.passwordbox({ prompt: '请输入密码', iconWidth: 38, showEye: true });
 
-                $('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv)
+                captchaPicDiv = $(`<img src='/captcha?${Math.random()}'/>`);
+                captchaPicDiv.appendTo(loginDialogDiv);
+                captchaPicDiv.click(function (e) {
+                    captchaPicDiv.attr('src', `/captcha?${Math.random()}`);
+                });
+                // captchaPicDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
 
                 captchaDiv = $('<div></div>');
                 captchaDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
@@ -223,6 +228,7 @@
                     onBeforeOpen: function () {
                         nameDiv.textbox('clear');
                         passDiv.textbox('clear');
+                        captchaPicDiv.click();
                         captchaDiv.textbox('clear');
                     },
                     width: 220,
@@ -237,19 +243,50 @@
                         // iconCls: 'icon-save',
                         //handler:confirm,
                         handler: function () {
-                            console.log('name:' + nameDiv.textbox('getText') + ';pass:' + passDiv.textbox('getText'));
-                            loginDialogDiv.dialog('close', true);
+                            var sendObject = {
+                                name: nameDiv.textbox('getValue'),
+                                pass: passDiv.textbox('getValue'),
+                                captcha: captchaDiv.textbox('getValue')
+                            }
+                            $.post('/verify', sendObject)
+                                .done(function (data) {
+                                    captchaPicDiv.click();
+                                    if (data !== 'isLogin') {
+                                        $.messager.alert('提示', data, 'info', function () {
+                                            // tableDiv.datagrid('reload');
+                                            // tableDiv.datagrid('loaded');
+                                            //tableDiv.datagrid('getPanel').focus();
+                                            //searchBoxDiv.textbox('textbox').focus();//重置焦点
+                                        });
+                                    }
+
+
+                                });
+                            // console.log('name:' + nameDiv.textbox('getValue') + ';pass:' + passDiv.textbox('getValue') + ';captcha:' + captchaDiv.textbox('getValue'));
+
                         }
                     }, {
                         text: '关闭',
                         // iconCls: 'icon-save',
                         handler: function () {
-                            loginDialogDiv.dialog('close', true);
+                            loginDialogDiv.dialog('close', false);
                         }
                     }],
                 });
 
+                // var ll = true;
+                // setInterval(function () {
+                //     if (ll) {
+                //         loginDialogDiv.dialog('close', false);
+                //         ll = false;
+                //     } else {
+                //         loginDialogDiv.dialog('open', false);
+                //         ll = true;
+                //     }
+
+                // }, 5000);
             };
+
 
             //构建
             var buildMain = function () {
