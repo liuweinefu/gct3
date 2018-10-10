@@ -33,10 +33,11 @@
     <script>
         //@ sourceURL=index.js
         void function () {
+            //主页面
             var mainDiv = null;
             var tabDiv = null;
             var menuDiv = null;
-            var init = function (data) {
+            var initMain = function (data) {
                 //初始化布局
                 mainDiv = $('<div></div>');
                 mainDiv.appendTo('body');
@@ -130,7 +131,6 @@
                 };
                 findTab(treeData);
             };
-
             var _builtMenuList = function (menus) {
                 menus.sort((one, two) => { return one.sn - two.sn })
                 if (!Array.isArray(menus) || menus.length == 0) { return; }
@@ -193,34 +193,98 @@
                 }
             };
 
-
-            var setLogin = function () {
+            //登录模块
+            var loginDialogDiv = null;
+            var indexRefresh = false;
+            var initLogin = function () {
                 loginDialogDiv = $('<div></div>');
                 loginDialogDiv.appendTo('body');
 
+
                 nameDiv = $('<div></div>');
-                nameDiv.appendTo('loginDialogDiv');
+                nameDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
+                nameDiv.textbox({ prompt: '用户名', iconCls: 'icon-man', iconWidth: 38 });
 
                 passDiv = $('<div></div>');
-                passDiv.appendTo('loginDialogDiv');
+                passDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
+                passDiv.passwordbox({ prompt: '请输入密码', iconWidth: 38, showEye: true });
 
-                buttonsDiv = $('<div></div>');
-                buttonsDiv.appendTo('loginDialogDiv');
+                $('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv)
 
+                captchaDiv = $('<div></div>');
+                captchaDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
+                captchaDiv.textbox({ prompt: '验证码', iconCls: 'icon-lock', iconWidth: 38 });
 
+                // buttonDiv = $('<div></div>');
+                // buttonDiv.appendTo('loginDialogDiv');
+                // buttonDiv.linkbutton({ text: '登录' });
 
+                loginDialogDiv.dialog({
+                    onBeforeOpen: function () {
+                        nameDiv.textbox('clear');
+                        passDiv.textbox('clear');
+                        captchaDiv.textbox('clear');
+                    },
+                    width: 220,
+                    height: 300,
+                    //iconCls: 'icon-save',
+                    title: '用户登录',
+                    modal: true,
+                    //toolbar: '#dlg-toolbar',
+                    // toolbar: view.getToolBarDiv(),
+                    buttons: [{
+                        text: '登录',
+                        // iconCls: 'icon-save',
+                        //handler:confirm,
+                        handler: function () {
+                            console.log('name:' + nameDiv.textbox('getText') + ';pass:' + passDiv.textbox('getText'));
+                            loginDialogDiv.dialog('close', true);
+                        }
+                    }, {
+                        text: '关闭',
+                        // iconCls: 'icon-save',
+                        handler: function () {
+                            loginDialogDiv.dialog('close', true);
+                        }
+                    }],
+                });
 
             };
+
+            //构建
             var buildMain = function () {
+
                 $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-                    console.log('触发登录模块' + jqXHR.status);
-                    console.log('触发登录模块' + jqXHR.status);
+                    console.log(event);
+                    console.log(jqXHR);
+                    // console.log(jqXHR.responseJSON);
+                    if (jqXHR.status === 401) {
+                        //indexRefresh = jqXHR.responseText === 'refresh' ? true : false;
+
+                        console.log('触发登录模块' + jqXHR.status);
+                        if (loginDialogDiv) {
+                            loginDialogDiv.dialog('open', false);
+                            // return;
+                        } else {
+                            initLogin();
+                        }
+                    } else {
+                        let message = '网站出错';
+                        if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                            message = jqXHR.responseJSON.message;
+                        } else if (jqXHR.responseText) {
+                            message = jqXHR.responseText;
+                        }
+                        $.messager.alert('出错信息', message, 'info', function () {
+                            //dialogDiv.dialog('close', true);
+                        });
+                    };
+
                 });
 
 
                 $.post('/getMenu')
-                    .done(init)
-                    .fail(setLogin);
+                    .done(initMain)
             };
             //初始化页面
             buildMain();

@@ -9,13 +9,13 @@ class HomeController extends Controller {
         await ctx.render('index.tpl', dataList);
     }
 
-    async list() {
-        const ctx = this.ctx;
-        //ctx.redirect(`http://job.nefu.edu.cn/`);
-        //this.ctx.body = 'hi, user';
-        const dataList = {};
-        await ctx.render('index.tpl', dataList);
-    }
+    // async list() {
+    //     const ctx = this.ctx;
+    //     //ctx.redirect(`http://job.nefu.edu.cn/`);
+    //     //this.ctx.body = 'hi, user';
+    //     const dataList = {};
+    //     await ctx.render('index.tpl', dataList);
+    // }
     async getMenu() {
         console.log('home->getMenu');
 
@@ -32,6 +32,19 @@ class HomeController extends Controller {
         ctx.body = {
             menus: menu,
         };
+    }
+
+    async verify() {
+        const { ctx } = this;
+        //const S = ctx.service;
+        const M = ctx.model;
+        const B = ctx.request.body;
+
+        // let user = await M.User.findAll();
+        // ctx.body = {
+        //     menus: menu,
+        // };
+
     }
 }
 

@@ -9,23 +9,33 @@ module.exports = app => {
   // router.get('/', controller.home.index);
   // router.get('/list', controller.home.list);
   // router.post('/getMenu', controller.home.getMenu);
-  router.use('/*', async function (ctx, next) {
-    const SS = ctx.session;
-    if (ctx.path === '/' && ctx.method === 'GET') {
-      await next();
-      // } else if (!SS.islogin) {
-    } else if (ctx.path === '/card/findAll') {
-      console.log('no login');
 
+  router.get('/', controller.home.index);
+
+  router.use('/*', async function (ctx, next) {
+    console.log(ctx.path);
+    console.log(ctx.method);
+
+    const SS = ctx.session;
+    // if (ctx.path === '/mix' && ctx.method === 'GET') {
+    //   // ctx.body = { message: '未授权' };
+    //   ctx.body = '未授权';
+    //   ctx.status = 401;
+    // } else {
+    //   await next();
+    // }
+
+    if (!SS.islogin) {
+      // ctx.body = { message: '未授权' };
+      ctx.body = '未授权';
       ctx.status = 401;
     } else {
       await next();
     }
 
-
-
   });
-  router.get('/', controller.home.index);
+
+
   router.post('/getMenu', controller.home.getMenu);
 
 
