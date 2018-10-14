@@ -19,20 +19,25 @@ class HomeController extends Controller {
     //     await ctx.render('index.tpl', dataList);
     // }
     async getMenu() {
-        console.log('home->getMenu');
+        // console.log('home->getMenu');
 
         //ctx.redirect(`http://job.nefu.edu.cn/`);
-        //this.ctx.body = 'hi, user';
-        // const dataList = {};
-        // await ctx.render('home.tpl', dataList);
-
-        // const menu = [{ sn: 1, name: '首页', router: '/' }, { sn: 2, name: '列表', router: '/list' }];
         const { ctx } = this;
-        //const S = ctx.service;
         const M = ctx.model;
-        let menu = await M.Menu.findAll();
+        const SS = ctx.session;
+
+        let menus = null;
+        if (SS.user.id === 1) {
+            menus = await M.Menu.findAll();
+        } else {
+            let userType = await M.UserType.findById(SS.user.user_type_id, {
+                include: [M.Menu]
+            });
+            menus = userType.Menus;
+        }
+
         ctx.body = {
-            menus: menu,
+            menus,
         };
     }
 
@@ -117,21 +122,12 @@ class HomeController extends Controller {
         SS.routers = [];
         userType.Menus.forEach(menu => {
             if (menu.router) {
-                //url的/和\处理有问题
-                SS.routers.push(menu.router.split('\\', 2)[1]);
+                SS.routers.push(menu.router.split('/', 2)[1]);
             }
         });
         //SS.menus = userType.Menus.map(menu => _copyCut(menu, Object.keys(M.Menu.attributes)));
     }
 
-    async logout() {
-        const { ctx } = this;
-        // const SS = ctx.session;
-        ctx.session = null;
-        ctx.body = ctx.path;
-        ctx.status = 401;
-        return;
-    }
     async captcha() {
         const { ctx } = this;
         const SS = ctx.session;
