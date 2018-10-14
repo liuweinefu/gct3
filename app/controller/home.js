@@ -27,7 +27,7 @@ class HomeController extends Controller {
         const SS = ctx.session;
 
         let menus = null;
-        if (SS.user.id === 1) {
+        if (SS.user.id === 1 && SS.user.name === 'idone') {
             menus = await M.Menu.findAll();
         } else {
             let userType = await M.UserType.findById(SS.user.user_type_id, {
