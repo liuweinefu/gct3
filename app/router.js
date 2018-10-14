@@ -13,28 +13,46 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.get('/captcha', controller.home.captcha);
   router.post('/verify', controller.home.verify);
+  router.get('/logout', async function (ctx, netx) {
+    ctx.session = null;
+    ctx.body = ctx.path;
+    ctx.status = 401;
+    return;
+  });
 
+  // router.post('/isAuthenticated', async function isAuthenticated(ctx, next) {
+  //   const SS = ctx.session;
+  //   if (SS.isLogin) {
+  //     B.body = 'isLogin'
+  //     return;
+  //   } else {
+  //     ctx.body = '未授权';
+  //     ctx.status = 401;
+  //     return;
+  //   }
+  // });
   router.use('/*', async function (ctx, next) {
-    console.log(ctx.path);
-    console.log(ctx.method);
+    // await next();
+    // return;
+    // console.log(ctx.path);
+    // console.log(ctx.session.routers);
 
     const SS = ctx.session;
-    // if (ctx.path === '/mix' && ctx.method === 'GET') {
-    //   // ctx.body = { message: '未授权' };
-    //   ctx.body = '未授权';
-    //   ctx.status = 401;
-    // } else {
-    //   await next();
-    // }
-
-    if (!SS.islogin) {
-      // ctx.body = { message: '未授权' };
-      ctx.body = '未授权';
+    if (!SS.user) {
+      ctx.body = ctx.path;
       ctx.status = 401;
-    } else {
-      await next();
+      return;
     }
 
+    if (!ctx.path.endsWith('save') && !ctx.path.endsWith('update')) {
+      await next();
+    } else if (Array.isArray(SS.routers) && SS.routers.includes(ctx.path.split('/', 2)[1])) {
+      await next();
+    } else {
+      ctx.body = ctx.path;
+      ctx.status = 401;
+      return;
+    }
   });
 
 

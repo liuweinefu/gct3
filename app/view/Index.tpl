@@ -195,8 +195,8 @@
 
             //登录模块
             var loginDialogDiv = null;
-            var indexRefresh = false;
-            var initLogin = function () {
+            // var indexRefresh = false;
+            var initLogin = function (URL) {
                 loginDialogDiv = $('<div></div>');
                 loginDialogDiv.appendTo('body');
 
@@ -209,7 +209,7 @@
                 passDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
                 passDiv.passwordbox({ prompt: '请输入密码', iconWidth: 38, showEye: true });
 
-                captchaPicDiv = $(`<img src='/captcha?${Math.random()}'/>`);
+                captchaPicDiv = $(`<img style="width:180px;height:50px;padding:12px" src='/captcha?${Math.random()}'/>`);
                 captchaPicDiv.appendTo(loginDialogDiv);
                 captchaPicDiv.click(function (e) {
                     captchaPicDiv.attr('src', `/captcha?${Math.random()}`);
@@ -231,10 +231,11 @@
                         captchaPicDiv.click();
                         captchaDiv.textbox('clear');
                     },
-                    width: 220,
-                    height: 300,
+                    width: 240,
+                    // height: 350,
                     //iconCls: 'icon-save',
                     title: '用户登录',
+                    closable: false,
                     modal: true,
                     //toolbar: '#dlg-toolbar',
                     // toolbar: view.getToolBarDiv(),
@@ -258,20 +259,24 @@
                                             //tableDiv.datagrid('getPanel').focus();
                                             //searchBoxDiv.textbox('textbox').focus();//重置焦点
                                         });
+                                    } else {
+                                        if (URL === '/getMenu') { location.reload(); }
+                                        loginDialogDiv.dialog('close', false);
                                     }
-
-
                                 });
                             // console.log('name:' + nameDiv.textbox('getValue') + ';pass:' + passDiv.textbox('getValue') + ';captcha:' + captchaDiv.textbox('getValue'));
 
                         }
-                    }, {
-                        text: '关闭',
-                        // iconCls: 'icon-save',
-                        handler: function () {
-                            loginDialogDiv.dialog('close', false);
-                        }
-                    }],
+                    },
+                        // {
+
+                        //     text: '关闭',
+                        //     // iconCls: 'icon-save',
+                        //     handler: function () {
+                        //         loginDialogDiv.dialog('close', false);
+                        //     }
+                        // }
+                    ],
                 });
 
                 // var ll = true;
@@ -292,9 +297,13 @@
             var buildMain = function () {
 
                 $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-                    console.log(event);
+                    // console.log(event);
                     console.log(jqXHR);
                     // console.log(jqXHR.responseJSON);
+                    if (jqXHR.responseText === '/logout') {
+                        location.reload();
+                        return;
+                    }
                     if (jqXHR.status === 401) {
                         //indexRefresh = jqXHR.responseText === 'refresh' ? true : false;
 
@@ -303,7 +312,7 @@
                             loginDialogDiv.dialog('open', false);
                             // return;
                         } else {
-                            initLogin();
+                            initLogin(jqXHR.responseText);
                         }
                     } else {
                         let message = '网站出错';

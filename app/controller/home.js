@@ -64,23 +64,73 @@ class HomeController extends Controller {
         }
 
         //认证用户
-        let user = await M.User.findAll({
+        let users = await M.User.findAll({
             where: {
                 name: B.name,
                 pass: md5(B.pass)
             }
         });
 
-        if (user.length !== 1) {
+        if (users.length !== 1) {
             ctx.body = '用户名或密码错误';
-        } else {
-
+            return;
         }
-        console.log(user);
-        // ctx.body = {
-        //     menus: menu,
-        // };
 
+        // const currentUser = users[0];
+        // currentUser.last_sign_in_at = new Date();
+        // await currentUser.save();
+
+        users[0].last_sign_in_at = new Date();
+        await users[0].save();
+        await this._serializeUser(users[0]);
+
+
+        ctx.body = 'isLogin';
+    }
+
+    async _serializeUser(currentUser) {
+        const { ctx } = this;
+        //const S = ctx.service;
+        const M = ctx.model;
+        // const B = ctx.request.body;
+        const SS = ctx.session;
+
+        function _copyCut(sourceObject, fieldsArray) {
+            if (typeof sourceObject !== 'object' || !Array.isArray(fieldsArray) || fieldsArray.length === 0) { return {} };
+            let targetObject = {}
+            fieldsArray.forEach(field => {
+                if (sourceObject[field] !== undefined) {
+                    targetObject[field] = sourceObject[field]
+                }
+            })
+            return targetObject;
+        }
+
+        SS.user = _copyCut(currentUser, Object.keys(M.User.attributes));
+        delete SS.user.pass;
+
+
+        let userType = await M.UserType.findById(SS.user.user_type_id, {
+            include: [M.Menu]
+        });
+        SS.userType = _copyCut(userType, Object.keys(M.UserType.attributes));
+        SS.routers = [];
+        userType.Menus.forEach(menu => {
+            if (menu.router) {
+                //url的/和\处理有问题
+                SS.routers.push(menu.router.split('\\', 2)[1]);
+            }
+        });
+        //SS.menus = userType.Menus.map(menu => _copyCut(menu, Object.keys(M.Menu.attributes)));
+    }
+
+    async logout() {
+        const { ctx } = this;
+        // const SS = ctx.session;
+        ctx.session = null;
+        ctx.body = ctx.path;
+        ctx.status = 401;
+        return;
     }
     async captcha() {
         const { ctx } = this;
