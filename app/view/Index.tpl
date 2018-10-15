@@ -298,7 +298,7 @@
 
                 $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
                     // console.log(event);
-                    console.log(jqXHR);
+                    //console.log(jqXHR);
                     // console.log(jqXHR.responseJSON);
                     if (jqXHR.responseText === '/logout') {
                         location.reload();
@@ -307,7 +307,7 @@
                     if (jqXHR.status === 401) {
                         //indexRefresh = jqXHR.responseText === 'refresh' ? true : false;
 
-                        console.log('触发登录模块' + jqXHR.status);
+                        //console.log('触发登录模块' + jqXHR.status);
                         if (loginDialogDiv) {
                             loginDialogDiv.dialog('open', false);
                             // return;

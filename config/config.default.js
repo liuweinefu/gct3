@@ -5,7 +5,7 @@ module.exports = appInfo => {
   const config = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1531808436618_7777';
+  config.keys = appInfo.name + '_1333333333_1234';
 
   //模板设置
   config.view = {

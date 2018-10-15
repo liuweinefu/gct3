@@ -59,12 +59,15 @@ class HomeController extends Controller {
         SS.captcha = '';
         if (!B.name || typeof B.name !== 'string' || B.name.length === 0) {
             ctx.body = '用户名错误';
+            return;
             // ctx.status = 403;
         } else if (!B.pass || typeof B.pass !== 'string' || B.pass.length < 6) {
             ctx.body = '密码错误';
+            return;
             // ctx.status = 403;
         } else if (!B.captcha || typeof B.captcha !== 'string' || B.captcha.length < 4 || currentCaptcha !== B.captcha) {
             ctx.body = '验证码错误';
+            return;
             // ctx.status = 403;
         }
 
@@ -88,7 +91,6 @@ class HomeController extends Controller {
         users[0].last_sign_in_at = new Date();
         await users[0].save();
         await this._serializeUser(users[0]);
-
 
         ctx.body = 'isLogin';
     }
