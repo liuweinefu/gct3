@@ -38,6 +38,7 @@ module.exports = app => {
     // console.log(ctx.session.routers);
 
     const SS = ctx.session;
+    ctx.session.maxAge = 0;//强制浏览器关闭的情况下 自动失效
     if (!SS.user) {
       ctx.body = ctx.path;
       ctx.status = 401;
