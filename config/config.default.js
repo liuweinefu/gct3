@@ -21,10 +21,10 @@ module.exports = appInfo => {
   config.bodyParser = {
     jsonLimit: '10mb',
     formLimit: '10mb',
-  },
+  };
 
-    // add your config here
-    config.middleware = [];
+  // add your config here
+  config.middleware = [];
 
   //sql Data
   config.sequelize = {
@@ -44,6 +44,15 @@ module.exports = appInfo => {
     //   cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
     //   sessionName: 'csrfToken', // Session 中的字段名，默认为 csrfToken
     // },
+  };
+
+  config.session = {
+    // maxAge: 24 * 3600 * 1000, // ms
+    key: 'NEFU_JOB',
+    maxAge: 0,
+    httpOnly: true,
+    encrypt: true,
+    // renew: true,
   };
 
   return config;
