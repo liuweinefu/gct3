@@ -608,9 +608,9 @@
                             $.messager.alert('提示', `请支付：${tableDiv.datagrid('getData').footer[0].price}`, 'info', function () {
                                 var sendObject = {
                                     currentRow: JSON.stringify(view.currentRow),
-                                    menus: JSON.stringify(tableDiv.datagrid('getData'))
+                                    records: JSON.stringify(tableDiv.datagrid('getData').rows)
                                 };
-                                $.post('userType/setMenus', sendObject)
+                                $.post('mix/settlement', sendObject)
                                     .done(function (data) {
                                         dialogDiv.dialog('close');
                                         //dialogDiv.dialog('destroy');

@@ -46,7 +46,8 @@ module.exports = app => {
       return;
     }
 
-    if (!ctx.path.endsWith('save') && !ctx.path.endsWith('update')) {
+    if (ctx.path.endsWith('findAll') || ctx.path.endsWith('getMenu')) {
+      // if (!ctx.path.endsWith('save') && !ctx.path.endsWith('update')) {
       await next();
     } else if (Array.isArray(SS.routers) && SS.routers.includes(ctx.path.split('/', 2)[1])) {
       await next();
@@ -81,6 +82,8 @@ module.exports = app => {
 
   router.post('/card/resetPass', controller.card.resetPass);
   router.post('/card/verifyPass', controller.card.verifyPass);
+
+  router.post('/mix/settlement', controller.mix.settlement);
 
   // router.get('/user', controller.user.getTpl);
   // router.post('/user/findAll', controller.user.findAll);
