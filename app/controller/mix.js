@@ -60,7 +60,8 @@ class MemberController extends Controller {
         for (let c of consumptions) {
             let DbCommodity = await M.Commodity.findById(c.commodity_id);
             dbConsumptions.push(DbCommodity);
-            if (DbCommodity.price != c.unitPrice) {
+            if (DbCommodity.price != c.unitPrice
+                || Number.parseFloat(DbCommodity.price * dbCurrentMember.Card.CardType.discount * c.quantity).toFixed(2) != Number.parseFloat(c.price).toFixed(2)) {
                 ctx.response.body = {
                     message: '商品信息出错'
                 };
@@ -68,8 +69,41 @@ class MemberController extends Controller {
             }
         };
 
+        //检测实收费用
+        var cash = Number.parseFloat(
+            records.rows
+                .map((row) => !Number.isNaN(Number.parseFloat(row.price)) && row.is_cash === '1' ? Number.parseFloat(row.price) : 0)
+                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                    return accumulator + currentValue;
+                }))
+            .toFixed(2);
+        var noCash = Number.parseFloat(
+            records.rows
+                .map((row) => !Number.isNaN(Number.parseFloat(row.price)) && row.is_cash === '0' ? Number.parseFloat(row.price) : 0)
+                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                    return accumulator + currentValue;
+                }))
+            .toFixed(2);
+        var total = Number.parseFloat(
+            records.rows
+                .map((row) => !Number.isNaN(Number.parseFloat(row.price)) ? Number.parseFloat(row.price) : 0)
+                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                    return accumulator + currentValue;
+                }))
+            .toFixed(2);
+        if (cash != records.footer[0].price || noCash != records.footer[1].price || total != records.footer[2].price) {
+            ctx.response.body = {
+                message: '消费信息出错'
+            };
+            return;
+        }
+
+        //保存消费记录
         const t = await M.transaction();
         try {
+
+
+
             dbCurrentMember.phone = '13936248323';
             await dbCurrentMember.save({ transaction: t });
             for (let c of dbConsumptions) {
