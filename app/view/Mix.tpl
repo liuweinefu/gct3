@@ -120,6 +120,32 @@
                 dialogDiv.appendTo(view.getDialogContainerDiv());
                 view.dialogPage.passDiv = dialogDiv;
 
+                var passwordHandler = function () {
+                    var value = passwordboxDiv.textbox('getValue');
+                    $.post('card/verifyPass', {
+                        id: view.currentRow.Card.id,
+                        pass: value
+                    }).done(function (data) {
+                        if (data.passed) {
+                            dialogDiv.dialog('close');
+                            view.currentRow.passed = true;
+                            view.currentRow.actionFunc();
+                        } else {
+                            $.messager.alert('提示', '密码错误请重新输入', 'info', function () {
+                                //passwordboxDiv.textbox('textbox').focus();
+                                view.currentRow.passed = false;
+                                passwordboxDiv.textbox('textbox').select();
+                            });
+                        }
+                    })
+                }
+
+                dialogDiv.keydown(function (e) {
+                    if (e.key === 'Enter') {
+                        passwordHandler();
+                    }
+                })
+
                 var dialogOp = {
                     title: `请输入   ${view.currentRow.name}   的密码`,
                     width: 400,
@@ -146,50 +172,7 @@
                     },
                     buttons: [{
                         text: '保存',
-                        handler: function () {
-                            var value = passwordboxDiv.textbox('getValue');
-                            $.post('card/verifyPass', {
-                                id: view.currentRow.Card.id,
-                                pass: value
-                            }).done(function (data) {
-                                if (data.passed) {
-                                    dialogDiv.dialog('close');
-                                    view.currentRow.passed = true;
-                                    view.currentRow.actionFunc();
-                                } else {
-                                    $.messager.alert('提示', '密码错误请重新输入', 'info', function () {
-                                        //passwordboxDiv.textbox('textbox').focus();
-                                        view.currentRow.passed = false;
-                                        passwordboxDiv.textbox('textbox').select();
-                                    });
-                                }
-                            })
-                            // view.currentRow.passed = ture;
-
-
-
-
-                            // var value = passwordboxDiv.textbox('getValue');
-                            // $.post('mix/checkPass', {
-                            //     id: view.currentRow.id,
-                            //     pass: value
-                            // }).done(function (data) {
-
-                            // view.currentRow.actionFunc();
-
-                            //     dialogDiv.dialog('close');
-                            //     //dialogDiv.dialog('destroy');
-                            //     $.messager.alert('提示', data.message, 'info', function () {
-                            //     });
-                            // }).fail(function (err) {
-                            //     //console.log(err);
-                            //     $.messager.alert('失败', err.responseText, 'warning', function () {
-                            //         //重置焦点
-                            //         passwordboxDiv.textbox('textbox').focus();
-                            //     });
-                            // });
-
-                        },
+                        handler: passwordHandler,
                     }, {
                         text: '关闭',
                         handler: function () {
@@ -259,11 +242,28 @@
                 var refreshFooter = function () {
                     var tableDiv = payView.getTableDiv();
                     var gridData = tableDiv.datagrid('getData');
-                    gridData.footer[0].price = 0.00
-                    if (gridData.rows.length > 0) {
+                    if (!Array.isArray(gridData.rows) || gridData.rows.length == 0) {
+                        gridData.footer[0].price = 0.00;
+                        gridData.footer[1].price = 0.00;
+                        gridData.footer[2].price = 0.00;
+                    } else {
                         gridData.footer[0].price = Number.parseFloat(
                             gridData.rows
-                                .map((row) => Number.isNaN(Number.parseFloat(row.price)) ? 0 : Number.parseFloat(row.price))
+                                .map((row) => !Number.isNaN(Number.parseFloat(row.price)) && row.is_cash === '1' ? Number.parseFloat(row.price) : 0)
+                                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                                    return accumulator + currentValue;
+                                }))
+                            .toFixed(2);
+                        gridData.footer[1].price = Number.parseFloat(
+                            gridData.rows
+                                .map((row) => !Number.isNaN(Number.parseFloat(row.price)) && row.is_cash === '0' ? Number.parseFloat(row.price) : 0)
+                                .reduce(function (accumulator, currentValue, currentIndex, array) {
+                                    return accumulator + currentValue;
+                                }))
+                            .toFixed(2);
+                        gridData.footer[2].price = Number.parseFloat(
+                            gridData.rows
+                                .map((row) => !Number.isNaN(Number.parseFloat(row.price)) ? Number.parseFloat(row.price) : 0)
                                 .reduce(function (accumulator, currentValue, currentIndex, array) {
                                     return accumulator + currentValue;
                                 }))
@@ -548,12 +548,76 @@
                     },
                 ]];
 
+                var payHandler = function () {
+                    var tableDiv = payView.getTableDiv();
+                    //结束编辑
+                    if (tableDiv.datagrid('cell')) {
+                        tableDiv.datagrid('endEdit', tableDiv.datagrid('cell').index);
+                    }
+                    //校验数据
+                    var rows = tableDiv.datagrid('getData').rows;
+                    var errorMessage = '';
+                    if (rows === undefined || rows.length == 0) {
+                        errorMessage = '无有效商品信息';
+                        $.messager.alert('提示', errorMessage, 'info', function () { });
+                        return;
+                    }
+                    if (rows.some(row => {
+                        if (!row.commodity_id) {
+                            errorMessage = '商品信息错误';
+                            return true;
+                        }
+                        if (row.quantity < 1 || row.quantity > 500) {
+                            errorMessage = '商品数量超范围';
+                            return true;
+                        }
+                        if (!row.employee_id) {
+                            errorMessage = '技师信息错误';
+                            return true;
+                        }
+                    })) {
+                        $.messager.alert('提示', errorMessage, 'info', function () { });
+                        return;
+                    }
+
+                    var payMessage = `
+                    ${tableDiv.datagrid('getData').footer[0].Commodity.name}${tableDiv.datagrid('getData').footer[0].price}</br>
+                    ${tableDiv.datagrid('getData').footer[1].Commodity.name}${tableDiv.datagrid('getData').footer[1].price}</br>
+                    ${tableDiv.datagrid('getData').footer[2].Commodity.name}${tableDiv.datagrid('getData').footer[2].price}</br>
+                    `
+                    //发送
+                    $.messager.alert('提示', payMessage, 'info', function () {
+                        var sendObject = {
+                            currentRow: JSON.stringify(view.currentRow),
+                            records: JSON.stringify(tableDiv.datagrid('getData'))
+                        };
+                        $.post('mix/settlement', sendObject)
+                            .done(function (data) {
+                                dialogDiv.dialog('close');
+                                //dialogDiv.dialog('destroy');
+                                $.messager.alert('提示', data.message, 'info', function () {
+                                    view.getTableDiv().datagrid('reload');
+                                });
+                            }).fail(function (err) {
+                                //console.log(err);
+                                $.messager.alert('失败', err.responseText, 'warning', function () { });
+                            });
+
+                    });
+                };
+                dialogDiv.keydown(function (e) {
+                    if (e.key === 'Enter') {
+                        payHandler();
+                    }
+                })
+
                 //对话框设置
                 var dialogOp = {
                     title: dialogTitle,
                     width: 800,
                     top: 120,
                     height: 500,
+                    closable: false,
                     closed: false,
                     cache: false,
                     //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
@@ -565,96 +629,34 @@
                     onOpen: function () {
                         // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
                         payView.getTableDiv().datagrid('loadData', {
-                            footer: [{ Commodity: { name: '合计' }, price: 0 }],
+                            footer: [
+                                { Commodity: { name: '现金应收：' }, price: 0 },
+                                { Commodity: { name: '卡内应收：' }, price: 0 },
+                                { Commodity: { name: '合计应收：' }, price: 0 }
+                            ],
                             rows: [payView.makeNewRow()],
                             total: 1
                         });
                     },
                     buttons: [{
                         text: '保存',
-                        handler: function () {
-                            var tableDiv = payView.getTableDiv();
-                            //结束编辑
-                            if (tableDiv.datagrid('cell')) {
-                                tableDiv.datagrid('endEdit', tableDiv.datagrid('cell').index);
-                            }
-                            //校验数据
-                            var rows = tableDiv.datagrid('getData').rows;
-                            var errorMessage = '';
-                            if (rows === undefined || rows.length == 0) {
-                                errorMessage = '无有效商品信息';
-                                $.messager.alert('提示', errorMessage, 'info', function () { });
-                                return;
-                            }
-                            if (rows.some(row => {
-                                if (!row.commodity_id) {
-                                    errorMessage = '商品信息错误';
-                                    return true;
-                                }
-                                if (row.quantity < 1 || row.quantity > 500) {
-                                    errorMessage = '商品数量超范围';
-                                    return true;
-                                }
-                                if (!row.employee_id) {
-                                    errorMessage = '技师信息错误';
-                                    return true;
-                                }
-                            })) {
-                                $.messager.alert('提示', errorMessage, 'info', function () { });
-                                return;
-                            }
-
-                            //发送
-                            $.messager.alert('提示', `请支付：${tableDiv.datagrid('getData').footer[0].price}`, 'info', function () {
-                                var sendObject = {
-                                    currentRow: JSON.stringify(view.currentRow),
-                                    records: JSON.stringify(tableDiv.datagrid('getData').rows)
-                                };
-                                $.post('mix/settlement', sendObject)
-                                    .done(function (data) {
-                                        dialogDiv.dialog('close');
-                                        //dialogDiv.dialog('destroy');
-                                        $.messager.alert('提示', data.message, 'info', function () {
-                                            view.getTableDiv().datagrid('reload');
-                                        });
-                                    }).fail(function (err) {
-                                        //console.log(err);
-                                        $.messager.alert('失败', err.responseText, 'warning', function () { });
-                                    });
-
-                            });
-
-
-
-
-
-
-
-
-
-                            // dialogDiv.dialog('close');
-
-                            // var sendObject = {
-                            //     currentRow: JSON.stringify(view.currentRow),
-                            //     menus: JSON.stringify(payView.getTableDiv().datagrid('getChecked'))
-                            // };
-                            // $.post('userType/setMenus', sendObject)
-                            //     .done(function (data) {
-                            //         dialogDiv.dialog('close');
-                            //         //dialogDiv.dialog('destroy');
-                            //         $.messager.alert('提示', data.message, 'info', function () {
-                            //             view.getTableDiv().datagrid('reload');
-                            //         });
-                            //     }).fail(function (err) {
-                            //         //console.log(err);
-                            //         $.messager.alert('失败', err.responseText, 'warning', function () { });
-                            //     });
-                        },
+                        handler: payHandler,
                     }, {
                         text: '关闭',
                         handler: function () {
                             //dialogDiv.dialog('destroy');
-                            dialogDiv.dialog('close');
+                            $.post('card/clearCurrentCard').done(function (data) {
+                                if (data.cleared) {
+                                    view.currentRow.passed = false;
+
+                                    dialogDiv.dialog('close');
+                                } else {
+                                    $.messager.alert('提示', '系统内部错误', 'info', function () {
+                                        $.get('logout');
+                                    });
+                                }
+                            })
+
                         }
                     }]
                 };

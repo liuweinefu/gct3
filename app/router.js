@@ -82,6 +82,7 @@ module.exports = app => {
 
   router.post('/card/resetPass', controller.card.resetPass);
   router.post('/card/verifyPass', controller.card.verifyPass);
+  router.post('/card/clearCurrentCard', controller.card.clearCurrentCard);
 
   router.post('/mix/settlement', controller.mix.settlement);
 

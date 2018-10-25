@@ -201,13 +201,14 @@
                 loginDialogDiv.appendTo('body');
 
 
+
                 nameDiv = $('<div></div>');
                 nameDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
-                nameDiv.textbox({ prompt: '用户名', iconCls: 'icon-man', iconWidth: 38 });
+                nameDiv.textbox({ prompt: '用户名', iconCls: 'icon-man', iconWidth: 38, required: true });
 
                 passDiv = $('<div></div>');
                 passDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
-                passDiv.passwordbox({ prompt: '请输入密码', iconWidth: 38, showEye: true });
+                passDiv.passwordbox({ prompt: '请输入密码', iconWidth: 38, showEye: true, required: true });
 
                 captchaPicDiv = $(`<img style="width:180px;height:50px;padding:12px" src='/captcha?${Math.random()}'/>`);
                 captchaPicDiv.appendTo(loginDialogDiv);
@@ -218,12 +219,42 @@
 
                 captchaDiv = $('<div></div>');
                 captchaDiv.appendTo($('<div style="width:100px;height:30px;padding:12px"></div>').appendTo(loginDialogDiv));
-                captchaDiv.textbox({ prompt: '验证码', iconCls: 'icon-lock', iconWidth: 38 });
+                captchaDiv.textbox({ prompt: '验证码', iconCls: 'icon-lock', iconWidth: 38, required: true });
 
                 // buttonDiv = $('<div></div>');
                 // buttonDiv.appendTo('loginDialogDiv');
                 // buttonDiv.linkbutton({ text: '登录' });
 
+
+                var loginHandler = function () {
+                    var sendObject = {
+                        name: nameDiv.textbox('getValue'),
+                        pass: passDiv.textbox('getValue'),
+                        captcha: captchaDiv.textbox('getValue')
+                    }
+                    $.post('/verify', sendObject)
+                        .done(function (data) {
+                            captchaPicDiv.click();
+                            if (data !== 'isLogin') {
+                                $.messager.alert('提示', data, 'info', function () {
+                                    // tableDiv.datagrid('reload');
+                                    // tableDiv.datagrid('loaded');
+                                    //tableDiv.datagrid('getPanel').focus();
+                                    //searchBoxDiv.textbox('textbox').focus();//重置焦点
+                                });
+                            } else {
+                                if (URL === '/getMenu') { location.reload(); }
+                                loginDialogDiv.dialog('close', false);
+                            }
+                        });
+                    // console.log('name:' + nameDiv.textbox('getValue') + ';pass:' + passDiv.textbox('getValue') + ';captcha:' + captchaDiv.textbox('getValue'));
+
+                }
+                loginDialogDiv.keydown(function (e) {
+                    if (e.key === 'Enter') {
+                        loginHandler();
+                    }
+                })
                 loginDialogDiv.dialog({
                     onBeforeOpen: function () {
                         nameDiv.textbox('clear');
@@ -243,30 +274,7 @@
                         text: '登录',
                         // iconCls: 'icon-save',
                         //handler:confirm,
-                        handler: function () {
-                            var sendObject = {
-                                name: nameDiv.textbox('getValue'),
-                                pass: passDiv.textbox('getValue'),
-                                captcha: captchaDiv.textbox('getValue')
-                            }
-                            $.post('/verify', sendObject)
-                                .done(function (data) {
-                                    captchaPicDiv.click();
-                                    if (data !== 'isLogin') {
-                                        $.messager.alert('提示', data, 'info', function () {
-                                            // tableDiv.datagrid('reload');
-                                            // tableDiv.datagrid('loaded');
-                                            //tableDiv.datagrid('getPanel').focus();
-                                            //searchBoxDiv.textbox('textbox').focus();//重置焦点
-                                        });
-                                    } else {
-                                        if (URL === '/getMenu') { location.reload(); }
-                                        loginDialogDiv.dialog('close', false);
-                                    }
-                                });
-                            // console.log('name:' + nameDiv.textbox('getValue') + ';pass:' + passDiv.textbox('getValue') + ';captcha:' + captchaDiv.textbox('getValue'));
-
-                        }
+                        handler: loginHandler
                     },
                         // {
 
