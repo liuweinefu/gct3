@@ -3,7 +3,7 @@
 const Controller = require('../core/normal_table_controller');
 const controllerName = Symbol(__filename);
 
-class MemberController extends Controller {
+class MixController extends Controller {
     constructor(ctx) {
         //填写配置
         ctx.controllerOption = {
@@ -35,41 +35,34 @@ class MemberController extends Controller {
 
         //校验当前客户信息
         var currentRow = JSON.parse(B.currentRow);
-        if (!currentRow.Card || !currentRow.Card.id || currentRow.Card.id != SS.currentCardId) {
+        // const DbMember = await M.Member.findById(currentRow.id, { include: [{ model: M.Card, include: [M.CardType] }] });
+        if (!currentRow.id || !currentRow.Card || !currentRow.Card.id || currentRow.Card.id != SS.currentCardId) {
+            ctx.response.body = {
+                message: '当前用户数据出错'
+            };
+            return;
+        }
+        const DbMember = await M.Member.findById(currentRow.id, { include: [M.Card] });
+        const DbCard = await M.Card.findById(SS.currentCardId, { include: [M.CardType] });
+        if (!DbMember.Card || !DbMember.Card.id || !DbCard.id || DbMember.Card.id != DbCard.id) {
             ctx.response.body = {
                 message: '当前用户数据出错'
             };
             return;
         }
 
-        const dbCurrentMember = await M.Member.findById(currentRow.id, { include: [{ model: M.Card, include: [M.CardType] }] });
-        if (currentRow.Card.balance !== dbCurrentMember.Card.balance ||
-            currentRow.Card.CardType.discount !== dbCurrentMember.Card.CardType.discount) {
+        if (currentRow.Card.balance !== DbCard.balance ||
+            currentRow.Card.CardType.discount !== DbCard.CardType.discount) {
             ctx.response.body = {
                 message: '当前用户数据出错'
             };
             return;
         }
 
-        //校验商品信息
+
         var records = JSON.parse(B.records);
 
-        var consumptions = records.rows;
-        const dbConsumptions = [];
-
-        for (let c of consumptions) {
-            let DbCommodity = await M.Commodity.findById(c.commodity_id);
-            dbConsumptions.push(DbCommodity);
-            if (DbCommodity.price != c.unitPrice
-                || Number.parseFloat(DbCommodity.price * dbCurrentMember.Card.CardType.discount * c.quantity).toFixed(2) != Number.parseFloat(c.price).toFixed(2)) {
-                ctx.response.body = {
-                    message: '商品信息出错'
-                };
-                return;
-            }
-        };
-
-        //检测实收费用
+        //检测汇总费用 并做好卡的消费变更准备
         var cash = Number.parseFloat(
             records.rows
                 .map((row) => !Number.isNaN(Number.parseFloat(row.price)) && row.is_cash === '1' ? Number.parseFloat(row.price) : 0)
@@ -97,19 +90,77 @@ class MemberController extends Controller {
             };
             return;
         }
+        DbCard.balance -= Number.parseFloat(noCash);
 
-        //保存消费记录
+        //校验每个商品的单价及总价  并做好该商品数量变更的准备 做好消费记录入库准备
+        var consumptions = records.rows;
+        const DbCommodities = [];
+        const DbConsumptions = [];
+
+        for (let c of consumptions) {
+            let DbCommodity = await M.Commodity.findById(c.commodity_id);
+            DbCommodities.push(DbCommodity);
+            if (!c.employee_id) {
+                ctx.response.body = {
+                    message: '技师信息出错'
+                };
+                return;
+            };
+            let employee = await M.Employee.findById(c.employee_id);
+            if (!employee) {
+                ctx.response.body = {
+                    message: '技师信息出错'
+                };
+                return;
+            };
+
+            let unitPriceErr = DbCommodity.price != c.unitPrice;
+            let totalPriceErr = c.whetherDiscount === '1'
+                ? Number.parseFloat(DbCommodity.price * DbCard.CardType.discount * c.quantity).toFixed(2) != Number.parseFloat(c.price).toFixed(2)
+                : Number.parseFloat(DbCommodity.price * c.quantity).toFixed(2) != Number.parseFloat(c.price).toFixed(2);
+
+            if (unitPriceErr || totalPriceErr) {
+                ctx.response.body = {
+                    message: '商品信息出错'
+                };
+                return;
+            }
+            //商品数量变更准备
+            DbCommodity.stocks -= Number.parseInt(c.quantity);
+
+            //消费记录生成准备
+            let DbConsumption = M.Consumption.build({
+                is_close: 0,
+                price: c.price,
+                quantity: c.quantity,
+                is_cash: c.is_cash,
+                employee_id: c.employee_id,
+                commodity_id: DbCommodity.id,
+                card_id: DbCard.id,
+                member_id: DbMember.id,
+                user_id: SS.user.id,
+            });
+            DbConsumptions.push(DbConsumption);
+
+        };
+
+
+
+        //保存本次消费相关记录
         const t = await M.transaction();
         try {
-
-
-
-            dbCurrentMember.phone = '13936248323';
-            await dbCurrentMember.save({ transaction: t });
-            for (let c of dbConsumptions) {
-                c.stocks--;
+            //商品变更
+            for (let c of DbCommodities) {
                 await c.save({ transaction: t });
             }
+            //卡余额变更
+            await DbCard.save({ transaction: t });
+
+            //消费记录变更
+            for (let c of DbConsumptions) {
+                await c.save({ transaction: t });
+            }
+
             //throw new Error();
         } catch (e) {
             t.rollback();
@@ -124,13 +175,8 @@ class MemberController extends Controller {
             message: '记账完毕'
         };
         return;
-        //console.log(dbConsumptions);
-        // t.commit();
-        //console.log(dbConsumptions);
-
-
     }
 
 
 }
-module.exports = MemberController;
+module.exports = MixController;
