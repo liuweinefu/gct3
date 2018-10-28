@@ -67,19 +67,19 @@
             op.buttonOption = {
                 // importExcel: true,
                 // exportExcel: true,
-                addNewCard: {
-                    text: '新卡开户(<ins>N</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
-                    iconCls: 'icon-search',
-                    onClick: function () {
-                        console.log(view);
-                    }
-                },
+                // addNewCard: {
+                //     text: '新卡开户(<ins>N</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
+                //     iconCls: 'icon-search',
+                //     onClick: function () {
+                //         console.log(view);
+                //     }
+                // },
                 addNewMember: {
-                    text: '旧卡增户(<ins>O</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
+                    text: '添加新会员(<ins>N</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
                     iconCls: 'icon-search',
                     onClick: function () {
-                        console.log(view);
-                    }
+                        addNewMember();
+                    },
                 },
                 // sort: true,
                 // search: true,
@@ -100,6 +100,170 @@
 
             //表格设置**************************************************
             view.currentRow = null;
+            var addNewMember = function () {
+                console.log('addNewMember');
+                var dialogTitle = '增添新会员';
+                // var dialogTitle = '';
+                if (view.dialogPage.addNewMemberDiv) {
+                    view.dialogPage.addNewMemberDiv.dialog('setTitle', dialogTitle);
+                    view.dialogPage.addNewMemberDiv.dialog('open', true);
+                    return;
+                }
+                var dialogDiv = $('<div></div>');
+                dialogDiv.appendTo(view.getDialogContainerDiv());
+                view.dialogPage.addNewMemberDiv = dialogDiv;
+
+                var layDiv = $('<div></div>');
+                layDiv.appendTo(dialogDiv);
+
+                layDiv.layout({
+                    fit: true
+                });
+                layDiv.layout('add', {
+                    region: 'west',
+                    width: '50%',
+                    title: '会员卡信息',
+                })
+                // var leftRegion = $('<div></div>');
+                // leftRegion.appendTo(layDiv.layout('panel', 'west'));
+                var leftRegion = layDiv.layout('panel', 'west');
+
+                layDiv.layout('add', {
+                    region: 'east',
+                    width: '50%',
+                    title: '会员信息',
+                })
+                // var rightRegion = $('<div></div>');
+                var rightRegion = layDiv.layout('panel', 'east');
+
+
+                var textboxOpArray = [
+                    {
+                        label: '会员名:', prompt: 'Ent'
+                    },
+                    {
+                        label: '会员电话:', prompt: 'Ent'
+                    },
+                    {
+                        label: '会员其他电话:', prompt: 'Ent'
+                    },
+                ]
+                var textboxDivArray = textboxOpArray.map(tb => {
+                    var op = {
+                        width: '100%',
+                        labelPosition: 'before',
+                        labelAlign: 'left',
+                        labelWidth: '170'
+                    }
+                    op = Object.assign(op, tb);
+                    console.log(op);
+                    var tbDiv = $('<div></div>');
+                    tbDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion));
+
+                    tbDiv.textbox(op);
+                    return tbDiv;
+                })
+                var textboxDivArraya = textboxOpArray.map(tb => {
+                    var op = {
+                        width: '100%',
+                        labelPosition: 'before',
+                        labelAlign: 'left',
+                        labelWidth: '170'
+                    }
+                    op = Object.assign(op, tb);
+                    console.log(op);
+                    var tbDiv = $('<div></div>');
+                    tbDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(rightRegion));
+
+                    tbDiv.textbox(op);
+                    return tbDiv;
+                })
+                // // var cardSpan = $('<span width="50%"></span>');
+                // // cardSpan.appendTo(dialogDiv);
+                // var cardNumberDiv = $('<div>1</div>');
+                // var cardTypeDiv = $('<div>2</div>');
+                // var cardNameDiv = $('<div></div>');
+                // var cardPhoneDiv = $('<div></div>');
+                // var cardOtherPhoneDiv = $('<div></div>');
+                // var cardRemarkDiv = $('<div></div>');
+                // var cardPassDiv = $('<div></div>');
+                // cardNumberDiv.appendTo(dialogDiv);
+                // cardTypeDiv.appendTo(dialogDiv);
+
+
+
+                // // var memberSpan = $('<span width="50%"></span>');
+                // // memberSpan.appendTo(dialogDiv);
+                // var memberNumberDiv = $('<div>3</div>');
+                // var memberTypeDiv = $('<div>4</div>');
+                // var memberNameDiv = $('<div></div>');
+                // var memberPhoneDiv = $('<div></div>');
+                // var memberOtherPhoneDiv = $('<div></div>');
+                // var memberRemarkDiv = $('<div></div>');
+                // memberNumberDiv.appendTo(dialogDiv);
+                // memberTypeDiv.appendTo(dialogDiv);
+
+
+
+                var addNewMemberHandler = function () {
+                    //发送新用户信息；
+                    console.log('addNewMemberHandler');
+                };
+                var dialogOp = {
+                    title: dialogTitle,
+                    width: 700,
+                    top: 120,
+                    height: 500,
+                    closable: true,
+                    closed: false,
+                    cache: false,
+                    //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
+                    //href: 'get_content.php',
+                    modal: true,
+                    onBeforeOpen: function () {
+                        // payView.build(payViewOp);
+                    },
+                    onOpen: function () {
+                        // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
+                        // payView.getTableDiv().datagrid('loadData', {
+                        //     footer: [
+                        //         { Commodity: { name: '现金应收：' }, price: 0 },
+                        //         { Commodity: { name: '卡内应收：' }, price: 0 },
+                        //         { Commodity: { name: '合计应收：' }, price: 0 }
+                        //     ],
+                        //     rows: [payView.makeNewRow()],
+                        //     total: 1
+                        // });
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: addNewMemberHandler,
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            //清理所有空间值；
+
+
+                            //dialogDiv.dialog('destroy');
+                            // $.post('card/clearCurrentCard').done(function (data) {
+                            //     if (data.cleared) {
+                            //         view.currentRow.passed = false;
+
+                            //         dialogDiv.dialog('close');
+                            //     } else {
+                            //         $.messager.alert('提示', '系统内部错误', 'info', function () {
+                            //             $.get('logout');
+                            //         });
+                            //     }
+                            // })
+
+                        }
+                    }]
+                };
+                dialogDiv.dialog(dialogOp);
+            };
+
+
             var empower = function () {
                 //检测是否已授权
                 if (view.currentRow.passed === true) {
@@ -218,7 +382,8 @@
                     var rows = payView.getTableDiv().datagrid('getRows');
                     if (rows.length == 0) {
                         return {
-                            // employee_id: 1,
+                            employee_id: '',
+                            Employee: {},
                             // commodity_id: 1,
                             // unitPrice: 100,
                             quantity: 1,
