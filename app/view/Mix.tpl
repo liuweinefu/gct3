@@ -101,7 +101,7 @@
             //表格设置**************************************************
             view.currentRow = null;
             var addNewMember = function () {
-                console.log('addNewMember');
+                //console.log('addNewMember');
                 var dialogTitle = '增添新会员';
                 // var dialogTitle = '';
                 if (view.dialogPage.addNewMemberDiv) {
@@ -119,6 +119,44 @@
                 layDiv.layout({
                     fit: true
                 });
+                layDiv.layout('add', {
+                    region: 'north',
+                    // width: '50%',
+                    minHeight: 55,
+                    // title: '会员卡号',
+                })
+                var topRegion = $('<div style="height:20px;padding:12px"></div>').appendTo(layDiv.layout('panel', 'north'));
+                var cardNumberDiv = $('<div></div>').appendTo($('<span></span>').appendTo(topRegion));
+                // var cardNumberDiv = $('<div></div>').appendTo($('<span><div style="width:300px;height:20px;padding:12px"></div></span>').appendTo(topRegion));
+                cardNumberDiv.textbox({
+                    label: '会员卡号:',
+                    // prompt: 'Ent',
+                    width: '300',
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    //labelWidth: '120'
+                });
+                var buttonContainerDiv = $('<span></span>').appendTo(topRegion);
+                var searchCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
+                var unlockCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
+
+                searchCardNumberBtn.linkbutton({
+                    iconCls: 'icon-search',
+                    text: '查询卡号',
+                    onClick: function () {
+                        console.log('查询卡号');
+                    }
+                });
+
+                unlockCardNumberBtn.linkbutton({
+                    iconCls: 'icon-search',
+                    text: '重置卡号',
+                    onClick: function () {
+                        console.log('重置卡号');
+                    }
+                });
+
+                //会员卡信息设置
                 layDiv.layout('add', {
                     region: 'west',
                     width: '50%',
@@ -178,30 +216,7 @@
                     tbDiv.textbox(op);
                     return tbDiv;
                 })
-                // // var cardSpan = $('<span width="50%"></span>');
-                // // cardSpan.appendTo(dialogDiv);
-                // var cardNumberDiv = $('<div>1</div>');
-                // var cardTypeDiv = $('<div>2</div>');
-                // var cardNameDiv = $('<div></div>');
-                // var cardPhoneDiv = $('<div></div>');
-                // var cardOtherPhoneDiv = $('<div></div>');
-                // var cardRemarkDiv = $('<div></div>');
-                // var cardPassDiv = $('<div></div>');
-                // cardNumberDiv.appendTo(dialogDiv);
-                // cardTypeDiv.appendTo(dialogDiv);
 
-
-
-                // // var memberSpan = $('<span width="50%"></span>');
-                // // memberSpan.appendTo(dialogDiv);
-                // var memberNumberDiv = $('<div>3</div>');
-                // var memberTypeDiv = $('<div>4</div>');
-                // var memberNameDiv = $('<div></div>');
-                // var memberPhoneDiv = $('<div></div>');
-                // var memberOtherPhoneDiv = $('<div></div>');
-                // var memberRemarkDiv = $('<div></div>');
-                // memberNumberDiv.appendTo(dialogDiv);
-                // memberTypeDiv.appendTo(dialogDiv);
 
 
 
