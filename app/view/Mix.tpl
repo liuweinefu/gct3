@@ -188,11 +188,19 @@
                     return;
                 }
                 var memberName = view.currentRow.name;
-                var balance = Number.parseFloat(view.currentRow.Card.balance).toFixed(2);
+                var balance = Number.parseFloat(view.currentRow.Card.balance);
                 var discount = Number.parseFloat(view.currentRow.Card.CardType.discount * 100).toFixed(2) + '%';
-                var dialogTitle = `客户:<span style="color:LightCoral">${memberName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                   余额:<span style="color:LightCoral">${balance}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                   折扣:<span style="color:LightCoral">${discount}</span>`;
+                var dialogTitle = '';
+                if (balance > 0) {
+                    dialogTitle = `客户:&nbsp;<span style="color:DarkGreen">${memberName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                   余额:&nbsp;<span style="color:DarkGreen">${balance.toFixed(2)}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                   折扣:&nbsp;<span style="color:DarkGreen">${discount}</span>`;
+                } else {
+                    dialogTitle = `客户:&nbsp;<span style="color:LightCoral">${memberName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                   余额:&nbsp;<span style="color:LightCoral">${balance.toFixed(2)}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                   折扣:&nbsp;<span style="color:LightCoral">${discount}</span>`;
+                }
+
 
                 if (view.dialogPage.payDiv) {
                     view.dialogPage.payDiv.dialog('setTitle', dialogTitle);
@@ -585,8 +593,13 @@
                     ${tableDiv.datagrid('getData').footer[1].Commodity.name}${tableDiv.datagrid('getData').footer[1].price}</br>
                     ${tableDiv.datagrid('getData').footer[2].Commodity.name}${tableDiv.datagrid('getData').footer[2].price}</br>
                     `
+                    var titleMessage = `结算提示：`
+                    if (tableDiv.datagrid('getData').footer[1].price > view.currentRow.Card.balance) {
+                        titleMessage += `<span style="color:LightCoral">卡内余额不足请充值</span>`;
+                    };
+
                     //发送
-                    $.messager.alert('提示', payMessage, 'info', function () {
+                    $.messager.alert(titleMessage, payMessage, 'info', function () {
                         var sendObject = {
                             currentRow: JSON.stringify(view.currentRow),
                             records: JSON.stringify(tableDiv.datagrid('getData'))
