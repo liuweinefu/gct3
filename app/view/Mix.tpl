@@ -80,6 +80,7 @@
                     onClick: function () {
                         addNewMember();
                     },
+
                 },
                 // sort: true,
                 // search: true,
@@ -119,6 +120,8 @@
                 layDiv.layout({
                     fit: true
                 });
+
+                //卡号查询区域设置*******************************************************************************************************************
                 layDiv.layout('add', {
                     region: 'north',
                     // width: '50%',
@@ -130,93 +133,194 @@
                 // var cardNumberDiv = $('<div></div>').appendTo($('<span><div style="width:300px;height:20px;padding:12px"></div></span>').appendTo(topRegion));
                 cardNumberDiv.textbox({
                     label: '会员卡号:',
-                    // prompt: 'Ent',
+                    // //prompt: 'Ent',
                     width: '300',
                     labelPosition: 'before',
                     labelAlign: 'left',
                     //labelWidth: '120'
-                });
+                }).textbox('textbox').select();
                 var buttonContainerDiv = $('<span></span>').appendTo(topRegion);
                 var searchCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
                 var unlockCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
 
+                view.isNewCard = false;
                 searchCardNumberBtn.linkbutton({
                     iconCls: 'icon-search',
                     text: '查询卡号',
                     onClick: function () {
-                        console.log('查询卡号');
+                        var value = cardNumberDiv.textbox('getValue');
+                        if (!value || value.trim().length === 0) {
+                            $.messager.alert('警告', '请输入卡号');
+                            return;
+                        }
+                        $.post('/mix/searchCardNumber', { card_number: value })
+                            .done(function (data) {
+                                console.log(data);
+                                if (data.errMessage) {
+                                    $.messager.alert('警告', data.errMessage);
+                                    return;
+                                };
+                                view.isNewCard = data.isNew;
+                                if (view.isNewCard) {
+                                    cardNumberDiv.textbox('setValue', `新卡号：${value}`);
+                                    cardTbDivArray.forEach(tb => tb.textbox('enable'));
+                                } else {
+                                    let card = data.card;
+                                    //设置cardTb的value
+                                    cardTbValues = [card.CardType.name, card.name, card.phone, card.otherphone, card.remark];
+                                    for (let i = 0; i < 5; i++) {
+                                        cardTbDivArray[i].textbox('setValue', cardTbValues[i]);
+                                    }
+                                    memberTbDivArray.forEach(tb => tb.textbox('enable'));
+                                }
+                                cardNumberDiv.textbox('disable');
+                                searchCardNumberBtn.linkbutton('disable');
+
+                            })
                     }
                 });
+
+
+                var unlockCardNumberBtnHandle = function () {
+                    cardNumberDiv.textbox('reset').textbox('enable').textbox('textbox').select();
+                    searchCardNumberBtn.linkbutton('enable');
+
+                    cardTbDivArray.forEach(tb => tb.textbox('disable').textbox('reset'));
+                    memberTbDivArray.forEach(tb => tb.textbox('disable').textbox('reset'));
+                }
 
                 unlockCardNumberBtn.linkbutton({
                     iconCls: 'icon-search',
                     text: '重置卡号',
-                    onClick: function () {
-                        console.log('重置卡号');
-                    }
+                    onClick: unlockCardNumberBtnHandle
                 });
 
-                //会员卡信息设置
+                //会员卡信息区域设置*****************************************************************************************
                 layDiv.layout('add', {
                     region: 'west',
+                    collapsible: false,
                     width: '50%',
                     title: '会员卡信息',
                 })
-                // var leftRegion = $('<div></div>');
-                // leftRegion.appendTo(layDiv.layout('panel', 'west'));
+
                 var leftRegion = layDiv.layout('panel', 'west');
 
-                layDiv.layout('add', {
-                    region: 'east',
-                    width: '50%',
-                    title: '会员信息',
+
+                var cardTypeDiv = $('<div></div>');
+                var cardTbDivArray = [cardTypeDiv];
+                cardTypeDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion));
+                cardTypeDiv.combobox({
+                    width: '100%',
+                    label: '会员卡类型:',
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    labelWidth: '130',
+                    //queryParams: { findBy: ['id', 'name'] },
+                    // panelWidth: 160,
+                    // editable: false,
+                    editable: true,
+                    valueField: 'id',
+                    textField: 'name',
+                    mode: 'remote',
+                    url: '/cardType/findAll',
+                    loadFilter: function (data) {
+                        return data.rows;
+                    },
+                    //data: userType,
+                    panelHeight: 100,
+                    disabled: true,
                 })
-                // var rightRegion = $('<div></div>');
-                var rightRegion = layDiv.layout('panel', 'east');
-
-
-                var textboxOpArray = [
+                var cardTbOpArray = [
                     {
-                        label: '会员名:', prompt: 'Ent'
+                        label: '会员卡主名:',
+                        //prompt: 'Ent'
                     },
                     {
-                        label: '会员电话:', prompt: 'Ent'
+                        label: '会员卡主电话:',
+                        //prompt: 'Ent'
                     },
                     {
-                        label: '会员其他电话:', prompt: 'Ent'
+                        label: '会员卡主其他电话:',
+                        //prompt: 'Ent'
+                    },
+                    {
+                        label: '会员卡备注:',
+                        //prompt: 'Ent'
                     },
                 ]
-                var textboxDivArray = textboxOpArray.map(tb => {
+                cardTbOpArray.forEach(tb => {
                     var op = {
                         width: '100%',
                         labelPosition: 'before',
                         labelAlign: 'left',
-                        labelWidth: '170'
+                        labelWidth: '130',
+                        disabled: true,
                     }
                     op = Object.assign(op, tb);
-                    console.log(op);
+                    // console.log(op);
                     var tbDiv = $('<div></div>');
                     tbDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion));
 
                     tbDiv.textbox(op);
-                    return tbDiv;
+                    cardTbDivArray.push(tbDiv);
                 })
-                var textboxDivArraya = textboxOpArray.map(tb => {
+
+
+
+
+
+
+                //会员信息区域设置*******************************************************************************************************************
+                layDiv.layout('add', {
+                    region: 'east',
+                    collapsible: false,
+                    width: '50%',
+                    title: '会员信息',
+                });
+                // var rightRegion = $('<div></div>');
+                var rightRegion = layDiv.layout('panel', 'east');
+
+                // var cardTypeDiv = $('<div></div>');
+                // var emptyDiv = $('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion);
+                // var memberTbDivArray = [emptyDiv];
+
+                $('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(rightRegion);
+
+
+                var memberTbOpArray = [
+                    {
+                        label: '会员名:',
+                        //prompt: 'Ent'
+                    },
+                    {
+                        label: '会员电话:',
+                        //prompt: 'Ent'
+                    },
+                    {
+                        label: '会员其他电话:',
+                        //prompt: 'Ent'
+                    },
+                    {
+                        label: '会员备注:',
+                        //prompt: 'Ent'
+                    },
+                ];
+                var memberTbDivArray = memberTbOpArray.map(tb => {
                     var op = {
                         width: '100%',
                         labelPosition: 'before',
                         labelAlign: 'left',
-                        labelWidth: '170'
+                        labelWidth: '130',
+                        disabled: true,
                     }
                     op = Object.assign(op, tb);
-                    console.log(op);
+                    // console.log(op);
                     var tbDiv = $('<div></div>');
                     tbDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(rightRegion));
 
                     tbDiv.textbox(op);
                     return tbDiv;
-                })
-
+                });
 
 
 
@@ -229,7 +333,7 @@
                     width: 700,
                     top: 120,
                     height: 500,
-                    closable: true,
+                    closable: false,
                     closed: false,
                     cache: false,
                     //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
@@ -239,16 +343,8 @@
                         // payView.build(payViewOp);
                     },
                     onOpen: function () {
-                        // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
-                        // payView.getTableDiv().datagrid('loadData', {
-                        //     footer: [
-                        //         { Commodity: { name: '现金应收：' }, price: 0 },
-                        //         { Commodity: { name: '卡内应收：' }, price: 0 },
-                        //         { Commodity: { name: '合计应收：' }, price: 0 }
-                        //     ],
-                        //     rows: [payView.makeNewRow()],
-                        //     total: 1
-                        // });
+                        view.isNewCard = false;
+                        cardNumberDiv.textbox('reset').textbox('enable').textbox('textbox').select();
                     },
                     buttons: [{
                         text: '保存',
@@ -256,21 +352,12 @@
                     }, {
                         text: '关闭',
                         handler: function () {
-                            //清理所有空间值；
+                            //清理所有空间值;
+                            unlockCardNumberBtnHandle();
+                            dialogDiv.dialog('close');
 
 
-                            //dialogDiv.dialog('destroy');
-                            // $.post('card/clearCurrentCard').done(function (data) {
-                            //     if (data.cleared) {
-                            //         view.currentRow.passed = false;
 
-                            //         dialogDiv.dialog('close');
-                            //     } else {
-                            //         $.messager.alert('提示', '系统内部错误', 'info', function () {
-                            //             $.get('logout');
-                            //         });
-                            //     }
-                            // })
 
                         }
                     }]
@@ -355,7 +442,7 @@
                     }, {
                         text: '关闭',
                         handler: function () {
-                            //dialogDiv.dialog('destroy');
+                            //dialogDiv.dialog('destroy');                            
                             dialogDiv.dialog('close');
                         }
                     }]

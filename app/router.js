@@ -85,6 +85,8 @@ module.exports = app => {
   router.post('/card/clearCurrentCard', controller.card.clearCurrentCard);
 
   router.post('/mix/settlement', controller.mix.settlement);
+  router.post('/mix/searchCardNumber', controller.mix.searchCardNumber);
+
 
   // router.get('/user', controller.user.getTpl);
   // router.post('/user/findAll', controller.user.findAll);

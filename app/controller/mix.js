@@ -177,6 +177,38 @@ class MixController extends Controller {
         return;
     }
 
+    async searchCardNumber() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        // const O = ctx.controllerOption; 
+        const SS = ctx.session;
 
+        SS.currentCard = null;
+        if (!B || !B.card_number) {
+            ctx.response.body = {
+                errMessage: '查询信息出错'
+            }
+        }
+        var card = await M.Card.findOne({
+            where: {
+                card_number: B.card_number
+            },
+            include: [M.CardType],
+        })
+        if (!card) {
+            SS.currentCard = { card_number: B.card_number };
+            ctx.response.body = {
+                isNew: true,
+            }
+        } else {
+            SS.currentCard = card;
+            ctx.response.body = {
+                isNew: false,
+                card: card
+            }
+        }
+    }
 }
 module.exports = MixController;
