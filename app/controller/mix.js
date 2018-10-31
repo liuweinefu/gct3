@@ -188,7 +188,7 @@ class MixController extends Controller {
         SS.currentCard = null;
         if (!B || !B.card_number) {
             ctx.response.body = {
-                errMessage: '查询信息出错'
+                message: '查询信息出错'
             }
         }
         var card = await M.Card.findOne({
@@ -209,6 +209,60 @@ class MixController extends Controller {
                 card: card
             }
         }
+    }
+
+    async addNewMerber() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        // const O = ctx.controllerOption; 
+        const SS = ctx.session;
+
+        if (!B.card && !B.member || !SS.currentCard) {
+            ctx.satus = 502;
+            return;
+        }
+        var key = B.card ? 'card' : 'member';
+        if (key == 'member' && SS.currentCard.id === undefined) {
+            ctx.status = 502;
+            return;
+        }
+
+        var card = null;
+        var member = null;
+        var valueArray = B[key];
+        var valueObj = {
+            name: valueArray[valueArray.length - 4],
+            phone: valueArray[valueArray.length - 3],
+            otherphone: valueArray[valueArray.length - 2],
+            remark: valueArray[valueArray.length - 1],
+        };
+
+        if (key === 'card') {
+            const t = await M.transaction();
+            try {
+                card = await M.Card.build(Object.assign({ card_number: SS.currentCard.card_number, card_type_id: B[key][0] }, valueObj));
+                await card.save({ transaction: t });
+                member = await M.Member.build(Object.assign({ card_id: card.id }, valueObj), valueObj);
+                await member.save({ transaction: t });
+            } catch (e) {
+                t.rollback();
+                ctx.response.body = {
+                    message: '保存失败'
+                };
+                return;
+            };
+            t.commit();
+
+        } else {
+            member = await M.Member.build(Object.assign({ card_id: SS.currentCard.id }, valueObj), valueObj);
+            await member.save();
+        }
+        // ctx.status = 200;
+        ctx.response.body = {
+            id: member.id
+        };
     }
 }
 module.exports = MixController;

@@ -144,44 +144,52 @@
                 var unlockCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
 
                 view.isNewCard = false;
+                var currnetTbDivArray = [];
+
+                var searchCardNumberBtnHandle = function () {
+
+                    var value = cardNumberDiv.textbox('getValue');
+                    if (!value || value.trim().length === 0) {
+                        $.messager.alert('警告', '请输入卡号');
+                        return;
+                    }
+                    $.post('/mix/searchCardNumber', { card_number: value })
+                        .done(function (data) {
+                            // console.log(data);
+                            currnetTbDivArray = [];
+                            if (data.message) {
+                                $.messager.alert('警告', data.message);
+                                return;
+                            };
+                            view.isNewCard = data.isNew;
+                            if (view.isNewCard) {
+                                cardNumberDiv.textbox('setValue', `新卡号：${value}`);
+                                cardTbDivArray.forEach(tb => tb.textbox('enable'));
+                                currnetTbDivArray = cardTbDivArray;
+                            } else {
+                                let card = data.card;
+                                currnetTbDivArray = memberTbDivArray;
+                                //设置cardTb的value
+                                cardTbValues = [card.CardType.name, card.name, card.phone, card.otherphone, card.remark];
+                                for (let i = 0; i < 5; i++) {
+                                    cardTbDivArray[i].textbox('setValue', cardTbValues[i]);
+                                }
+                                memberTbDivArray.forEach(tb => tb.textbox('enable'));
+                            }
+                            cardNumberDiv.textbox('disable');
+                            searchCardNumberBtn.linkbutton('disable');
+
+                        })
+                };
                 searchCardNumberBtn.linkbutton({
                     iconCls: 'icon-search',
                     text: '查询卡号',
-                    onClick: function () {
-                        var value = cardNumberDiv.textbox('getValue');
-                        if (!value || value.trim().length === 0) {
-                            $.messager.alert('警告', '请输入卡号');
-                            return;
-                        }
-                        $.post('/mix/searchCardNumber', { card_number: value })
-                            .done(function (data) {
-                                console.log(data);
-                                if (data.errMessage) {
-                                    $.messager.alert('警告', data.errMessage);
-                                    return;
-                                };
-                                view.isNewCard = data.isNew;
-                                if (view.isNewCard) {
-                                    cardNumberDiv.textbox('setValue', `新卡号：${value}`);
-                                    cardTbDivArray.forEach(tb => tb.textbox('enable'));
-                                } else {
-                                    let card = data.card;
-                                    //设置cardTb的value
-                                    cardTbValues = [card.CardType.name, card.name, card.phone, card.otherphone, card.remark];
-                                    for (let i = 0; i < 5; i++) {
-                                        cardTbDivArray[i].textbox('setValue', cardTbValues[i]);
-                                    }
-                                    memberTbDivArray.forEach(tb => tb.textbox('enable'));
-                                }
-                                cardNumberDiv.textbox('disable');
-                                searchCardNumberBtn.linkbutton('disable');
-
-                            })
-                    }
+                    onClick: searchCardNumberBtnHandle
                 });
 
 
                 var unlockCardNumberBtnHandle = function () {
+                    currnetTbDivArray = [];
                     cardNumberDiv.textbox('reset').textbox('enable').textbox('textbox').select();
                     searchCardNumberBtn.linkbutton('enable');
 
@@ -194,6 +202,7 @@
                     text: '重置卡号',
                     onClick: unlockCardNumberBtnHandle
                 });
+
 
                 //会员卡信息区域设置*****************************************************************************************
                 layDiv.layout('add', {
@@ -325,8 +334,48 @@
 
 
                 var addNewMemberHandler = function () {
-                    //发送新用户信息；
-                    console.log('addNewMemberHandler');
+                    //发送新用户信息;
+                    if (!Array.isArray(currnetTbDivArray) || currnetTbDivArray.length === 0) {
+                        $.messager.alert('警告', '无有效信息');
+                        return;
+                    }
+                    var sendArray = currnetTbDivArray.map(tbDiv => {
+                        // console.log('getText:' + tbDiv.textbox('getText'));
+                        // console.log('getValue:' + tbDiv.textbox('getValue'));
+                        return tbDiv.textbox('getValue');
+                    });
+                    var sendKey = '';
+                    if (currnetTbDivArray === cardTbDivArray) {
+                        sendKey = 'card';
+                    } else if (currnetTbDivArray === memberTbDivArray) {
+                        sendKey = 'member';
+                    } else {
+                        $.messager.alert('警告', '无有效信息');
+                        return;
+                    }
+
+
+                    // console.log($.fn.validatebox.defaults.rules);
+                    $.post('/mix/addNewMerber', { [sendKey]: sendArray })
+                        .done(function (data) {
+                            if (data.message) {
+                                $.messager.alert('警告', data.message);
+                            } else {
+                                $.messager.alert('提示', '保存成功', 'info', function () {
+                                    unlockCardNumberBtnHandle();
+                                    dialogDiv.dialog('close');
+                                    // view.getTableDiv().datagrid('reload');
+                                    view.getTableDiv().datagrid('load', {
+                                        name: 'id',
+                                        value: data.id
+                                    });
+
+                                });
+                            }
+
+
+                        });
+
                 };
                 var dialogOp = {
                     title: dialogTitle,
