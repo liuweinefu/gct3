@@ -137,8 +137,16 @@
                     width: '300',
                     labelPosition: 'before',
                     labelAlign: 'left',
+                    // required: true,
+                    validType: ['isNumber', 'length[1,10]'],
+                    tipPosition: 'left'
                     //labelWidth: '120'
                 }).textbox('textbox').select();
+                cardNumberDiv.textbox('textbox').keydown(function (e) {
+                    if (e.key === 'Enter') {
+                        setTimeout(searchCardNumberBtnHandle, 0);
+                    }
+                });
                 var buttonContainerDiv = $('<span></span>').appendTo(topRegion);
                 var searchCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
                 var unlockCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
@@ -147,12 +155,17 @@
                 var currnetTbDivArray = [];
 
                 var searchCardNumberBtnHandle = function () {
-
                     var value = cardNumberDiv.textbox('getValue');
-                    if (!value || value.trim().length === 0) {
-                        $.messager.alert('警告', '请输入卡号');
+
+                    if (!value || value.trim().length == 0 || !cardNumberDiv.textbox('isValid')) {
+                        $.messager.alert('警告', '请输入正确卡号');
                         return;
                     }
+
+                    // if (!value || value.trim().length == 0 || value.trim().length > 10 || !(/^\d+$/).test(value)) {
+                    //     $.messager.alert('警告', '请输入正确卡号');
+                    //     return;
+                    // }
                     $.post('/mix/searchCardNumber', { card_number: value })
                         .done(function (data) {
                             // console.log(data);
@@ -178,7 +191,7 @@
                             }
                             cardNumberDiv.textbox('disable');
                             searchCardNumberBtn.linkbutton('disable');
-
+                            currnetTbDivArray[0].textbox('textbox').select();
                         })
                 };
                 searchCardNumberBtn.linkbutton({
@@ -238,14 +251,19 @@
                     //data: userType,
                     panelHeight: 100,
                     disabled: true,
+                    required: true,
                 })
                 var cardTbOpArray = [
                     {
                         label: '会员卡主名:',
+                        required: true,
+                        // validType: ['isNumber', 'length[1,10]'],
                         //prompt: 'Ent'
                     },
                     {
                         label: '会员卡主电话:',
+                        required: true,
+                        validType: ['isNumber', 'length[8,11]'],
                         //prompt: 'Ent'
                     },
                     {
@@ -299,10 +317,13 @@
                 var memberTbOpArray = [
                     {
                         label: '会员名:',
+                        required: true,
                         //prompt: 'Ent'
                     },
                     {
                         label: '会员电话:',
+                        required: true,
+                        validType: ['isNumber', 'length[8,11]'],
                         //prompt: 'Ent'
                     },
                     {
@@ -339,11 +360,25 @@
                         $.messager.alert('警告', '无有效信息');
                         return;
                     }
-                    var sendArray = currnetTbDivArray.map(tbDiv => {
-                        // console.log('getText:' + tbDiv.textbox('getText'));
-                        // console.log('getValue:' + tbDiv.textbox('getValue'));
-                        return tbDiv.textbox('getValue');
-                    });
+                    var sendArray = [cardNumberDiv.textbox('getValue')];
+                    for (tbDiv of currnetTbDivArray) {
+                        if (!tbDiv.textbox('isValid')) {
+                            $.messager.alert('警告', '请输入正确的:<span style="color:LightCoral"><b>' + tbDiv.textbox('options').label.slice(0, -1)) + '</b></span>';
+                            return;
+                        };
+                        var value = tbDiv.textbox('getValue');
+                        sendArray.push(value);
+                    };
+                    // currnetTbDivArray.forEach(tbDiv => {
+                    //     // console.log('getText:' + tbDiv.textbox('getText'));
+                    //     // console.log('getValue:' + tbDiv.textbox('getValue'));
+                    //     if (!tbDiv.textbox('isValid')) {
+                    //         $.messager.alert('警告', '请输入正确' + tbDiv.textbox('options').label);
+                    // return;
+                    //     };
+                    //     var value = tbDiv.textbox('getValue');
+                    //     sendArray.push(value);
+                    // });
                     var sendKey = '';
                     if (currnetTbDivArray === cardTbDivArray) {
                         sendKey = 'card';
@@ -1222,7 +1257,7 @@
                     //width: 100,
                     sortable: true,
                     formatter: function (value, row, index) {
-                        console.log(row);
+                        // console.log(row);
                         if (!Number.isNaN(Date.parse(value))) {
                             return new Date(Date.parse(value)).toLocaleString();
                         } else {

@@ -219,19 +219,44 @@ class MixController extends Controller {
         // const O = ctx.controllerOption; 
         const SS = ctx.session;
 
-        if (!B.card && !B.member || !SS.currentCard) {
-            ctx.satus = 502;
+
+        if (!B.card && !B.member) {
+            ctx.response.body = {
+                message: '提交参数错误'
+            };
             return;
         }
         var key = B.card ? 'card' : 'member';
+        if (!SS.currentCard || SS.currentCard.card_number != B[key][0]) {
+            ctx.response.body = {
+                message: '当前卡号错误'
+            };
+            return;
+
+        }
+
         if (key == 'member' && SS.currentCard.id === undefined) {
-            ctx.status = 502;
+            ctx.response.body = {
+                message: '无当前卡'
+            };
             return;
         }
 
         var card = null;
         var member = null;
         var valueArray = B[key];
+        if (typeof valueArray[valueArray.length - 4] != 'string' || valueArray[valueArray.length - 4].length == 0) {
+            ctx.response.body = {
+                message: '用户名不能为空'
+            };
+            return;
+        }
+        if (typeof valueArray[valueArray.length - 3] != 'string' || valueArray[valueArray.length - 3].length < 8 || valueArray[valueArray.length - 3].length > 11) {
+            ctx.response.body = {
+                message: '电话号错误'
+            };
+            return;
+        }
         var valueObj = {
             name: valueArray[valueArray.length - 4],
             phone: valueArray[valueArray.length - 3],
@@ -242,11 +267,12 @@ class MixController extends Controller {
         if (key === 'card') {
             const t = await M.transaction();
             try {
-                card = await M.Card.build(Object.assign({ card_number: SS.currentCard.card_number, card_type_id: B[key][0] }, valueObj));
+                card = await M.Card.build(Object.assign({ card_number: SS.currentCard.card_number, card_type_id: B[key][1] }, valueObj));
                 await card.save({ transaction: t });
-                member = await M.Member.build(Object.assign({ card_id: card.id }, valueObj), valueObj);
+                member = await M.Member.build(Object.assign({ card_id: card.id }, valueObj));
                 await member.save({ transaction: t });
             } catch (e) {
+                // console.log(e);
                 t.rollback();
                 ctx.response.body = {
                     message: '保存失败'
@@ -256,7 +282,7 @@ class MixController extends Controller {
             t.commit();
 
         } else {
-            member = await M.Member.build(Object.assign({ card_id: SS.currentCard.id }, valueObj), valueObj);
+            member = await M.Member.build(Object.assign({ card_id: SS.currentCard.id }, valueObj));
             await member.save();
         }
         // ctx.status = 200;

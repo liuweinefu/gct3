@@ -1,3 +1,23 @@
+//拓展验证规则
+$.extend($.fn.validatebox.defaults.rules, {
+    isNumber: {
+        validator: function (value) {
+            var re = /^\d+$/;
+            return re.test(value);
+        },
+        message: '请输入数字'
+    },
+    // minLength: {
+    //     validator: function (value, param) {
+    //         return value.length >= param[0];
+    //     },
+    //     message: 'Please enter at least {0} characters.'
+    // }
+});
+
+
+
+
 var combogridEvents = function (page) {
     return {
         onLoadSuccess: function () {
