@@ -29,7 +29,7 @@ class CardController extends Controller {
         //const C = ctx.condition = {};
         const M = ctx.model;
         const O = ctx.controllerOption;
-        const S = ctx.session;
+        const SS = ctx.session;
 
 
         var passed = false;
@@ -38,7 +38,7 @@ class CardController extends Controller {
         if (B.id) {
             let card = await M[O.modelName].findOne({ where: { id: B.id } });
             if (!card.pass || card.pass === md5(B.pass)) {
-                S.currentCardId = B.id;
+                SS.currentCardId = B.id;
                 passed = true;
             }
         }

@@ -548,21 +548,8 @@
                 };
                 dialogDiv.dialog(dialogOp);
             };
-            var _clearCurrentCardId = function (dialogDiv) {
-                $.post('card/clearCurrentCard')
-                    .done(function (data) {
-                        if (data.cleared) {
-                            view.currentRow.passed = false;
-                            dialogDiv.dialog('close');
-                        } else {
-                            $.messager.alert('提示', '系统内部错误', 'info', function () {
-                                $.get('logout');
-                            });
-                        }
-                    });
-            }
             var pay = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
+                if (!view.currentRow) {
                     return;
                 }
                 var memberName = view.currentRow.name;
@@ -1035,29 +1022,26 @@
                         handler: payHandler,
                     }, {
                         text: '关闭',
-                        // handler: _closeDlg,
                         handler: function () {
-                            _clearCurrentCardId(dialogDiv);
-                            // $.post('card/clearCurrentCard')
-                            //     .done(function (data) {
-                            //         if (data.cleared) {
-                            //             view.currentRow.passed = false;
-                            //             dialogDiv.dialog('close');
-                            //         } else {
-                            //             $.messager.alert('提示', '系统内部错误', 'info', function () {
-                            //                 $.get('logout');
-                            //             });
-                            //         }
-                            //     })
+                            //dialogDiv.dialog('destroy');
+                            $.post('card/clearCurrentCard').done(function (data) {
+                                if (data.cleared) {
+                                    view.currentRow.passed = false;
+
+                                    dialogDiv.dialog('close');
+                                } else {
+                                    $.messager.alert('提示', '系统内部错误', 'info', function () {
+                                        $.get('logout');
+                                    });
+                                }
+                            })
+
                         }
                     }]
                 };
                 dialogDiv.dialog(dialogOp);
             }
             var recharge = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
-                    return;
-                }
                 // view.currentRow = view.getTableDiv().datagrid('getRows')[index];
                 // if (!view.currentRow.id) {
                 //     $.messager.alert('提示', '请先保存再设置密码', 'info');
@@ -1125,398 +1109,14 @@
                     }, {
                         text: '关闭',
                         handler: function () {
-                            _clearCurrentCardId(dialogDiv);
-                        }
-                    }]
-                };
-                dialogDiv.dialog(dialogOp);
-            }
-            var addMember = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
-                    return;
-                }
-                var dialogTitle = `为会员卡号：<span style="color:LightCoral"><b>${view.currentRow.Card.card_number}</b></span>增加新会员`;
-                // var dialogTitle = '';
-                if (view.dialogPage.addMember) {
-                    view.dialogPage.addMember.dialog('setTitle', dialogTitle);
-                    view.dialogPage.addMember.dialog('open', true);
-                    return;
-                }
-                var dialogDiv = $('<div></div>');
-                dialogDiv.appendTo(view.getDialogContainerDiv());
-                view.dialogPage.addMember = dialogDiv;
-
-
-                var memberNameDiv = $('<div></div>').appendTo(dialogDiv);
-                var memberPhoneDiv = $('<div></div>').appendTo(dialogDiv);
-                var memberOtherPhoneDiv = $('<div></div>').appendTo(dialogDiv);
-                var memberRemarkDiv = $('<div></div>').appendTo(dialogDiv);
-
-
-
-
-
-
-
-
-
-                var layDiv = $('<div></div>');
-                layDiv.appendTo(dialogDiv);
-
-                layDiv.layout({
-                    fit: true
-                });
-
-                //卡号查询区域设置*******************************************************************************************************************
-                layDiv.layout('add', {
-                    region: 'north',
-                    // width: '50%',
-                    minHeight: 55,
-                    // title: '会员卡号',
-                })
-                var topRegion = $('<div style="height:20px;padding:12px"></div>').appendTo(layDiv.layout('panel', 'north'));
-                var cardNumberDiv = $('<div></div>').appendTo($('<span></span>').appendTo(topRegion));
-                // var cardNumberDiv = $('<div></div>').appendTo($('<span><div style="width:300px;height:20px;padding:12px"></div></span>').appendTo(topRegion));
-                cardNumberDiv.textbox({
-                    label: '会员卡号:',
-                    // //prompt: 'Ent',
-                    width: '300',
-                    labelPosition: 'before',
-                    labelAlign: 'left',
-                    // required: true,
-                    validType: ['isNumber', 'length[1,10]'],
-                    tipPosition: 'left'
-                    //labelWidth: '120'
-                }).textbox('textbox').select();
-                cardNumberDiv.textbox('textbox').keydown(function (e) {
-                    if (e.key === 'Enter') {
-                        setTimeout(searchCardNumberBtnHandle, 0);
-                    }
-                });
-                var buttonContainerDiv = $('<span></span>').appendTo(topRegion);
-                var searchCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
-                var unlockCardNumberBtn = $('<a style="margin-left:20px;"></a>').appendTo(buttonContainerDiv);
-
-                view.isNewCard = false;
-                var currnetTbDivArray = [];
-
-                var searchCardNumberBtnHandle = function () {
-                    var value = cardNumberDiv.textbox('getValue');
-
-                    if (!value || value.trim().length == 0 || !cardNumberDiv.textbox('isValid')) {
-                        $.messager.alert('警告', '请输入正确卡号');
-                        return;
-                    }
-
-                    // if (!value || value.trim().length == 0 || value.trim().length > 10 || !(/^\d+$/).test(value)) {
-                    //     $.messager.alert('警告', '请输入正确卡号');
-                    //     return;
-                    // }
-                    $.post('/mix/searchCardNumber', { card_number: value })
-                        .done(function (data) {
-                            // console.log(data);
-                            currnetTbDivArray = [];
-                            if (data.message) {
-                                $.messager.alert('警告', data.message);
-                                return;
-                            };
-                            view.isNewCard = data.isNew;
-                            if (view.isNewCard) {
-                                cardNumberDiv.textbox('setValue', `新卡号：${value}`);
-                                cardTbDivArray.forEach(tb => tb.textbox('enable'));
-                                currnetTbDivArray = cardTbDivArray;
-                            } else {
-                                let card = data.card;
-                                currnetTbDivArray = memberTbDivArray;
-                                //设置cardTb的value
-                                cardTbValues = [card.CardType.name, card.name, card.phone, card.otherphone, card.remark];
-                                for (let i = 0; i < 5; i++) {
-                                    cardTbDivArray[i].textbox('setValue', cardTbValues[i]);
-                                }
-                                memberTbDivArray.forEach(tb => tb.textbox('enable'));
-                            }
-                            cardNumberDiv.textbox('disable');
-                            searchCardNumberBtn.linkbutton('disable');
-                            currnetTbDivArray[0].textbox('textbox').select();
-                        })
-                };
-                searchCardNumberBtn.linkbutton({
-                    iconCls: 'icon-search',
-                    text: '查询卡号',
-                    onClick: searchCardNumberBtnHandle
-                });
-
-
-                var unlockCardNumberBtnHandle = function () {
-                    currnetTbDivArray = [];
-                    cardNumberDiv.textbox('reset').textbox('enable').textbox('textbox').select();
-                    searchCardNumberBtn.linkbutton('enable');
-
-                    cardTbDivArray.forEach(tb => tb.textbox('disable').textbox('reset'));
-                    memberTbDivArray.forEach(tb => tb.textbox('disable').textbox('reset'));
-                }
-
-                unlockCardNumberBtn.linkbutton({
-                    iconCls: 'icon-search',
-                    text: '重置卡号',
-                    onClick: unlockCardNumberBtnHandle
-                });
-
-
-                //会员卡信息区域设置*****************************************************************************************
-                layDiv.layout('add', {
-                    region: 'west',
-                    collapsible: false,
-                    width: '50%',
-                    title: '会员卡信息',
-                })
-
-                var leftRegion = layDiv.layout('panel', 'west');
-
-
-                var cardTypeDiv = $('<div></div>');
-                var cardTbDivArray = [cardTypeDiv];
-                cardTypeDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion));
-                cardTypeDiv.combobox({
-                    width: '100%',
-                    label: '会员卡类型:',
-                    labelPosition: 'before',
-                    labelAlign: 'left',
-                    labelWidth: '130',
-                    //queryParams: { findBy: ['id', 'name'] },
-                    // panelWidth: 160,
-                    // editable: false,
-                    editable: true,
-                    valueField: 'id',
-                    textField: 'name',
-                    mode: 'remote',
-                    url: '/cardType/findAll',
-                    loadFilter: function (data) {
-                        return data.rows;
-                    },
-                    //data: userType,
-                    panelHeight: 100,
-                    disabled: true,
-                    required: true,
-                });
-                var cardPassDiv = $('<div></div>');
-                cardTbDivArray.push(cardPassDiv);
-                cardPassDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion));
-                cardPassDiv.passwordbox({
-                    width: '100%',
-                    label: '会员卡密码:',
-                    labelPosition: 'before',
-                    labelAlign: 'left',
-                    labelWidth: '130',
-
-                    // prompt: '请输入密码',
-                    // iconWidth: 28,
-                    showEye: true,
-                    disabled: true,
-
-                });
-
-
-                var cardTbOpArray = [
-                    {
-                        label: '会员卡主名:',
-                        required: true,
-                        // validType: ['isNumber', 'length[1,10]'],
-                        //prompt: 'Ent'
-                    },
-                    {
-                        label: '会员卡主电话:',
-                        required: true,
-                        validType: ['isNumber', 'length[8,11]'],
-                        //prompt: 'Ent'
-                    },
-                    {
-                        label: '会员卡主其他电话:',
-                        //prompt: 'Ent'
-                    },
-                    {
-                        label: '会员卡备注:',
-                        //prompt: 'Ent'
-                    },
-                ]
-                cardTbOpArray.forEach(tb => {
-                    var op = {
-                        width: '100%',
-                        labelPosition: 'before',
-                        labelAlign: 'left',
-                        labelWidth: '130',
-                        disabled: true,
-                    }
-                    op = Object.assign(op, tb);
-                    // console.log(op);
-                    var tbDiv = $('<div></div>');
-                    tbDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion));
-
-                    tbDiv.textbox(op);
-                    cardTbDivArray.push(tbDiv);
-                })
-
-
-
-
-
-
-                //会员信息区域设置*******************************************************************************************************************
-                layDiv.layout('add', {
-                    region: 'east',
-                    collapsible: false,
-                    width: '50%',
-                    title: '会员信息',
-                });
-                // var rightRegion = $('<div></div>');
-                var rightRegion = layDiv.layout('panel', 'east');
-
-                // var cardTypeDiv = $('<div></div>');
-                // var emptyDiv = $('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(leftRegion);
-                // var memberTbDivArray = [emptyDiv];
-
-                $('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(rightRegion);
-                $('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(rightRegion);
-
-
-                var memberTbOpArray = [
-                    {
-                        label: '会员名:',
-                        required: true,
-                        //prompt: 'Ent'
-                    },
-                    {
-                        label: '会员电话:',
-                        required: true,
-                        validType: ['isNumber', 'length[8,11]'],
-                        //prompt: 'Ent'
-                    },
-                    {
-                        label: '会员其他电话:',
-                        //prompt: 'Ent'
-                    },
-                    {
-                        label: '会员备注:',
-                        //prompt: 'Ent'
-                    },
-                ];
-                var memberTbDivArray = memberTbOpArray.map(tb => {
-                    var op = {
-                        width: '100%',
-                        labelPosition: 'before',
-                        labelAlign: 'left',
-                        labelWidth: '130',
-                        disabled: true,
-                    }
-                    op = Object.assign(op, tb);
-                    // console.log(op);
-                    var tbDiv = $('<div></div>');
-                    tbDiv.appendTo($('<div style="width:300px;height:30px;padding:12px"></div>').appendTo(rightRegion));
-
-                    tbDiv.textbox(op);
-                    return tbDiv;
-                });
-
-
-
-                var addNewMemberHandler = function () {
-                    //发送新用户信息;
-                    if (!Array.isArray(currnetTbDivArray) || currnetTbDivArray.length === 0) {
-                        $.messager.alert('警告', '无有效信息');
-                        return;
-                    }
-                    var sendArray = [cardNumberDiv.textbox('getValue')];
-                    for (tbDiv of currnetTbDivArray) {
-                        if (!tbDiv.textbox('isValid')) {
-                            $.messager.alert('警告', '请输入正确的:<span style="color:LightCoral"><b>' + tbDiv.textbox('options').label.slice(0, -1)) + '</b></span>';
-                            return;
-                        };
-                        var value = tbDiv.textbox('getValue');
-                        sendArray.push(value);
-                    };
-                    // currnetTbDivArray.forEach(tbDiv => {
-                    //     // console.log('getText:' + tbDiv.textbox('getText'));
-                    //     // console.log('getValue:' + tbDiv.textbox('getValue'));
-                    //     if (!tbDiv.textbox('isValid')) {
-                    //         $.messager.alert('警告', '请输入正确' + tbDiv.textbox('options').label);
-                    // return;
-                    //     };
-                    //     var value = tbDiv.textbox('getValue');
-                    //     sendArray.push(value);
-                    // });
-                    var sendKey = '';
-                    if (currnetTbDivArray === cardTbDivArray) {
-                        sendKey = 'card';
-                    } else if (currnetTbDivArray === memberTbDivArray) {
-                        sendKey = 'member';
-                    } else {
-                        $.messager.alert('警告', '无有效信息');
-                        return;
-                    }
-
-
-                    // console.log($.fn.validatebox.defaults.rules);
-                    $.post('/mix/addNewMerber', { [sendKey]: sendArray })
-                        .done(function (data) {
-                            if (data.message) {
-                                $.messager.alert('警告', data.message);
-                            } else {
-                                $.messager.alert('提示', '保存成功', 'info', function () {
-                                    unlockCardNumberBtnHandle();
-                                    dialogDiv.dialog('close');
-                                    // view.getTableDiv().datagrid('reload');
-                                    view.getTableDiv().datagrid('load', {
-                                        name: 'id',
-                                        value: data.id
-                                    });
-
-                                });
-                            }
-
-
-                        });
-
-                };
-                var dialogOp = {
-                    title: dialogTitle,
-                    width: 700,
-                    top: 120,
-                    height: 500,
-                    closable: false,
-                    closed: false,
-                    cache: false,
-                    //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
-                    //href: 'get_content.php',
-                    modal: true,
-                    onBeforeOpen: function () {
-                        // payView.build(payViewOp);
-                    },
-                    onOpen: function () {
-                        view.isNewCard = false;
-                        cardNumberDiv.textbox('reset').textbox('enable').textbox('textbox').select();
-                    },
-                    buttons: [{
-                        text: '保存',
-                        handler: addNewMemberHandler,
-                    }, {
-                        text: '关闭',
-                        handler: function () {
-                            //清理所有空间值;
-                            unlockCardNumberBtnHandle();
+                            //dialogDiv.dialog('destroy');
                             dialogDiv.dialog('close');
                         }
                     }]
                 };
                 dialogDiv.dialog(dialogOp);
-
-
-
-
             }
             var printCase = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
-                    return;
-                }
                 //console.log('print');
             }
             op.tableOption = {
@@ -1536,9 +1136,6 @@
                             break;
                         case 'action_recharge':
                             view.currentRow.actionFunc = recharge;
-                            break;
-                        case 'action_addMember':
-                            view.currentRow.actionFunc = addMember;
                             break;
                         case 'action_print':
                             view.currentRow.actionFunc = printCase;
@@ -1577,14 +1174,6 @@
                     formatter: function (value, row, index) {
                         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
                         return '<button>充值</button>';
-                    },
-                }, {
-                    field: 'action_addMember',
-                    title: '增户',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>增户</button>';
                     },
                 }, {
                     field: 'action_print',
