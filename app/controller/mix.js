@@ -177,6 +177,76 @@ class MixController extends Controller {
         };
         return;
     }
+    async verifyPass() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        const O = ctx.controllerOption;
+        const SS = ctx.session;
+
+
+        var passed = false;
+
+
+        if (B.id) {
+            let card = await M[O.modelName].findOne({ where: { id: B.id } });
+            if (!card.pass || card.pass === md5(B.pass)) {
+                SS.currentCardId = B.id;
+                passed = true;
+            }
+        }
+
+        ctx.response.body = {
+            passed
+        };
+
+    }
+
+    async clearCurrentCard() {
+        const { ctx } = this;
+        // const B = ctx.request.body;
+        // const C = ctx.condition = {};
+        // const M = ctx.model;
+        // const O = ctx.controllerOption;
+        const S = ctx.session;
+
+        S.currentCardId = null;
+        ctx.response.body = {
+            cleared: true,
+        };
+    }
+    async recharge() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        const O = ctx.controllerOption;
+        const SS = ctx.session;
+        if (SS.currentCardId != B.cardId) {
+            ctx.response.body = {
+                message: '当前卡号错误'
+            };
+            return;
+        }
+        var quantity = Number.parseFloat(B.quantity);
+        if (Number.isNaN(quantity) || quantity <= 0 || quantity > 10000) {
+            ctx.response.body = {
+                message: '充值数额错误'
+            };
+            return;
+        }
+        var card = await M.Card.findOne({ where: { id: SS.currentCardId } });
+        card.balance = Number.parseFloat(card.balance) + quantity;
+        await card.save();
+
+        ctx.response.body = {
+            name: card.name,
+            card_number: card.card_number,
+            balance: card.balance,
+        };
+
+    }
 
     async searchCardNumber() {
         const { ctx } = this;

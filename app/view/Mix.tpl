@@ -123,7 +123,7 @@
 
                 var passwordHandler = function () {
                     var value = passwordboxDiv.textbox('getValue');
-                    $.post('card/verifyPass', {
+                    $.post('mix/verifyPass', {
                         id: view.currentRow.Card.id,
                         pass: value
                     }).done(function (data) {
@@ -185,7 +185,7 @@
                 dialogDiv.dialog(dialogOp);
             };
             var _clearCurrentCardId = function (dialogDiv) {
-                $.post('card/clearCurrentCard')
+                $.post('mix/clearCurrentCard')
                     .done(function (data) {
                         if (data.cleared) {
                             view.currentRow.passed = false;
@@ -699,7 +699,7 @@
                 //     $.messager.alert('提示', '请先保存再设置密码', 'info');
                 //     return;
                 // }
-                var dialogTitle = `为会员：  ${view.currentRow.name}  充值`;
+                var dialogTitle = `充值    会员名：${view.currentRow.name}   卡号：${view.currentRow.Card.card_number}`;
                 if (view.dialogPage.rechargeDiv) {
                     view.dialogPage.rechargeDiv.dialog('setTitle', dialogTitle);
                     view.dialogPage.rechargeDiv.dialog('open', true);
@@ -725,7 +725,7 @@
                         numberboxDiv.numberbox({
                             width: '100%',
                             height: 45,
-                            prompt: `请输入充值金额（${dialogTitle}）`,
+                            prompt: `请输入充值金额`,
                             iconWidth: 28,
                             min: 0,
                             max: 100000,
@@ -735,27 +735,41 @@
                     onOpen: function () {
                         numberboxDiv.textbox('clear');
                         //设置焦点                            
-                        numberboxDiv.textbox('textbox').focus();
+                        // numberboxDiv.textbox('textbox').focus();
+                        numberboxDiv.textbox('textbox').select();
                     },
                     buttons: [{
                         text: '保存',
                         handler: function () {
-                            // var value = passwordboxDiv.textbox('getValue');
-                            // $.post('user/resetPass', {
-                            //     id: view.currentRow.id,
-                            //     pass: value
-                            // }).done(function (data) {
-                            //     dialogDiv.dialog('close');
-                            //     //dialogDiv.dialog('destroy');
-                            //     $.messager.alert('提示', data.message, 'info', function () {
-                            //     });
-                            // }).fail(function (err) {
-                            //     //console.log(err);
-                            //     $.messager.alert('失败', err.responseText, 'warning', function () {
-                            //         //重置焦点
-                            //         passwordboxDiv.textbox('textbox').focus();
-                            //     });
-                            // });
+                            var value = Number.parseFloat(numberboxDiv.textbox('getValue'));
+                            if (Number.isNaN(value) || value <= 0 || value > 10000) {
+                                $.messager.alert('失败', '请输入有效充值金额', 'warning', function () {
+                                    numberboxDiv.textbox('textbox').select();
+                                });
+                                return;
+                            }
+                            $.post('mix/recharge', {
+                                cardId: view.currentRow.Card.id,
+                                quantity: value
+                            }).done(function (data) {
+                                if (data.message) {
+                                    $.messager.alert('警告', data.message, 'warning', function () {
+                                        numberboxDiv.textbox('textbox').select();
+                                    });
+
+                                } else {
+                                    $.messager.alert('充值成功！',
+                                        `卡号：${data.card_number}</br>
+                                                    卡主：${data.name}</br>
+                                                    余额：￥${Number.parseFloat(data.balance).toFixed(2)}`,
+                                        'info',
+                                        function () {
+                                            _clearCurrentCardId(dialogDiv);
+                                            view.getTableDiv().datagrid('reload');
+                                            dialogDiv.dialog('close');
+                                        });
+                                };
+                            });
                             dialogDiv.dialog('close');
                         },
                     }, {
@@ -1213,6 +1227,7 @@
                     }, {
                         text: '关闭',
                         handler: function () {
+                            _clearCurrentCardId(dialogDiv);
                             dialogDiv.dialog('close');
                         }
                     }]

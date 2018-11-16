@@ -81,10 +81,12 @@ module.exports = app => {
   router.post('/userType/setMenus', controller.userType.setMenus);
 
   router.post('/card/resetPass', controller.card.resetPass);
-  router.post('/card/verifyPass', controller.card.verifyPass);
-  router.post('/card/clearCurrentCard', controller.card.clearCurrentCard);
+
 
   router.post('/mix/settlement', controller.mix.settlement);
+  router.post('/mix/verifyPass', controller.mix.verifyPass);
+  router.post('/mix/clearCurrentCard', controller.mix.clearCurrentCard);
+  router.post('/mix/recharge', controller.mix.recharge);
   router.post('/mix/searchCardNumber', controller.mix.searchCardNumber);
   router.post('/mix/addNewCard', controller.mix.addNewCard);
   router.post('/mix/addNewMerber', controller.mix.addNewMerber);

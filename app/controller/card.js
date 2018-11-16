@@ -23,45 +23,7 @@ class CardController extends Controller {
         super(ctx);
     }
 
-    async verifyPass() {
-        const { ctx } = this;
-        const B = ctx.request.body;
-        //const C = ctx.condition = {};
-        const M = ctx.model;
-        const O = ctx.controllerOption;
-        const SS = ctx.session;
 
-
-        var passed = false;
-
-
-        if (B.id) {
-            let card = await M[O.modelName].findOne({ where: { id: B.id } });
-            if (!card.pass || card.pass === md5(B.pass)) {
-                SS.currentCardId = B.id;
-                passed = true;
-            }
-        }
-
-        ctx.response.body = {
-            passed
-        };
-
-    }
-
-    async clearCurrentCard() {
-        const { ctx } = this;
-        // const B = ctx.request.body;
-        // const C = ctx.condition = {};
-        // const M = ctx.model;
-        // const O = ctx.controllerOption;
-        const S = ctx.session;
-
-        S.currentCardId = null;
-        ctx.response.body = {
-            cleared: true,
-        };
-    }
 
     // async resetPass() {
 
