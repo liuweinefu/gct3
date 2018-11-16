@@ -1,5 +1,6 @@
 'use strict';
 
+const md5 = require('md5');
 const Controller = require('../core/normal_table_controller');
 const controllerName = Symbol(__filename);
 
@@ -198,15 +199,14 @@ class MixController extends Controller {
             include: [M.CardType],
         })
         if (!card) {
-            SS.currentCard = { card_number: B.card_number };
+            SS.newCardNumber = B.card_number;
             ctx.response.body = {
-                isNew: true,
+                notNew: false,
             }
         } else {
-            SS.currentCard = card;
+            SS.newCardNumber = null;
             ctx.response.body = {
-                isNew: false,
-                card: card
+                notNew: true,
             }
         }
     }
@@ -219,73 +219,123 @@ class MixController extends Controller {
         // const O = ctx.controllerOption; 
         const SS = ctx.session;
 
-
-        if (!B.card && !B.member) {
-            ctx.response.body = {
-                message: '提交参数错误'
-            };
-            return;
-        }
-        var key = B.card ? 'card' : 'member';
-        if (!SS.currentCard || SS.currentCard.card_number != B[key][0]) {
+        if (SS.currentCardId != B.cardId) {
             ctx.response.body = {
                 message: '当前卡号错误'
             };
             return;
-
         }
-
-        if (key == 'member' && SS.currentCard.id === undefined) {
+        if (!B.name || !B.phone) {
             ctx.response.body = {
-                message: '无当前卡'
+                message: '提交参数错误'
             };
             return;
-        }
-
-        var card = null;
-        var member = null;
-        var valueArray = B[key];
-        if (typeof valueArray[valueArray.length - 4] != 'string' || valueArray[valueArray.length - 4].length == 0) {
+        };
+        if (typeof B.name != 'string' || B.name.length < 3 || B.name.length > 20) {
             ctx.response.body = {
-                message: '用户名不能为空'
+                message: '用户名错误'
             };
             return;
-        }
-        if (typeof valueArray[valueArray.length - 3] != 'string' || valueArray[valueArray.length - 3].length < 8 || valueArray[valueArray.length - 3].length > 11) {
+        };
+        if (typeof B.phone != 'string' || B.phone.length < 8 || B.phone.length > 11) {
             ctx.response.body = {
                 message: '电话号错误'
             };
             return;
-        }
-        var valueObj = {
-            name: valueArray[valueArray.length - 4],
-            phone: valueArray[valueArray.length - 3],
-            otherphone: valueArray[valueArray.length - 2],
-            remark: valueArray[valueArray.length - 1],
         };
 
-        if (key === 'card') {
-            const t = await M.transaction();
-            try {
-                card = await M.Card.build(Object.assign({ card_number: SS.currentCard.card_number, card_type_id: B[key][1] }, valueObj));
-                await card.save({ transaction: t });
-                member = await M.Member.build(Object.assign({ card_id: card.id }, valueObj));
-                await member.save({ transaction: t });
-            } catch (e) {
-                // console.log(e);
-                t.rollback();
+        var member = M.Member.build({
+            name: B.name,
+            phone: B.phone,
+            otherphone: B.otherphone,
+            remark: B.remark,
+            card_id: SS.currentCardId,
+        });
+        await member.save();
+
+        ctx.response.body = {
+            id: member.id
+        };
+    }
+
+    async addNewCard() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        // const O = ctx.controllerOption; 
+        const SS = ctx.session;
+
+
+        if (SS.newCardNumber != B.card_number) {
+            ctx.response.body = {
+                message: '当前卡号错误'
+            };
+            return;
+        }
+        if (!B.name || !B.phone) {
+            ctx.response.body = {
+                message: '提交参数错误'
+            };
+            return;
+        };
+        if (typeof B.name != 'string' || B.name.length < 3 || B.name.length > 20) {
+            ctx.response.body = {
+                message: '用户名错误'
+            };
+            return;
+        };
+        if (typeof B.phone != 'string' || B.phone.length < 8 || B.phone.length > 11) {
+            ctx.response.body = {
+                message: '电话号错误'
+            };
+            return;
+        };
+        if (typeof B.pass == 'string' && B.pass.length > 0) {
+            if (B.pass.length < 6 || B.pass.length > 20) {
                 ctx.response.body = {
-                    message: '保存失败'
+                    message: '密码错误'
                 };
                 return;
             };
-            t.commit();
+        };
 
-        } else {
-            member = await M.Member.build(Object.assign({ card_id: SS.currentCard.id }, valueObj));
-            await member.save();
-        }
-        // ctx.status = 200;
+        var memberInfo = {
+            name: B.name,
+            phone: B.phone,
+            otherphone: B.otherphone,
+            remark: B.remark,
+        };
+
+        var cardInfo = Object.assign({}, memberInfo);
+        cardInfo.card_number = B.card_number;
+        cardInfo.card_type_id = B.card_type_id;
+
+        if (B.pass.length > 0) {
+            cardInfo.pass = md5(B.pass);
+        };
+
+
+
+        const t = await M.transaction();
+        try {
+            var card = M.Card.build(cardInfo);
+            await card.save({ transaction: t });
+
+            memberInfo.card_id = card.id;
+            var member = M.Member.build(memberInfo);
+
+            await member.save({ transaction: t });
+        } catch (e) {
+            console.log(e);
+            t.rollback();
+            ctx.response.body = {
+                message: '保存失败'
+            };
+            return;
+        };
+        t.commit();
+
         ctx.response.body = {
             id: member.id
         };

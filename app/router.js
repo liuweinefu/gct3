@@ -86,6 +86,7 @@ module.exports = app => {
 
   router.post('/mix/settlement', controller.mix.settlement);
   router.post('/mix/searchCardNumber', controller.mix.searchCardNumber);
+  router.post('/mix/addNewCard', controller.mix.addNewCard);
   router.post('/mix/addNewMerber', controller.mix.addNewMerber);
 
 
