@@ -205,8 +205,15 @@
                     width: 60,
                     sortable: true,
                     editor: {
-                        type: 'textbox',
-                        options: {}
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
                     field: 'bonus',
@@ -214,8 +221,15 @@
                     sortable: true,
                     width: 60,
                     editor: {
-                        type: 'textbox',
-                        options: {}
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
                     field: 'created_at',

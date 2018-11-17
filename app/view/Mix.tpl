@@ -610,7 +610,7 @@
                     ${tableDiv.datagrid('getData').footer[2].Commodity.name}${tableDiv.datagrid('getData').footer[2].price}</br>
                     `
                     var titleMessage = `结算提示：`
-                    if (tableDiv.datagrid('getData').footer[1].price > view.currentRow.Card.balance) {
+                    if (view.currentRow.Card.balance - tableDiv.datagrid('getData').footer[1].price < 0) {
                         titleMessage += `<span style="color:LightCoral">卡内余额不足请充值</span>`;
                     };
 

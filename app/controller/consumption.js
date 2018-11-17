@@ -47,15 +47,22 @@ class ConsumptionController extends Controller {
             };
             return;
         }
+        if (consumption.is_cash) {
+            await consumption.destroy();
+            ctx.response.body = {
+                message: '现金记录已撤销'
+            };
+            return;
+        }
 
 
 
         var commdityLastQuantity = consumption.Commodity.stocks;
-        consumption.Commodity.stocks += consumption.quantity;
+        consumption.Commodity.stocks -= -consumption.quantity;
         var commdityNowQuantity = consumption.Commodity.stocks;
 
         var cardLastBalance = consumption.Card.balance;
-        consumption.Card.balance = Number.parseFloat(consumption.Card.balance) + Number.parseFloat(consumption.price);
+        consumption.Card.balance -= -consumption.price; //避免 加法 按字符串连接
         var cardNowBalance = consumption.Card.balance;
 
         const t = await M.transaction();
@@ -65,7 +72,6 @@ class ConsumptionController extends Controller {
             await consumption.Card.save({ transaction: t });
             await consumption.destroy({ transaction: t });
         } catch (e) {
-            console.log(e);
             t.rollback();
             ctx.response.body = {
                 message: '保存失败'

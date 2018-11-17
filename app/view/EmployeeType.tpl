@@ -135,12 +135,12 @@
                         type: 'numberbox',
                         options: {
                             prefix: '￥',
-                            max: 10000,
+                            max: 100000,
                             precision: 2
                         }
                     },
                     formatter: function (value, row, index) {
-                        return '￥' + Number.parseFloat(value);
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
                     field: 'remark',

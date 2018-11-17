@@ -76,29 +76,39 @@
             op.tableOption = {
                 onClickCell: function (index, field, value) {
                     if (field !== 'action_revoke') { return; }
-
                     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
                     if (!view.currentRow || !view.currentRow.id) {
                         $.messager.alert('提示', '当前行出错', 'warning');
                         return;
                     }
-                    $.post('consumption/revoke', { id: view.currentRow.id })
-                        .done(function (data) {
-                            if (data.message) {
-                                $.messager.alert('警告', data.message, 'warning');
-                            } else {
-                                $.messager.alert('撤销成功！',
-                                    `商品：${data.commdityName}(${data.commdityLastQuantity}->${data.commdityNowQuantity})</br >
-                                     会员：${data.cardName}(${data.card_number})</br >
-                                     余额：￥${ Number.parseFloat(data.cardLastBalance).toFixed(2)}->￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}`,
-                                    'info',
-                                    function () {
-                                        view.getTableDiv().datagrid('reload');
-                                    });
-                            };
-                        });
-                    // $(this).datagrid('cancelEdit', index);
-                    return;
+                    var revoke = function () {
+                        $.post('consumption/revoke', { id: view.currentRow.id })
+                            .done(function (data) {
+                                if (data.message) {
+                                    $.messager.alert('警告', data.message, 'warning',
+                                        function () {
+                                            view.getTableDiv().datagrid('reload');
+                                        });
+                                } else {
+                                    $.messager.alert('撤销成功！',
+                                        `商品名称：${data.commdityName}</br>
+                                                商品库存：${data.commdityNowQuantity}(撤销前：${data.commdityLastQuantity})</br ></br >
+                                                会员名称：${data.cardName}(卡号：${data.card_number})</br >
+                                                当前余额：￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}</br >
+                                                撤销前余额：￥${Number.parseFloat(data.cardLastBalance).toFixed(2)}`,
+                                        'info',
+                                        function () {
+                                            view.getTableDiv().datagrid('reload');
+                                        });
+                                };
+                            });
+                    }
+
+                    $.messager.confirm('是否继续撤销', '是否撤销当前消费记录？', function (r) {
+                        if (r) {
+                            revoke();
+                        }
+                    });
                 },
                 singleSelect: true,
                 //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
@@ -131,11 +141,15 @@
                 }, {
                     field: 'price',
                     title: '消费金额',
-                    width: 50,
+                    width: 100,
                     sortable: true,
                     editor: {
-                        type: 'textbox',
-                        options: {}
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
                     },
                     formatter: function (value, row, index) {
                         return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
