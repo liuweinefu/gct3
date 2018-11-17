@@ -25,6 +25,26 @@
             var op = {};
             //searchBox设置**************************************************
             op.searchBoxOption = {};
+            op.searchBoxOption.option = {
+                searcher: function (value, name) {
+                    // view.getTableDiv().datagrid({
+                    //     url: '/mix/findAll'
+                    // });
+                    if (name.endsWith('card_number')) {
+                        view.getTableDiv().datagrid('load', {
+                            isEq: true,
+                            name: name,
+                            value: value
+                        });
+                    } else {
+                        view.getTableDiv().datagrid('load', {
+                            name: name,
+                            value: value
+                        });
+                    }
+
+                },
+            };
             // op.searchBoxOption.option = {
             //     searcher: function (value, name) {
             //         view.getTableDiv().datagrid('load', {

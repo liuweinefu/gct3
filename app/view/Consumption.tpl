@@ -24,6 +24,26 @@
             var op = {};
             //searchBox设置**************************************************
             op.searchBoxOption = {};
+            op.searchBoxOption.option = {
+                searcher: function (value, name) {
+                    // view.getTableDiv().datagrid({
+                    //     url: '/mix/findAll'
+                    // });
+                    if (name.endsWith('card_number')) {
+                        view.getTableDiv().datagrid('load', {
+                            isEq: true,
+                            name: name,
+                            value: value
+                        });
+                    } else {
+                        view.getTableDiv().datagrid('load', {
+                            name: name,
+                            value: value
+                        });
+                    }
+
+                },
+            };
             // op.searchBoxOption.option = {
             //     searcher: function (value, name) {
             //         view.getTableDiv().datagrid('load', {
@@ -35,7 +55,7 @@
             //     menu: '#abc'
             // };
             op.searchBoxOption.menu = [
-                { name: 'Card.card_number', text: '卡号' },
+                { name: 'Card.card_number', text: '会员卡号' },
                 { name: 'Member.name', text: '会员名' },
                 { name: 'Employee.name', text: '雇员名' },
                 { name: 'price', text: '消费金额' },

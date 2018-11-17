@@ -249,9 +249,31 @@ class MixController extends Controller {
             };
             return;
         }
+
+        var cardRecharge = M.CardRecharge.build({
+            card_id: SS.currentCardId,
+            user_id: SS.user.id,
+            price: quantity,
+            remark: B.memberName
+        })
         var card = await M.Card.findOne({ where: { id: SS.currentCardId } });
-        card.balance = Number.parseFloat(card.balance) + quantity;
-        await card.save();
+        card.balance -= -quantity;
+
+        const t = await M.transaction();
+        try {
+            await cardRecharge.save({ transaction: t });
+            await card.save({ transaction: t });
+        } catch (e) {
+            t.rollback();
+            ctx.response.body = {
+                message: '充值过程错误'
+            };
+            return;
+        }
+
+        t.commit();
+
+
 
         ctx.response.body = {
             name: card.name,

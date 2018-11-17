@@ -24,6 +24,26 @@
             var op = {};
             //searchBox设置**************************************************
             op.searchBoxOption = {};
+            op.searchBoxOption.option = {
+                searcher: function (value, name) {
+                    // view.getTableDiv().datagrid({
+                    //     url: '/mix/findAll'
+                    // });
+                    if (name.endsWith('card_number')) {
+                        view.getTableDiv().datagrid('load', {
+                            isEq: true,
+                            name: name,
+                            value: value
+                        });
+                    } else {
+                        view.getTableDiv().datagrid('load', {
+                            name: name,
+                            value: value
+                        });
+                    }
+
+                },
+            };
             // op.searchBoxOption.option = {
             //     searcher: function (value, name) {
             //         view.getTableDiv().datagrid('load', {
@@ -35,11 +55,11 @@
             //     menu: '#abc'
             // };
             op.searchBoxOption.menu = [
+                { name: 'Card.card_number', text: '会员卡号' },
                 { name: 'name', text: '会员名' },
                 { name: 'phone', text: '会员电话' },
                 { name: 'otherphone', text: '其他电话' },
                 { name: 'remark', text: '备注' },
-                { name: 'Card.card_number', text: '会员卡号' },
                 { name: 'Card.name', text: '会员卡主名' },
             ];
 

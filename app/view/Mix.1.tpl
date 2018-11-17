@@ -29,7 +29,7 @@
                     // view.getTableDiv().datagrid({
                     //     url: '/mix/findAll'
                     // });
-                    if (name == 'Card.card_number') {
+                    if (name.endsWith('card_number')) {
                         view.getTableDiv().datagrid('load', {
                             isEq: true,
                             name: name,

@@ -29,7 +29,7 @@
                     // view.getTableDiv().datagrid({
                     //     url: '/mix/findAll'
                     // });
-                    if (name == 'Card.card_number') {
+                    if (name.endsWith('card_number')) {
                         view.getTableDiv().datagrid('load', {
                             isEq: true,
                             name: name,
@@ -759,7 +759,8 @@
                             }
                             $.post('mix/recharge', {
                                 cardId: view.currentRow.Card.id,
-                                quantity: value
+                                quantity: value,
+                                memberName: view.currentRow.name,
                             }).done(function (data) {
                                 if (data.message) {
                                     $.messager.alert('警告', data.message, 'warning', function () {
