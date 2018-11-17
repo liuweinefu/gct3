@@ -92,6 +92,9 @@ module.exports = app => {
   router.post('/mix/addNewMerber', controller.mix.addNewMerber);
 
 
+  router.post('/consumption/revoke', controller.consumption.revoke);
+
+
   // router.get('/user', controller.user.getTpl);
   // router.post('/user/findAll', controller.user.findAll);
   // router.post('/user/save', controller.user.save);

@@ -72,16 +72,34 @@
             //         sn: newRowIndex ? newRowIndex : 0,
             //     };
             // };
-            // view.currentRow = null;
+            view.currentRow = null;
             op.tableOption = {
-                // onClickCell: function (index, field, value) {
-                //     // if (field === 'updated_at') {
-                //     //     $(this).datagrid('cancelEdit', index);
-                //     //     return;
-                //     // }
-                //     $(this).datagrid('cancelEdit', index);
-                //     return;
-                // },
+                onClickCell: function (index, field, value) {
+                    if (field !== 'action_revoke') { return; }
+
+                    view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                    if (!view.currentRow || !view.currentRow.id) {
+                        $.messager.alert('提示', '当前行出错', 'warning');
+                        return;
+                    }
+                    $.post('consumption/revoke', { id: view.currentRow.id })
+                        .done(function (data) {
+                            if (data.message) {
+                                $.messager.alert('警告', data.message, 'warning');
+                            } else {
+                                $.messager.alert('撤销成功！',
+                                    `商品：${data.commdityName}(${data.commdityLastQuantity}->${data.commdityNowQuantity})</br >
+                                     会员：${data.cardName}(${data.card_number})</br >
+                                     余额：￥${ Number.parseFloat(data.cardLastBalance).toFixed(2)}->￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}`,
+                                    'info',
+                                    function () {
+                                        view.getTableDiv().datagrid('reload');
+                                    });
+                            };
+                        });
+                    // $(this).datagrid('cancelEdit', index);
+                    return;
+                },
                 singleSelect: true,
                 //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
                 listOnly: true,
@@ -97,6 +115,14 @@
                 {
                     field: 'ck',
                     checkbox: true
+                }, {
+                    field: 'action_revoke',
+                    title: '撤销结算',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        return '<button>撤销结算</button>';
+                    },
                 },
                 {
                     field: 'id',
@@ -143,11 +169,7 @@
                         }
                     },
                     formatter: function (value, row, index) {
-                        if (Number.parseInt(value) === 1) {
-                            return '是'
-                        } else {
-                            return '否';
-                        }
+                        return value ? '是' : '否'
                     },
                 }, {
                     field: 'is_close',
@@ -173,11 +195,7 @@
                         }
                     },
                     formatter: function (value, row, index) {
-                        if (Number.parseInt(value) === 1) {
-                            return '是'
-                        } else {
-                            return '否';
-                        }
+                        return value ? '是' : '否'
                     },
                 }, {
                     field: 'remark',

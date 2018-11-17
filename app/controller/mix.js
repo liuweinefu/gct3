@@ -173,7 +173,9 @@ class MixController extends Controller {
 
         t.commit();
         ctx.response.body = {
-            message: '记账完毕'
+            card_number: DbCard.card_number,
+            memberName: DbMember.name,
+            balance: DbCard.balance,
         };
         return;
     }
@@ -190,8 +192,19 @@ class MixController extends Controller {
 
 
         if (B.id) {
-            let card = await M[O.modelName].findOne({ where: { id: B.id } });
-            if (!card.pass || card.pass === md5(B.pass)) {
+
+            let card = await M.Card.findOne({ where: { id: B.id } });
+
+            // if (!card.pass || card.pass === md5(B.pass)) {
+            // if (!card.pass && B.pass == '') {
+            //     SS.currentCardId = B.id;
+            //     passed = true;
+            // } else if (card.pass === md5(B.pass)) {
+            //     SS.currentCardId = B.id;
+            //     passed = true;
+            // }
+
+            if (!card.pass && B.pass == '' || card.pass === md5(B.pass)) {
                 SS.currentCardId = B.id;
                 passed = true;
             }
@@ -230,7 +243,7 @@ class MixController extends Controller {
             return;
         }
         var quantity = Number.parseFloat(B.quantity);
-        if (Number.isNaN(quantity) || quantity <= 0 || quantity > 10000) {
+        if (Number.isNaN(quantity) || quantity <= 0 || quantity > 100000) {
             ctx.response.body = {
                 message: '充值数额错误'
             };
@@ -243,6 +256,7 @@ class MixController extends Controller {
         ctx.response.body = {
             name: card.name,
             card_number: card.card_number,
+            quantity: quantity,
             balance: card.balance,
         };
 

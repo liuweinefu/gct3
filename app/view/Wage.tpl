@@ -103,23 +103,25 @@
                     field: 'id',
                     title: '工资ID',
                     hidden: true,
-                }, {
-                    field: 'action_list',
-                    title: '结算记录',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>结算记录</button>';
-                    },
-                }, {
-                    field: 'action_delete',
-                    title: '撤销结算',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>撤销结算</button>';
-                    },
-                }, {
+                },
+                //  {
+                //     field: 'action_list',
+                //     title: '结算记录',
+                //     //width: 90,
+                //     formatter: function (value, row, index) {
+                //         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                //         return '<button>结算记录</button>';
+                //     },
+                // }, {
+                //     field: 'action_delete',
+                //     title: '撤销结算',
+                //     //width: 90,
+                //     formatter: function (value, row, index) {
+                //         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                //         return '<button>撤销结算</button>';
+                //     },
+                // },
+                {
                     //field: 'UserType.name',wage_type_id
                     field: 'employee_id',
                     title: '雇员名',

@@ -48,6 +48,12 @@ module.exports = app => {
             underscored: true,
             freezeTableName: true,
             tableName: 'consumption',
+            paranoid: true,
+            // defaultScope: {
+            //     where: {
+            //         deleted_at: null
+            //     }
+            // },
         });
 
     Consumption.associate = function () {

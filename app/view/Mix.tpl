@@ -172,7 +172,7 @@
                         passwordboxDiv.textbox('textbox').focus();
                     },
                     buttons: [{
-                        text: '保存',
+                        text: '提交',
                         handler: passwordHandler,
                     }, {
                         text: '关闭',
@@ -230,6 +230,7 @@
 
                 payView.makeNewRow = () => {
                     var rows = payView.getTableDiv().datagrid('getRows');
+                    //console.log(rows);
                     if (rows.length == 0) {
                         return {
                             employee_id: '',
@@ -524,15 +525,6 @@
                             }
                         }
                     }, {
-                        field: 'remark',
-                        title: '备注',
-                        width: 100,
-                        sortable: true,
-                        editor: {
-                            type: 'textbox',
-                            options: {}
-                        }
-                    }, {
                         field: 'employee_id',
                         title: '技师',
                         width: 100,
@@ -567,6 +559,15 @@
                                 onLoadSuccess: combogridOnLoadSuccess,
                                 onShowPanel: combogridOnShowPanel
                             }
+                        }
+                    }, {
+                        field: 'remark',
+                        title: '备注',
+                        width: 100,
+                        sortable: true,
+                        editor: {
+                            type: 'textbox',
+                            options: {}
                         }
                     },
                 ]];
@@ -621,15 +622,23 @@
                         };
                         $.post('mix/settlement', sendObject)
                             .done(function (data) {
-                                dialogDiv.dialog('close');
+                                if (data.message) {
+                                    $.messager.alert('错误', data.message, 'info');
+                                    return;
+                                }
+                                $.messager.alert('计算成功', `会员卡号:${data.card_number}(${data.memberName})</br>
+                                                             当前余额:￥${Number.parseFloat(data.balance).toFixed(2)}`,
+                                    'info', function () {
+                                        //清空已结算信息
+                                        payView.getTableDiv().datagrid('loadData', []);
+                                        dialogDiv.dialog('close');
+                                        view.getTableDiv().datagrid('reload');
+
+                                    });
+
                                 //dialogDiv.dialog('destroy');
-                                $.messager.alert('提示', data.message, 'info', function () {
-                                    view.getTableDiv().datagrid('reload');
-                                });
-                            }).fail(function (err) {
-                                //console.log(err);
-                                $.messager.alert('失败', err.responseText, 'warning', function () { });
-                            });
+
+                            })
 
                     });
                 };
@@ -699,7 +708,7 @@
                 //     $.messager.alert('提示', '请先保存再设置密码', 'info');
                 //     return;
                 // }
-                var dialogTitle = `充值    会员名：${view.currentRow.name}   卡号：${view.currentRow.Card.card_number}`;
+                var dialogTitle = `${view.currentRow.Card.card_number}号卡(${view.currentRow.name})--余额：${Number.parseFloat(view.currentRow.Card.balance).toFixed(2)}`;
                 if (view.dialogPage.rechargeDiv) {
                     view.dialogPage.rechargeDiv.dialog('setTitle', dialogTitle);
                     view.dialogPage.rechargeDiv.dialog('open', true);
@@ -727,8 +736,8 @@
                             height: 45,
                             prompt: `请输入充值金额`,
                             iconWidth: 28,
-                            min: 0,
-                            max: 100000,
+                            min: 0.00,
+                            max: 100000.00,
                             precision: 2,
                         });
                     },
@@ -742,7 +751,7 @@
                         text: '保存',
                         handler: function () {
                             var value = Number.parseFloat(numberboxDiv.textbox('getValue'));
-                            if (Number.isNaN(value) || value <= 0 || value > 10000) {
+                            if (Number.isNaN(value) || value <= 0 || value > 100000) {
                                 $.messager.alert('失败', '请输入有效充值金额', 'warning', function () {
                                     numberboxDiv.textbox('textbox').select();
                                 });
@@ -759,9 +768,9 @@
 
                                 } else {
                                     $.messager.alert('充值成功！',
-                                        `卡号：${data.card_number}</br>
-                                                    卡主：${data.name}</br>
-                                                    余额：￥${Number.parseFloat(data.balance).toFixed(2)}`,
+                                        `会员：${data.card_number}号卡(${data.name})</br >
+                                    充值：￥${ Number.parseFloat(data.quantity).toFixed(2)}</br >
+                                    余额：￥${ Number.parseFloat(data.balance).toFixed(2)}`,
                                         'info',
                                         function () {
                                             _clearCurrentCardId(dialogDiv);
@@ -1073,13 +1082,11 @@
                 };
                 dialogDiv.dialog(dialogOp);
             };
-
-
             var addMember = function () {
                 if (!view.currentRow || !view.currentRow.passed) {
                     return;
                 }
-                var dialogTitle = `为会员卡号：<span style="color:LightCoral"><b>${view.currentRow.Card.card_number}</b></span>增加新会员`;
+                var dialogTitle = `为${view.currentRow.Card.card_number}号会员卡增户(当前用户：${view.currentRow.name})`;
                 // var dialogTitle = '';
                 if (view.dialogPage.addMemberDiv) {
                     view.dialogPage.addMemberDiv.dialog('setTitle', dialogTitle);
@@ -1238,6 +1245,8 @@
 
 
             }
+
+
             var printCase = function () {
                 if (!view.currentRow || !view.currentRow.passed) {
                     return;
@@ -1292,7 +1301,7 @@
                     title: '结账',
                     //width: 90,
                     formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
                         return '<button>结账</button>';
                     },
                 }, {
@@ -1300,7 +1309,7 @@
                     title: '充值',
                     //width: 90,
                     formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
                         return '<button>充值</button>';
                     },
                 }, {
@@ -1308,7 +1317,7 @@
                     title: '增户',
                     //width: 90,
                     formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
                         return '<button>增户</button>';
                     },
                 }, {
@@ -1316,7 +1325,7 @@
                     title: '打印',
                     //width: 90,
                     formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button >`;
                         return '<button>打印</button>';
                     },
                 }, {
