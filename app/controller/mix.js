@@ -242,6 +242,7 @@ class MixController extends Controller {
             };
             return;
         }
+
         var quantity = Number.parseFloat(B.quantity);
         if (Number.isNaN(quantity) || quantity <= 0 || quantity > 100000) {
             ctx.response.body = {
@@ -250,13 +251,22 @@ class MixController extends Controller {
             return;
         }
 
+        var card = await M.Card.findOne({ where: { id: SS.currentCardId } });
+        var member = await M.Member.findOne({ where: { id: B.memberId }, include: [M.Card] });
+        if (!card || !member || card.id != member.Card.id) {
+            ctx.response.body = {
+                message: '当前会员与卡号不符合'
+            };
+            return;
+        }
+
         var cardRecharge = M.CardRecharge.build({
             card_id: SS.currentCardId,
             user_id: SS.user.id,
             price: quantity,
-            remark: B.memberName
+            remark: member.name
         })
-        var card = await M.Card.findOne({ where: { id: SS.currentCardId } });
+
         card.balance -= -quantity;
 
         const t = await M.transaction();
@@ -276,7 +286,7 @@ class MixController extends Controller {
 
 
         ctx.response.body = {
-            name: card.name,
+            memberName: member.name,
             card_number: card.card_number,
             quantity: quantity,
             balance: card.balance,

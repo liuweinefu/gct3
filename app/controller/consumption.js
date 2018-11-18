@@ -84,7 +84,7 @@ class ConsumptionController extends Controller {
             commdityName: consumption.Commodity.name,
             commdityLastQuantity,
             commdityNowQuantity,
-            cardName: consumption.Card.name,
+            memberName: consumption.Member.name,
             card_number: consumption.Card.card_number,
             cardLastBalance,
             cardNowBalance,

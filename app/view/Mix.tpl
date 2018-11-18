@@ -760,7 +760,7 @@
                             $.post('mix/recharge', {
                                 cardId: view.currentRow.Card.id,
                                 quantity: value,
-                                memberName: view.currentRow.name,
+                                memberId: view.currentRow.id,
                             }).done(function (data) {
                                 if (data.message) {
                                     $.messager.alert('警告', data.message, 'warning', function () {
@@ -769,7 +769,7 @@
 
                                 } else {
                                     $.messager.alert('充值成功！',
-                                        `会员：${data.card_number}号卡(${data.name})</br >
+                                        `会员：${data.memberName}(${data.card_number}号卡)</br >
                                     充值：￥${ Number.parseFloat(data.quantity).toFixed(2)}</br >
                                     余额：￥${ Number.parseFloat(data.balance).toFixed(2)}`,
                                         'info',

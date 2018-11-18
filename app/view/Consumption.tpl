@@ -113,7 +113,7 @@
                                     $.messager.alert('撤销成功！',
                                         `商品名称：${data.commdityName}</br>
                                                 商品库存：${data.commdityNowQuantity}(撤销前：${data.commdityLastQuantity})</br ></br >
-                                                会员名称：${data.cardName}(卡号：${data.card_number})</br >
+                                                会员名称：${data.memberName}(卡号：${data.card_number})</br >
                                                 当前余额：￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}</br >
                                                 撤销前余额：￥${Number.parseFloat(data.cardLastBalance).toFixed(2)}`,
                                         'info',
@@ -136,6 +136,8 @@
 
                 multiSort: true,
                 remoteSort: true,
+                sortName: 'updated_at',
+                sortOrder: 'desc',
             };
 
             var combogridOnLoadSuccess = combogridEvents(view).onLoadSuccess;
@@ -143,9 +145,6 @@
 
             op.tableOption.columns = [[
                 {
-                    field: 'ck',
-                    checkbox: true
-                }, {
                     field: 'action_revoke',
                     title: '撤销结算',
                     //width: 90,
