@@ -776,7 +776,7 @@
                                         function () {
                                             _clearCurrentCardId(dialogDiv);
                                             view.getTableDiv().datagrid('reload');
-                                            dialogDiv.dialog('close');
+                                            // dialogDiv.dialog('close');
                                         });
                                 };
                             });
@@ -1236,7 +1236,7 @@
                         text: '关闭',
                         handler: function () {
                             _clearCurrentCardId(dialogDiv);
-                            dialogDiv.dialog('close');
+                            // dialogDiv.dialog('close');
                         }
                     }]
                 };
@@ -1246,6 +1246,76 @@
 
 
             }
+            var changePass = function () {
+                if (!view.currentRow || !view.currentRow.passed) {
+                    return;
+                }
+                if (view.dialogPage.resetPassDiv) {
+                    view.dialogPage.resetPassDiv.dialog('setTitle', `修改   ${view.currentRow.name}   的密码`);
+                    view.dialogPage.resetPassDiv.dialog('open', true);
+                    return;
+                }
+                var dialogDiv = $('<div></div>');
+                var passwordboxDiv = $('<div></div>');
+                passwordboxDiv.appendTo(dialogDiv);
+                dialogDiv.appendTo(view.getDialogContainerDiv());
+                view.dialogPage.resetPassDiv = dialogDiv;
+
+                var dialogOp = {
+                    title: `修改   ${view.currentRow.name}   的密码`,
+                    width: 400,
+                    top: 120,
+                    //height: 120,
+                    closed: false,
+                    cache: false,
+                    //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
+                    //href: 'get_content.php',
+                    modal: true,
+                    onBeforeOpen: function () {
+                        passwordboxDiv.passwordbox({
+                            width: '100%',
+                            height: 45,
+                            prompt: '请输入密码',
+                            iconWidth: 28,
+                            showEye: true
+                        });
+                    },
+                    onOpen: function () {
+                        passwordboxDiv.textbox('clear');
+                        //设置焦点                            
+                        passwordboxDiv.textbox('textbox').focus();
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: function () {
+                            var value = passwordboxDiv.textbox('getValue');
+                            $.post('mix/resetPass', {
+                                memberId: view.currentRow.id,
+                                cardId: view.currentRow.Card.id,
+                                pass: value
+                            }).done(function (data) {
+                                if (data.message) {
+                                    $.messager.alert('提示', data.message, 'info', function () {
+                                    });
+                                    return;
+                                }
+
+                                $.messager.alert('提示', `密码修改成功</br>会员：${data.memberName}</br>卡号：${data.cardNumber}`, 'info', function () {
+                                    _clearCurrentCardId(dialogDiv);
+                                });
+                            });
+                        },
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            //dialogDiv.dialog('destroy');
+                            _clearCurrentCardId(dialogDiv);
+                            // dialogDiv.dialog('close');
+                        }
+                    }]
+                };
+                dialogDiv.dialog(dialogOp);
+            };
 
 
             var printCase = function () {
@@ -1274,6 +1344,9 @@
                             break;
                         case 'action_addMember':
                             view.currentRow.actionFunc = addMember;
+                            break;
+                        case 'action_changePass':
+                            view.currentRow.actionFunc = changePass;
                             break;
                         case 'action_print':
                             view.currentRow.actionFunc = printCase;
@@ -1320,6 +1393,15 @@
                     formatter: function (value, row, index) {
                         // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
                         return '<button>增户</button>';
+                    },
+                }, {
+                    field: 'action_changePass',
+                    title: '密码',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        return '<button>修改密码</button>';
+
                     },
                 }, {
                     field: 'action_print',

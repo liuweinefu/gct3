@@ -326,7 +326,43 @@ class MixController extends Controller {
             }
         }
     }
+    async resetPass() {
+        const { ctx } = this;
+        const B = ctx.request.body;
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        // const O = ctx.controllerOption;
+        const SS = ctx.session;
 
+        if (SS.currentCardId != B.cardId) {
+            ctx.response.body = {
+                message: '当前卡号错误'
+            };
+            return;
+        }
+        if (B.pass.length > 0 && B.pass.length < 6) {
+            ctx.response.body = {
+                message: '密码长度不够'
+            };
+            return;
+        }
+        let member = await M.Member.findOne({ where: { id: B.memberId }, include: [M.Card] });
+        let card = await M.Card.findOne({ where: { id: B.cardId } });
+        if (card.card_number != member.Card.card_number) {
+            ctx.response.body = {
+                message: '当前卡号错误'
+            };
+            return;
+        }
+        card.pass = B.pass.length === 0 ? '' : md5(B.pass);
+        await card.save();
+
+        ctx.response.body = {
+            memberName: member.name,
+            cardNumber: card.card_number
+        };
+
+    }
     async addNewMerber() {
         const { ctx } = this;
         const B = ctx.request.body;
