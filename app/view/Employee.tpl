@@ -468,7 +468,8 @@
                         wage: wageDiv.textbox('getValue'),
                         bonus: bonusDiv.textbox('getValue'),
                         employeeId: view.currentRow.id,
-                        consumptionIdArrray: JSON.stringify(tableDiv.datagrid('getData').rows.map(row => row.id))//只返回 消费id
+                        // consumptionIdArrray: JSON.stringify(tableDiv.datagrid('getData').rows.map(row => row.id))//只返回 消费id
+                        consumptionIdArrray: tableDiv.datagrid('getData').rows.map(row => row.id)//只返回 消费id
                     };
 
                     $.post('employee/payWage', sendObject)
@@ -477,8 +478,8 @@
                                 $.messager.alert('错误', data.message, 'info');
                                 return;
                             }
-                            $.messager.alert('计算成功', `技师：${data.EmployeeName}</br>
-                                                             工资:￥${Number.parseFloat(data.wage).toFixed(2)}`,
+                            $.messager.alert('工资结算完成', `技师：${data.employeeName}</br>
+                                                             实发工资:￥${Number.parseFloat(data.wage).toFixed(2)}`,
                                 'info', function () {
                                     //清空已结算信息                                        
                                     dialogDiv.dialog('close');
