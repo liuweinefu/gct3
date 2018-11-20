@@ -49,14 +49,14 @@ class EmployeeController extends Controller {
             return;
         }
 
+        var wage = M.Wage.build({
+            wage: B.wage,
+            bonus: B.bonus,
+            employee_id: B.employeeId,
+            user_id: SS.user.id,
+        });
         const t = await M.transaction();
         try {
-            var wage = M.Wage.build({
-                wage: B.wage,
-                bonus: B.bonus,
-                employee_id: B.employeeId,
-                user_id: SS.user.id,
-            });
             await wage.save({ transaction: t });
             if (consumptionIdArrray.length != 0) {
                 consumptionIdArrray.forEach(c => { c.is_close = true; c.wage_id = wage.id });

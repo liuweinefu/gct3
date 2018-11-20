@@ -144,6 +144,7 @@
                     view: groupview,
                     groupFormatter: function (value, rows) {
                         //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';
+                        console.log(rows);
                         return `(${rows[0].Commodity.name}):${rows.length}次`;
                     },
                     onLoadSuccess: function () {
@@ -510,11 +511,16 @@
                         payWageView.build(payWageViewOp);
                     },
                     onOpen: function () {
+                        wageDiv.numberbox('setValue', view.currentRow.EmployeeType.wage ? view.currentRow.EmployeeType.wage : '0.00');
+                        bonusDiv.numberbox('setValue', '0.00');
+
                         payWageView.getTableDiv().datagrid('load', {
                             // name: 'employee_id',
                             // value: view.currentRow.id,
                             where: JSON.stringify([{ "leftBracket": "", "field": "employee_id", "compareSymbol": "eq", "value": view.currentRow.id, "rightBracket": "", "logicalSymbol": "and" }, { "leftBracket": "", "field": "is_close", "compareSymbol": "eq", "value": "0", "rightBracket": "", "logicalSymbol": "and" }]),
                         });
+
+
                         // // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
                         // payView.getTableDiv().datagrid('loadData', {
                         //     footer: [
