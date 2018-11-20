@@ -1272,6 +1272,9 @@ var lwTable = function (anchorDiv) {
     this.getButtons = () => buttons;
 
     var _buildButtons = (buttonOption) => {
+        if (!buttonOption || !Array.isArray(Object.keys(buttonOption)) || Object.keys(buttonOption).length == 0) {
+            return;
+        }
         Object.keys(buttonOption).forEach((key) => {
             if (!allButtons[key]) {
                 buttons[key] = buttonOption[key];
