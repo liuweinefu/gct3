@@ -123,7 +123,14 @@
                     // fit: true,
                     // fitColumns: true,
                     // singleSelect: true,
+
                     url: '/consumption/findAll',
+
+                    queryParams: {
+                        name: 'id',
+                        value: '-1'
+                    },
+
                     // method: 'post',
                     // toolbar: '',
                     // striped: true,
@@ -144,7 +151,7 @@
                     view: groupview,
                     groupFormatter: function (value, rows) {
                         //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';
-                        console.log(rows);
+                        // console.log(rows);
                         return `(${rows[0].Commodity.name}):${rows.length}次`;
                     },
                     onLoadSuccess: function () {
@@ -514,6 +521,7 @@
                         wageDiv.numberbox('setValue', view.currentRow.EmployeeType.wage ? view.currentRow.EmployeeType.wage : '0.00');
                         bonusDiv.numberbox('setValue', '0.00');
 
+                        // payWageView.getTableDiv().datagrid({ url: '/consumption/findAll' });
                         payWageView.getTableDiv().datagrid('load', {
                             // name: 'employee_id',
                             // value: view.currentRow.id,

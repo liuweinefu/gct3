@@ -38,16 +38,33 @@ class EmployeeController extends Controller {
         }
 
         var consumptionIdArrray = []
-        if (Array.isArray(B.consumptionIdArrray) && B.consumptionIdArrray.length > 0) {
-            var tt = B.consumptionIdArrray.map(id => M.Consumption.findOne({ where: { id: id } }));
-            consumptionIdArrray = await Promise.all(tt);
+
+
+        for (let id of B.consumptionIdArrray) {
+            let c = await M.Consumption.findOne({ where: { id: id } });
+            if (B.employeeId != c.employee_id) {
+                ctx.response.body = {
+                    message: '消费记录与雇员不符'
+                };
+                return;
+            }
+            consumptionIdArrray.push(c);
         }
-        if (consumptionIdArrray.length != 0 && consumptionIdArrray.every(c => B.employeeId != c.employee_id)) {
-            ctx.response.body = {
-                message: '消费记录与雇员不符'
-            };
-            return;
-        }
+
+
+
+        // if (Array.isArray(B.consumptionIdArrray) && B.consumptionIdArrray.length > 0) {
+        //     // let tt = B.consumptionIdArrray.map(id => M.Consumption.findOne({ where: { id: id } }));
+        //     consumptionIdArrray = await Promise.all(B.consumptionIdArrray.map(id => M.Consumption.findOne({ where: { id: id } })));
+        // }
+        // if (consumptionIdArrray.length != 0 && consumptionIdArrray.every(c => B.employeeId != c.employee_id)) {
+        //     ctx.response.body = {
+        //         message: '消费记录与雇员不符'
+        //     };
+        //     return;
+        // }
+
+
 
         var wage = M.Wage.build({
             wage: B.wage,

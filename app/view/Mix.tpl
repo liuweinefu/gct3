@@ -1325,7 +1325,11 @@
                 //console.log('print');
             }
             op.tableOption = {
-                // url: '',
+                // url: '/mix/findAll',
+                queryParams: {
+                    name: 'id',
+                    value: '-1'
+                },
                 multiSort: true,
                 remoteSort: true,
 

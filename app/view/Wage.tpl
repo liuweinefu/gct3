@@ -109,13 +109,16 @@
                     singleSelect: true,
                     //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
                     listOnly: true,
-                    // groupField: 'commodity_id',
-                    // view: groupview,
-                    // groupFormatter: function (value, rows) {
-                    //     //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';
-                    //     console.log(rows);
-                    //     return `(${rows[0].Commodity.name}):${rows.length}次`;
-                    // },
+                    groupField: 'commodity_id',
+                    view: groupview,
+                    groupFormatter: function (value, rows) {
+                        //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';                        
+                        // var name = rows[0].Commodity.name;
+                        // if (name.length < 30) {
+                        //     let l = 30 - name.length
+                        // }
+                        return `${rows.length.toString().padStart(3, '0')}次---商品：${rows[0].Commodity.name}`;
+                    },
                     // onLoadSuccess: function () {
 
                     //     listWageView.getTableDiv().datagrid('collapseGroup');
@@ -475,6 +478,24 @@
                         //         // });
                         //     },
                         // }, 
+                        {
+                            text: '全部展开或折叠',
+                            handler: function () {
+                                if (listWageView.collapseGroup) {
+                                    listWageView.getTableDiv().datagrid('expandGroup');
+                                    listWageView.collapseGroup = false;
+                                } else {
+                                    listWageView.getTableDiv().datagrid('collapseGroup');
+                                    listWageView.collapseGroup = true;
+                                }
+
+                                // $.messager.confirm('确认对话框', '是否继续结算？', function (r) {
+                                //     if (r) {
+                                //         listWageHandler();
+                                //     }
+                                // });
+                            },
+                        },
                         {
                             text: '关闭',
                             // handler: _closeDlg,
