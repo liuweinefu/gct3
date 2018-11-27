@@ -11,7 +11,7 @@
     "egg-view-nunjucks": "^2.2.0",
     "md5": "^2.2.1",
     "mysql2": "^1.6.4",
-    "svg-captcha": "^1.3.11",
+    "svg-captcha": "^1.3.12",
     "tedious": "^2.7.1"
   },
   "devDependencies": {
