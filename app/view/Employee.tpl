@@ -150,9 +150,12 @@
                     groupField: 'commodity_id',
                     view: groupview,
                     groupFormatter: function (value, rows) {
-                        //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';
-                        // console.log(rows);
-                        return `(${rows[0].Commodity.name}):${rows.length}次`;
+                        //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';                        
+                        // var name = rows[0].Commodity.name;
+                        // if (name.length < 30) {
+                        //     let l = 30 - name.length
+                        // }
+                        return `${rows.length.toString().padStart(3, '0')}次---商品：${rows[0].Commodity.name}`;
                     },
                     onLoadSuccess: function () {
 
