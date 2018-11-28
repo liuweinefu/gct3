@@ -32,6 +32,12 @@ module.exports = app => {
         remark: {
             type: STRING(255)
         },
+        case: {
+            type: TEXT
+        },
+        case_remark: {
+            type: TEXT
+        }
     }, {
             timestamps: true,
             underscored: true,
@@ -42,10 +48,10 @@ module.exports = app => {
 
     Member.associate = function () {
         //app.model.User.hasMany(app.model.Post, { as: 'posts', foreignKey: 'user_id' });
-        const { Member, Card, Consumption, Case } = app.model;
+        const { Member, Card, Consumption } = app.model;
         Member.belongsTo(Card);
         Member.hasMany(Consumption);
-        Member.hasMany(Case);
+        // Member.hasMany(Case);
 
     };
 

@@ -94,7 +94,245 @@
                     //card_id: newRowIndex ? newRowIndex : 0,
                 };
             };
+
             view.currentRow = null;
+            var recordCase = function () {
+                if (!view.currentRow) {
+                    return;
+                }
+                if (view.dialogPage.recordCaseDiv) {
+                    view.dialogPage.recordCaseDiv.dialog('setTitle', `修改   ${view.currentRow.name}   的诊疗方案`);
+                    view.dialogPage.recordCaseDiv.dialog('open', true);
+                    return;
+                }
+                var dialogDiv = $('<div></div>');
+                dialogDiv.appendTo(view.getDialogContainerDiv());
+                view.dialogPage.recordCaseDiv = dialogDiv;
+
+                //基本信息
+                var nameDiv = $('<div></div>');
+                var cardNumberDiv = $('<div></div>');
+                var cardTypeDiv = $('<div></div>');
+
+                var phoneDiv = $('<div></div>');
+                var otherphoneDiv = $('<div></div>');
+                var remarkDiv = $('<div></div>');
+
+                $('<div style="padding:12px"></div>').appendTo(dialogDiv)
+                    .append($('<span></span>').append(nameDiv))
+                    .append($('<span style="margin-left:20px;"></span>').append(cardNumberDiv))
+                    .append($('<span style="margin-left:20px;"></span>').append(cardTypeDiv));
+
+                $('<div style="padding:12px"></div>').appendTo(dialogDiv)
+                    .append($('<span ></span>').append(phoneDiv))
+                    .append($('<span style="margin-left:20px;"></span>').append(otherphoneDiv))
+                    .append($('<span style="margin-left:20px;"></span>').append(remarkDiv));
+
+                dialogDiv.append('<hr/>');
+
+                nameDiv.textbox({
+                    label: '会员名:',
+                    // //prompt: 'Ent',
+                    width: 240,
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '80',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    disabled: true,
+                    // value: view.currentRow.name,
+                });
+
+                cardNumberDiv.textbox({
+                    label: '会员卡号:',
+                    // //prompt: 'Ent',
+                    width: 240,
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '80',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    disabled: true,
+                    // value: view.currentRow.Card.card_number,
+                });
+
+                cardTypeDiv.textbox({
+                    label: '会员类型:',
+                    // //prompt: 'Ent',
+                    width: 240,
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '80',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    disabled: true,
+                    // value: view.currentRow.Card.CardType.name,
+                });
+
+                phoneDiv.textbox({
+                    label: '电话:',
+                    // //prompt: 'Ent',
+                    width: 240,
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '80',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    disabled: true,
+                    // value: view.currentRow.name,
+                });
+
+                otherphoneDiv.textbox({
+                    label: '其他电话:',
+                    // //prompt: 'Ent',
+                    width: 240,
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '80',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    disabled: true,
+                    // value: view.currentRow.Card.card_number,
+                });
+
+                remarkDiv.textbox({
+                    label: '备注:',
+                    // //prompt: 'Ent',
+                    width: 240,
+                    labelPosition: 'before',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '80',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    disabled: true,
+                    // readonly: true,
+                    // value: view.currentRow.Card.CardType.name,
+                });
+
+                //反馈
+                var caseDiv = $('<div></div>');
+                var caseRemarkDiv = $('<div></div>');
+
+
+                $('<div style="padding:12px"></div>').appendTo(dialogDiv).append(caseDiv);
+                dialogDiv.append('<hr/>');
+                $('<div style="padding:12px"></div>').appendTo(dialogDiv).append(caseRemarkDiv);
+
+                caseDiv.textbox({
+                    label: '身体状态描述:',
+                    // //prompt: 'Ent',
+                    width: '100%',
+                    labelPosition: 'top',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '200',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    // disabled: true,
+                    multiline: true,
+                    height: 180,
+                    // value: view.currentRow.Card.CardType.name,
+                });
+                caseRemarkDiv.textbox({
+                    label: '诊疗步骤:',
+                    // //prompt: 'Ent',
+                    width: '100%',
+                    labelPosition: 'top',
+                    labelAlign: 'left',
+                    // required: true,
+                    latipPosition: 'right',
+                    labelWidth: '200',
+                    // validType: ['isNumber', 'length[8,11]'],
+                    // disabled: true,
+                    multiline: true,
+                    height: 180,
+                    // value: view.currentRow.Card.CardType.name,
+                });
+
+
+
+
+                var dialogOp = {
+                    title: `修改   ${view.currentRow.name}   的诊疗方案`,
+                    width: 800,
+                    top: 120,
+                    //height: 120,
+                    closed: false,
+                    cache: false,
+                    //content: '<input class="easyui-passwordbox" prompt="密码" iconWidth="28" style="width:100%;height:34px;padding:10px">',
+                    //href: 'get_content.php',
+                    modal: true,
+                    onBeforeOpen: function () {
+
+                    },
+                    onOpen: function () {
+
+
+                        if (!view.currentRow.Card) {
+                            cardNumberDiv.textbox('reset');
+                        } else {
+                            cardNumberDiv.textbox('setText', view.currentRow.Card.card_number);
+                        };
+                        if (!view.currentRow.Card || !view.currentRow.Card.CardType) {
+                            cardTypeDiv.textbox('reset');
+                        } else {
+                            cardTypeDiv.textbox('setText', view.currentRow.Card.CardType.name);
+                        };
+                        nameDiv.textbox('setText', view.currentRow.name);
+                        phoneDiv.textbox('setText', view.currentRow.phone);
+                        otherphoneDiv.textbox('setText', view.currentRow.otherphone);
+                        remarkDiv.textbox('setText', view.currentRow.remark);
+
+                        caseDiv.textbox('setText', view.currentRow.case);
+                        caseRemarkDiv.textbox('setText', view.currentRow.case_remark);
+
+
+
+                        //设置焦点                               
+                        caseDiv.textbox('textbox').focus();
+                    },
+                    buttons: [{
+                        text: '保存',
+                        handler: function () {
+                            var caseValue = caseDiv.textbox('getValue');
+                            var caseRemarkValue = caseRemarkDiv.textbox('getValue');
+                            $.post('member/saveCase', {
+                                id: view.currentRow.id,
+                                name: view.currentRow.name,
+                                caseValue,
+                                caseRemarkValue
+                            }).done(function (data) {
+                                if (data.message) {
+                                    $.messager.alert('提示', data.message, 'info', function () {
+                                    });
+                                    return;
+                                }
+
+                                $.messager.alert('提示', `会员：<b>${data.memberName}</b>的诊疗方案更新成功`, 'info', function () {
+                                    view.getTableDiv().datagrid('reload');
+                                    dialogDiv.dialog('close');
+                                });
+                            });
+                        },
+                    }, {
+                        text: '关闭',
+                        handler: function () {
+                            //dialogDiv.dialog('destroy');
+                            dialogDiv.dialog('close');
+                        }
+                    }]
+                };
+                dialogDiv.dialog(dialogOp);
+            };
+            var printCase = function () {
+
+            };
             op.tableOption = {
                 onEndEdit: function (index, row, changes) {
                     if (!Object.keys(changes).includes('card_id')) { return; }
@@ -126,6 +364,21 @@
                     //     row['UserType.name'] = $(ed.target).combobox('getText');
                     // }
                 },
+                onClickCell: function (index, field, value) {
+                    if (!field.includes('action_')) { return; }
+                    view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                    if (field === 'action_case') {
+                        recordCase();
+                        return;
+                    }
+                    if (field === 'action_print') {
+                        printCase();
+                        return;
+                    }
+
+                },
+
+
 
                 multiSort: true,
                 remoteSort: true,
@@ -139,8 +392,23 @@
                 {
                     field: 'ck',
                     checkbox: true
-                },
-                {
+                }, {
+                    field: 'action_case',
+                    title: '方案',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>调整</button>';
+                    },
+                }, {
+                    field: 'action_print',
+                    title: '方案',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>打印</button>';
+                    },
+                }, {
                     field: 'id',
                     title: '会员ID',
                     hidden: true,

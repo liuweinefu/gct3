@@ -80,6 +80,9 @@ module.exports = app => {
   router.post('/user/resetPass', controller.user.resetPass);
   router.post('/userType/setMenus', controller.userType.setMenus);
 
+
+  router.post('/member/saveCase', controller.member.saveCase);
+
   router.post('/card/resetPass', controller.card.resetPass);
 
   router.post('/employee/payWage', controller.employee.payWage);
