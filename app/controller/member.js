@@ -22,6 +22,31 @@ class MemberController extends Controller {
         super(ctx);
     }
 
+    async list() {
+        const { ctx } = this;
+        // const B = ctx.request.body;
+        const Q = ctx.query;
+
+        //const C = ctx.condition = {};
+        const M = ctx.model;
+        // const O = ctx.controllerOption; 
+        // const SS = ctx.session;
+        var member = await M.Member.findOne({ where: { id: Q.id }, include: [M.Card] });
+
+        let options = {
+            // Card: { card_number: member.Card.card_number },
+            cardNumber: member.Card ? member.Card.card_number : '',
+            name: member.name,
+            phone: member.phone,
+            created_at: (new Date(Date.parse(member.created_at)).toLocaleString()).split(' ')[0],
+            case: member.case,
+            case_remark: member.case_remark,
+        };
+
+        await ctx.render('listCase.tpl', options);
+
+
+    }
 
     async saveCase() {
         const { ctx } = this;

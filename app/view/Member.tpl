@@ -317,6 +317,7 @@
                                 $.messager.alert('提示', `会员：<b>${data.memberName}</b>的诊疗方案更新成功`, 'info', function () {
                                     view.getTableDiv().datagrid('reload');
                                     dialogDiv.dialog('close');
+                                    printCase();
                                 });
                             });
                         },
@@ -331,7 +332,11 @@
                 dialogDiv.dialog(dialogOp);
             };
             var printCase = function () {
-
+                if (!view.currentRow) {
+                    return;
+                }
+                // window.location.href = "http://www.jb51.net";
+                window.open(`/member/list/?id=${view.currentRow.id}`);
             };
             op.tableOption = {
                 onEndEdit: function (index, row, changes) {

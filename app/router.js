@@ -65,7 +65,7 @@ module.exports = app => {
   /**
    * 普通数据表对应的R-C结构
    */
-  const tableControllers = ['user', 'menu', 'userType', 'card', 'cardRecharge', 'cardType', 'commodity', 'commodityType', 'commodityWarehousing', 'consumption', 'employee', 'employeeType', 'employeeWage', 'member', 'wage', 'case', 'mix'];
+  const tableControllers = ['user', 'menu', 'userType', 'card', 'cardRecharge', 'cardType', 'commodity', 'commodityType', 'commodityWarehousing', 'consumption', 'employee', 'employeeType', 'employeeWage', 'member', 'wage', 'mix'];
 
   tableControllers.forEach(ctr => {
     router.get('/' + ctr, controller[ctr].getTpl);
@@ -82,6 +82,7 @@ module.exports = app => {
 
 
   router.post('/member/saveCase', controller.member.saveCase);
+  router.get('/member/list', controller.member.list);
 
   router.post('/card/resetPass', controller.card.resetPass);
 

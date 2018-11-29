@@ -131,6 +131,8 @@
                             dialogDiv.dialog('close');
                             view.currentRow.passed = true;
                             view.currentRow.actionFunc();
+
+                            // view.currentRow.actionFunc();
                         } else {
                             $.messager.alert('提示', '密码错误请重新输入', 'info', function () {
                                 //passwordboxDiv.textbox('textbox').focus();
@@ -1316,14 +1318,17 @@
                 };
                 dialogDiv.dialog(dialogOp);
             };
-
-
             var printCase = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
+                if (!view.currentRow) {
                     return;
                 }
-                //console.log('print');
-            }
+
+                // window.location.href = "http://www.jb51.net";                
+                window.open(`/member/list/?id=${view.currentRow.id}`);
+
+
+            };
+
             op.tableOption = {
                 // url: '/mix/findAll',
                 queryParams: {
@@ -1339,6 +1344,10 @@
                 onClickCell: function (index, field, value) {
                     if (!field.includes('action_')) { return; }
                     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                    if (field == 'action_print') {
+                        printCase();
+                        return;
+                    }
                     switch (field) {
                         case 'action_pay':
                             view.currentRow.actionFunc = pay;
@@ -1352,9 +1361,9 @@
                         case 'action_changePass':
                             view.currentRow.actionFunc = changePass;
                             break;
-                        case 'action_print':
-                            view.currentRow.actionFunc = printCase;
-                            break;
+                        // case 'action_print':
+                        //     view.currentRow.actionFunc = printCase;
+                        //     break;
                     }
                     empower();
                 },
