@@ -10,7 +10,7 @@
 
     <table style="width:210mm;margin:0 auto;">
         <tr>
-            <td>卡号：
+            <td style="width:50mm;">卡号：
                 {{ cardNumber }}
             </td>
             <td>电话：
@@ -67,7 +67,9 @@
         </tr>
     </table>
 
-
+    <script>
+        window.print(); 
+    </script>
 </body>
 
 </html>
