@@ -4,6 +4,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <!-- 若页面需默认用极速核，增加标签：
+    <meta name="renderer" content="webkit"> 
+    若页面需默认用ie兼容内核，增加标签：
+    <meta name="renderer" content="ie-comp"> 
+    若页面需默认用ie标准内核，增加标签：
+    <meta name="renderer" content="ie-stand"> -->
+
     <title>东北林业大学就业管理系统</title>
     <!-- <link rel="stylesheet" type="text/css" href="./dropify/css/dropify.min.css"> -->
     <link rel="stylesheet" type="text/css" href="/public/easyui/themes/default/easyui.css">
@@ -262,6 +270,7 @@
                         captchaPicDiv.click();
                         captchaDiv.textbox('clear');
                     },
+                    top: 120,
                     width: 240,
                     // height: 350,
                     //iconCls: 'icon-save',

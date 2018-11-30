@@ -117,7 +117,14 @@
                         // if (name.length < 30) {
                         //     let l = 30 - name.length
                         // }
-                        return `${rows.length.toString().padStart(3, '0')}次---商品：${rows[0].Commodity.name}`;
+                        var commodityName = rows[0].Commodity.name;
+                        var count = rows.reduce((prev, curr) => {
+                            console.log(prev)
+                            return prev + curr.quantity;
+                        }, 0);
+
+
+                        return `${count.toString().padStart(3, '0')}次---商品：${commodityName}`;
                     },
                     // onLoadSuccess: function () {
 

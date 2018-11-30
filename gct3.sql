@@ -11,7 +11,7 @@
  Target Server Version : 100308
  File Encoding         : 65001
 
- Date: 28/11/2018 21:40:55
+ Date: 29/11/2018 16:37:46
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `card`  (
 -- Records of card
 -- ----------------------------
 INSERT INTO `card` VALUES (1, '250', '测试用户测试用户测试用户测试用户', 'c33367701511b4f6020ec61ded352059', 4263.0000, '123', '123', '123', '2018-08-19 14:24:49', '2018-11-27 12:26:22', 13);
-INSERT INTO `card` VALUES (2, '2', 'name', '', 19669.4500, '133phone', '133other', '备注826', '2018-08-19 14:02:13', '2018-11-21 17:08:59', 2);
+INSERT INTO `card` VALUES (2, '2', 'name', '', 19452.5000, '133phone', '133other', '备注826', '2018-08-19 14:02:13', '2018-11-29 07:46:25', 2);
 INSERT INTO `card` VALUES (9, '3', 'c', '14e6a05b6a4dcdc99ee86175fe494aab', 10000000.0000, '11111111111', '0000', '备注119', '2018-08-19 14:03:32', '2018-09-28 03:22:43', 3);
 INSERT INTO `card` VALUES (10, '4', 'd', NULL, 0.0000, '00000000000', '0000', '备注817', '2018-08-20 13:42:41', '2018-08-22 12:36:09', 4);
 INSERT INTO `card` VALUES (14, '5', 'e', NULL, 0.0000, '00000000000', '0000', '备注534', '2018-08-20 13:42:59', '2018-08-22 12:36:09', 8);
@@ -88,7 +88,7 @@ CREATE TABLE `card_recharge`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `card_recharge_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `card_recharge_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of card_recharge
@@ -105,6 +105,7 @@ INSERT INTO `card_recharge` VALUES (9, 234.0000, '1301', '2018-11-18 02:00:55', 
 INSERT INTO `card_recharge` VALUES (10, 2345.0000, '1302', '2018-11-18 02:01:36', 26, 10);
 INSERT INTO `card_recharge` VALUES (11, 20000.0000, '新会员 985', '2018-11-21 17:08:59', 2, 10);
 INSERT INTO `card_recharge` VALUES (12, 100000.0000, '4444', '2018-11-27 12:25:20', 58, 10);
+INSERT INTO `card_recharge` VALUES (13, 123.0000, '新会员 985', '2018-11-29 07:45:25', 2, 10);
 
 -- ----------------------------
 -- Table structure for card_type
@@ -182,7 +183,7 @@ INSERT INTO `commodity` VALUES (16, '新商品 398', 10000.0000, 10000, '备注1
 INSERT INTO `commodity` VALUES (17, '新商品 797', 10000.0000, 10000, '备注782', 9, '2018-09-19 09:18:57', '2018-09-20 02:12:33', NULL);
 INSERT INTO `commodity` VALUES (18, '新商品 550', 10000.0000, 10000, '备注563', 10, '2018-09-19 09:18:57', '2018-09-20 02:12:33', NULL);
 INSERT INTO `commodity` VALUES (19, '新商品 343', 10000.0000, 10000, '备注348', 11, '2018-09-19 09:18:57', '2018-09-20 02:12:33', NULL);
-INSERT INTO `commodity` VALUES (20, '新商品 255', 523.0000, 9984, '', 2, '2018-09-19 09:18:57', '2018-11-27 12:27:24', NULL);
+INSERT INTO `commodity` VALUES (20, '新商品 255', 523.0000, 9983, '', 2, '2018-09-19 09:18:57', '2018-11-29 07:46:25', NULL);
 
 -- ----------------------------
 -- Table structure for commodity_type
@@ -258,7 +259,7 @@ CREATE TABLE `consumption`  (
   CONSTRAINT `consumption_ibfk_4` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `consumption_ibfk_5` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `consumption_ibfk_6` FOREIGN KEY (`wage_id`) REFERENCES `wage` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 74 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 75 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of consumption
@@ -336,6 +337,7 @@ INSERT INTO `consumption` VALUES (70, 130.9000, 2, 0, 1, NULL, '2018-11-27 12:27
 INSERT INTO `consumption` VALUES (71, 44.0000, 1, 0, 1, NULL, '2018-11-27 12:27:24', '2018-11-27 12:28:39', NULL, 58, 2, 10, 51, 14, 33);
 INSERT INTO `consumption` VALUES (72, 126.5000, 1, 0, 1, NULL, '2018-11-27 12:29:25', '2018-11-27 12:29:36', NULL, 58, 1, 10, 51, 14, 34);
 INSERT INTO `consumption` VALUES (73, 126.5000, 1, 0, 0, NULL, '2018-11-27 12:30:53', '2018-11-27 12:30:53', NULL, 58, 1, 10, 51, 5, NULL);
+INSERT INTO `consumption` VALUES (74, 339.9500, 1, 0, 0, NULL, '2018-11-29 07:46:25', '2018-11-29 07:46:25', NULL, 2, 20, 10, 5, 15, NULL);
 
 -- ----------------------------
 -- Table structure for employee
@@ -441,11 +443,11 @@ CREATE TABLE `member`  (
 -- ----------------------------
 -- Records of member
 -- ----------------------------
-INSERT INTO `member` VALUES (1, '新会员 982', '13936248323', '0000', 'abc', '阿斯顿发布', '2', '0000-00-00 00:00:00', '2018-11-28 12:41:03', 26);
-INSERT INTO `member` VALUES (5, '新会员 985', '00000000000', '0000', '2', NULL, NULL, '2018-08-22 09:04:39', '2018-10-25 09:12:05', 2);
+INSERT INTO `member` VALUES (1, '新会员 982', '13936248323', '0000', 'abc', '一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。\n一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。', '一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。', '0000-00-00 00:00:00', '2018-11-29 06:58:35', 26);
+INSERT INTO `member` VALUES (5, '新会员 985', '00000000000', '0000', '2', '这两天头部神经一跳一跳地疼，让人心烦意乱。还失眠。晚上睡觉头也痛', '1、建议营养均衡，保持良好情绪，作息规律，避免紧张，可以先服用正天丸治疗，观察一下，祝你健康\n2、建议营养均衡，保持良好情绪，作息规律，避免紧张，可以先服用正天丸治疗，观察一下，祝你健康\n3、建议营养均衡，保持良好情绪，作息规律，避免紧张，可以先服用正天丸治疗，观察一下，祝你健康', '2018-08-22 09:04:39', '2018-11-29 05:09:05', 2);
 INSERT INTO `member` VALUES (6, '新会员 983', '00000000000', '0000', '备注494', NULL, NULL, '2018-08-22 09:04:39', '2018-09-07 03:14:18', 23);
-INSERT INTO `member` VALUES (7, '新会员 660', '00000000000', '0000', '备注941', NULL, NULL, '2018-08-22 09:04:39', '2018-08-23 06:32:00', 1);
-INSERT INTO `member` VALUES (9, '新会员 475', '00000000000', '0000', '备注763', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 1);
+INSERT INTO `member` VALUES (7, '新会员 660', '00000000000', '0000', '备注941', '660', '660', '2018-08-22 09:04:39', '2018-11-29 06:44:39', 1);
+INSERT INTO `member` VALUES (9, '新会员 475', '00000000000', '0000', '备注763', '475', '475', '2018-08-23 06:32:20', '2018-11-29 06:44:46', 1);
 INSERT INTO `member` VALUES (10, '新会员 31', '00000000000', '0000', '备注708', 'action_printaction_printaction_print', 'action_printaction_printaction_print\naction_print\n\naction_print\naction_print\n\naction_print', '2018-08-23 06:32:20', '2018-11-28 12:51:20', 1);
 INSERT INTO `member` VALUES (11, '新会员 602', '00000000000', '0000', '备注549', NULL, NULL, '2018-08-23 06:32:20', '2018-08-23 06:32:20', 1);
 INSERT INTO `member` VALUES (12, '新会员 952', '00000000000', '0000', '备注462', NULL, NULL, '2018-08-23 06:32:20', '2018-11-28 01:05:35', 1);
@@ -476,12 +478,12 @@ INSERT INTO `member` VALUES (42, '1301', '12345678901', '1', '1', NULL, NULL, '2
 INSERT INTO `member` VALUES (43, '1302', '12345678901', '2', '2', NULL, NULL, '2018-11-15 14:12:04', '2018-11-15 14:12:04', 26);
 INSERT INTO `member` VALUES (44, '1303', '12345678901', '3', '3', NULL, NULL, '2018-11-15 14:36:49', '2018-11-15 14:36:49', 26);
 INSERT INTO `member` VALUES (45, '12345', '11111111111', '7', '7', NULL, NULL, '2018-11-16 07:04:24', '2018-11-16 07:04:24', 55);
-INSERT INTO `member` VALUES (46, '123', '12345678901', '123', '123', NULL, NULL, '2018-11-16 12:04:27', '2018-11-16 12:04:27', 56);
-INSERT INTO `member` VALUES (47, '123', '12311111111', '123', '123', NULL, NULL, '2018-11-16 12:06:57', '2018-11-16 12:06:57', 56);
+INSERT INTO `member` VALUES (46, '123', '12345678901', '123', '123', '(new Date(Date.parse(member.created_at)).toLocaleString())', '', '2018-11-16 12:04:27', '2018-11-29 05:42:09', 56);
+INSERT INTO `member` VALUES (47, '123', '12311111111', '123', '123', '', '', '2018-11-16 12:06:57', '2018-11-29 05:42:21', 56);
 INSERT INTO `member` VALUES (49, '新会员 346', '00000000000', '0000', '备注499', NULL, NULL, '2018-11-17 16:58:29', '2018-11-17 16:58:29', 57);
-INSERT INTO `member` VALUES (50, '123456', '12321234111', '', '', NULL, NULL, '2018-11-27 12:24:45', '2018-11-27 12:24:45', 58);
-INSERT INTO `member` VALUES (51, '4444', '54323452345', '', '', NULL, NULL, '2018-11-27 12:25:00', '2018-11-27 12:25:00', 58);
-INSERT INTO `member` VALUES (52, '新会员 661', '00000000000', '0000', '备注847', NULL, NULL, '2018-11-28 12:41:33', '2018-11-28 12:41:33', NULL);
+INSERT INTO `member` VALUES (50, '123456', '12321234111', '', '', '', '一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。\n一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。\n一般来说您的这个年龄应该不会有器质性的病变，应该与您精神压力比较大，有一定的关系。您可以喝点安神补脑液。', '2018-11-27 12:24:45', '2018-11-29 05:40:34', 58);
+INSERT INTO `member` VALUES (51, '4444', '54323452345', '', '', '', '', '2018-11-27 12:25:00', '2018-11-29 05:41:31', 58);
+INSERT INTO `member` VALUES (52, '新会员 661', '00000000000', '0000', '备注847', '', '', '2018-11-28 12:41:33', '2018-11-29 05:41:49', NULL);
 INSERT INTO `member` VALUES (53, '新会员 93', '00000000000', '0000', '备注214', NULL, NULL, '2018-11-28 12:41:33', '2018-11-28 12:41:33', NULL);
 INSERT INTO `member` VALUES (54, '新会员 484', '00000000000', '0000', '备注624', NULL, NULL, '2018-11-28 12:41:33', '2018-11-28 12:41:33', NULL);
 INSERT INTO `member` VALUES (55, '新会员 410', '00000000000', '0000', '备注633', NULL, NULL, '2018-11-28 12:41:33', '2018-11-28 12:41:33', NULL);
@@ -584,7 +586,7 @@ INSERT INTO `user` VALUES (3, 'liuwei', 'e10adc3949ba59abbe56e057f20f883e', '123
 INSERT INTO `user` VALUES (4, '新登录用户 227', NULL, NULL, NULL, '', 3, NULL, '2018-08-04 07:40:27', '2018-08-21 08:26:48', 3);
 INSERT INTO `user` VALUES (5, '新登录用户 413', NULL, NULL, NULL, '', 5, NULL, '2018-08-04 07:40:27', '2018-08-21 08:26:48', 3);
 INSERT INTO `user` VALUES (6, '4', NULL, NULL, NULL, '', 6, NULL, '2018-08-04 07:40:27', '2018-08-21 08:26:48', 4);
-INSERT INTO `user` VALUES (10, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '', '1111', '1', 1, '2018-11-28 12:35:17', '2018-08-04 14:34:18', '2018-11-28 12:35:17', 1);
+INSERT INTO `user` VALUES (10, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '', '1111', '1', 1, '2018-11-29 07:45:17', '2018-08-04 14:34:18', '2018-11-29 07:45:17', 1);
 INSERT INTO `user` VALUES (11, '新登录用户 346', NULL, NULL, NULL, '', 4, NULL, '2018-08-04 14:34:18', '2018-08-21 08:26:48', 1);
 INSERT INTO `user` VALUES (12, '新登录用户 275', NULL, NULL, NULL, '', 7, NULL, '2018-08-04 14:34:18', '2018-08-21 08:26:48', 4);
 INSERT INTO `user` VALUES (13, '新登录用户 23475', NULL, NULL, NULL, '1', 10, NULL, '0000-00-00 00:00:00', '2018-08-31 09:32:03', NULL);

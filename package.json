@@ -28,7 +28,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-gct3",
+    "start": "egg-scripts start --daemon --port=5555 --workers=1 --title=egg-server-gct3",
     "stop": "egg-scripts stop --title=egg-server-gct3",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",

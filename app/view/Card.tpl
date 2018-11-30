@@ -301,7 +301,7 @@
                     editor: {
                         type: 'combobox',
                         options: {
-                            //queryParams: { findBy: ['id', 'name'] },
+                            queryParams: { sort: 'sn', order: 'asc' },
                             panelWidth: 160,
                             // editable: false,
                             editable: true,
