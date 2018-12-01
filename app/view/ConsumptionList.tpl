@@ -131,6 +131,7 @@
                 //     });
                 // },
                 // singleSelect: true,
+                url: '/consumption/findAll',
                 //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
                 listOnly: true,
 
