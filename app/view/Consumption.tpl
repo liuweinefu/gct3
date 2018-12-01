@@ -175,7 +175,7 @@
 
                     var message = '';
 
-                    var commodityName = rows[0].Commodity.name;
+                    var commodityName = rows[0].Commodity.name ? rows[0].Commodity.name : '已删除商品';
                     message += `（商品：${commodityName}）`.padEnd(20, '_');
 
                     var count = rows.reduce((prev, curr) => {
