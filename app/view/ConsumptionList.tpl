@@ -1,8 +1,8 @@
-<div id='ConsumptionCount' style="height: 100%;"></div>
+<div id='consumption' style="height: 100%;"></div>
 <script>
     //@ sourceURL=Consumption.js
     void function () {
-        var anchorDiv = $('#ConsumptionCount');
+        var anchorDiv = $('#consumption');
         var view = new lwTable(anchorDiv);
 
         // var userType = null;
@@ -64,29 +64,9 @@
             ];
 
             //buttons设置**************************************************
-            var expandGroupView = function () {
-                if (view.collapseGroup) {
-                    view.getTableDiv().datagrid('expandGroup');
-                    view.collapseGroup = false;
-                } else {
-                    view.getTableDiv().datagrid('collapseGroup');
-                    view.collapseGroup = true;
-                }
-
-                // $.messager.confirm('确认对话框', '是否继续结算？', function (r) {
-                //     if (r) {
-                //         listWageHandler();
-                //     }
-                // });
-            };
             op.buttonOption = {
                 // importExcel: true,
                 // exportExcel: true,
-                expand: {
-                    text: '全部展开或折叠',
-                    iconCls: 'icon-search',
-                    onClick: expandGroupView,
-                },
                 sort: true,
                 search: true,
                 // replace: true,
@@ -114,196 +94,73 @@
             // };
             view.currentRow = null;
             op.tableOption = {
-                onClickCell: function (index, field, value) {
-                    if (field !== 'action_revoke') { return; }
-                    view.currentRow = view.getTableDiv().datagrid('getRows')[index];
-                    if (!view.currentRow || !view.currentRow.id) {
-                        $.messager.alert('提示', '当前行出错', 'warning');
-                        return;
-                    }
-                    var revoke = function () {
-                        $.post('consumption/revoke', { id: view.currentRow.id })
-                            .done(function (data) {
-                                if (data.message) {
-                                    $.messager.alert('警告', data.message, 'warning',
-                                        function () {
-                                            view.getTableDiv().datagrid('reload');
-                                        });
-                                } else {
-                                    $.messager.alert('撤销成功！',
-                                        `商品名称：${data.commdityName}</br>
-                                                商品库存：${data.commdityNowQuantity}(撤销前：${data.commdityLastQuantity})</br ></br >
-                                                会员名称：${data.memberName}(卡号：${data.card_number})</br >
-                                                当前余额：￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}</br >
-                                                撤销前余额：￥${Number.parseFloat(data.cardLastBalance).toFixed(2)}`,
-                                        'info',
-                                        function () {
-                                            view.getTableDiv().datagrid('reload');
-                                        });
-                                };
-                            });
-                    }
+                // onClickCell: function (index, field, value) {
+                //     if (field !== 'action_revoke') { return; }
+                //     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                //     if (!view.currentRow || !view.currentRow.id) {
+                //         $.messager.alert('提示', '当前行出错', 'warning');
+                //         return;
+                //     }
+                //     var revoke = function () {
+                //         $.post('consumption/revoke', { id: view.currentRow.id })
+                //             .done(function (data) {
+                //                 if (data.message) {
+                //                     $.messager.alert('警告', data.message, 'warning',
+                //                         function () {
+                //                             view.getTableDiv().datagrid('reload');
+                //                         });
+                //                 } else {
+                //                     $.messager.alert('撤销成功！',
+                //                         `商品名称：${data.commdityName}</br>
+                //                                 商品库存：${data.commdityNowQuantity}(撤销前：${data.commdityLastQuantity})</br ></br >
+                //                                 会员名称：${data.memberName}(卡号：${data.card_number})</br >
+                //                                 当前余额：￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}</br >
+                //                                 撤销前余额：￥${Number.parseFloat(data.cardLastBalance).toFixed(2)}`,
+                //                         'info',
+                //                         function () {
+                //                             view.getTableDiv().datagrid('reload');
+                //                         });
+                //                 };
+                //             });
+                //     }
 
-                    $.messager.confirm('是否继续撤销', '是否撤销当前消费记录？', function (r) {
-                        if (r) {
-                            revoke();
-                        }
-                    });
-                },
-
-                queryParams: {
-                    where: JSON.stringify([{
-                        "leftBracket": "", "field": "updated_at", "compareSymbol": "gt", "value": new Date(Date.now() - 86400000 * 30), "rightBracket": "", "logicalSymbol": "and", "viewValue": null
-                    }])
-                },
-                // queryParams: {
-                //     where: JSON.stringify([{
-                //         "leftBracket": "", "field": "updated_at", "compareSymbol": "lt", "value": new Date(), "rightBracket": "", "logicalSymbol": "and", "viewValue": null
-                //     }, {
-                //         "leftBracket": "", "field": "updated_at", "compareSymbol": "gt", "value": "2018-11-29", "rightBracket": "", "logicalSymbol": "and", "viewValue": null
-                //     }])
+                //     $.messager.confirm('是否继续撤销', '是否撤销当前消费记录？', function (r) {
+                //         if (r) {
+                //             revoke();
+                //         }
+                //     });
                 // },
-                url: '/consumption/findAll',
-                showFooter: true,
-                view: groupview,
-                groupField: 'commodity_id',
-                groupFormatter: function (value, rows) {
-                    if (!Array.isArray(rows) && rows.length === 0) {
-                        return;
-                    };
-
-
-                    var message = '';
-
-                    var commodityName = rows[0].Commodity.name;
-                    message += `（商品：${commodityName}）`.padEnd(20, '_');
-
-                    var count = rows.reduce((prev, curr) => {
-                        return prev - (-curr.quantity);
-                    }, 0);
-                    message += `（${count}次）`.padEnd(10, '_');
-
-                    var allprice = rows.reduce((prev, curr) => {
-                        return prev - (-curr.price);
-                    }, 0);
-                    message += `（总价${allprice.toFixed(2)}）`.padEnd(20, '_')
-
-
-                    var cash = rows.reduce((prev, curr) => {
-                        if (curr.is_cash) {
-                            return prev - (-curr.price);
-                        } else {
-                            return prev;
-                        }
-                    }, 0);
-
-                    message += `[现金:￥${cash.toFixed(2)}]`.padEnd(20, '_');
-                    var noCash = rows.reduce((prev, curr) => {
-                        if (curr.is_cash) {
-                            return prev;
-                        } else {
-                            return prev - (-curr.price);
-                        }
-                    }, 0);
-                    message += `[卡刷:￥${noCash.toFixed(2)}]`;
-                    // return `商品：${commodityName}_________${count.toString().padEnd(3, '0')}次------总价：${price}`;
-                    // return `（商品：${commodityName})------(${count}次)------(总价：￥${allprice.toFixed(2)})---[现金:￥${cash.toFixed(2)}]---[卡刷:￥${noCash.toFixed(2)}]`;
-                    return message;
-
-                },
-                pageSize: '1000',
-                pageList: [1000, 5000, 10000, 50000],
-
-                singleSelect: true,
+                // singleSelect: true,
                 //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
                 listOnly: true,
-
 
                 multiSort: true,
                 remoteSort: true,
                 sortName: 'updated_at',
                 sortOrder: 'desc',
-                onLoadSuccess: function (data) {
-                    // expand();
-                    console.log(data);
-                    // data.footer = [{
-                    //     name: 'aaaaaa',
-                    //     price: 0.00
-                    // }];
-                    expandGroupView();
-
-                    var allprice = data.rows.reduce((prev, curr) => {
-                        return prev - (-curr.price);
-                    }, 0);
-
-                    view.getTableDiv().datagrid('reloadFooter', [{
-                        action_revoke: 1,
-                        Commodity: { name: '合计' },
-                        price: allprice,
-                    }]);
-
-                }
             };
 
             var combogridOnLoadSuccess = combogridEvents(view).onLoadSuccess;
             var combogridOnShowPanel = combogridEvents(view).onShowPanel;
 
             op.tableOption.columns = [[
-                {
-                    field: 'action_revoke',
-                    title: '撤销结算',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        if (value) { return }
-                        return '<button>撤销结算</button>';
-                    },
-                },
+                // {
+                //     field: 'action_revoke',
+                //     title: '撤销结算',
+                //     //width: 90,
+                //     formatter: function (value, row, index) {
+                //         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                //         return '<button>撤销结算</button>';
+                //     },
+                // },
                 {
                     field: 'id',
                     title: '消费记录ID',
                     hidden: true,
                 }, {
-                    //field: 'UserType.name',user_type_id
-                    field: 'commodity_id',
-                    title: '商品名',
-                    width: 80,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        return row.Commodity ? row.Commodity.name : '';
-                    },
-                    editor: {
-                        type: 'combogrid',
-                        options: {
-                            //queryParams: { findBy: ['card_number', 'name'] },
-                            mode: 'remote',
-                            url: '/commodity/findAll',
-                            panelWidth: 300,
-                            //panelMaxHeight: 265,
-                            //panelHeight: 200,
-                            idField: 'id',
-                            textField: 'name',
-                            columns: [[
-                                // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                                
-                                { field: 'name', title: '商品名', width: 165 },
-                            ]],
-                            //reversed: true,
-                            sortName: 'sn',
-                            //避免出现滑条，造成选择的时候无法选中
-                            pagination: true,
-                            pageSize: 6,
-                            pageList: [6],
-                            //pagePosition: 'top',
-
-                            rownumbers: true,
-                            onLoadSuccess: combogridOnLoadSuccess,
-                            onShowPanel: combogridOnShowPanel,
-                        }
-                    }
-                }, {
                     field: 'price',
                     title: '消费金额',
-                    width: 200,
+                    width: 100,
                     sortable: true,
                     editor: {
                         type: 'numberbox',
@@ -393,6 +250,43 @@
                     editor: {
                         type: 'textbox',
                         options: {}
+                    }
+                }, {
+                    //field: 'UserType.name',user_type_id
+                    field: 'commodity_id',
+                    title: '商品名',
+                    width: 80,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        return row.Commodity ? row.Commodity.name : '';
+                    },
+                    editor: {
+                        type: 'combogrid',
+                        options: {
+                            //queryParams: { findBy: ['card_number', 'name'] },
+                            mode: 'remote',
+                            url: '/commodity/findAll',
+                            panelWidth: 300,
+                            //panelMaxHeight: 265,
+                            //panelHeight: 200,
+                            idField: 'id',
+                            textField: 'name',
+                            columns: [[
+                                // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                                
+                                { field: 'name', title: '商品名', width: 165 },
+                            ]],
+                            //reversed: true,
+                            sortName: 'sn',
+                            //避免出现滑条，造成选择的时候无法选中
+                            pagination: true,
+                            pageSize: 6,
+                            pageList: [6],
+                            //pagePosition: 'top',
+
+                            rownumbers: true,
+                            onLoadSuccess: combogridOnLoadSuccess,
+                            onShowPanel: combogridOnShowPanel,
+                        }
                     }
                 }, {
                     //field: 'UserType.name',user_type_id
@@ -558,7 +452,7 @@
                         }
                     },
                     editor: {
-                        type: 'datebox',
+                        type: 'datetimebox',
                         options: {}
                     },
                 },

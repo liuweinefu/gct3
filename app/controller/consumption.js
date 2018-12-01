@@ -21,10 +21,10 @@ class ConsumptionController extends Controller {
         ctx.controllerOption.name = controllerName;
         super(ctx);
     }
-    async getConsumptionCount() {
+    async getConsumptionList() {
         const { ctx } = this;
         let options = {};
-        await ctx.render('ConsumptionCount.Tpl', options);
+        await ctx.render('ConsumptionList.Tpl', options);
         //ctx.body = 'Hello ' + this.ctx.ctlOption.modelName + ':' + this.ctx.ctlOption.modelTpl;
         //ctx.body = await ctx.service.normalTable.selectCondition();
     }

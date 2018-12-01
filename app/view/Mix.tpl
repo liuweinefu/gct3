@@ -481,7 +481,9 @@
                         },
                         formatter: function (value, row, index) {
                             switch (value) {
+                                case true:
                                 case '1': return '是';
+                                case false:
                                 case '0': return '否';
                                 default: return '';
                             }
@@ -510,7 +512,9 @@
                         },
                         formatter: function (value, row, index) {
                             switch (value) {
+                                case true:
                                 case '1': return '是';
+                                case false:
                                 case '0': return '否';
                                 default: return '';
                             }
