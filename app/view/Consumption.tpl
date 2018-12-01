@@ -175,7 +175,7 @@
 
                     var message = '';
 
-                    var commodityName = rows[0].Commodity.name ? rows[0].Commodity.name : '已删除商品';
+                    var commodityName = rows[0].Commodity ? rows[0].Commodity.name : '已删除商品';
                     message += `（商品：${commodityName}）`.padEnd(20, '_');
 
                     var count = rows.reduce((prev, curr) => {
@@ -225,7 +225,7 @@
                 sortOrder: 'desc',
                 onLoadSuccess: function (data) {
                     // expand();
-                    console.log(data);
+                    // console.log(data);
                     // data.footer = [{
                     //     name: 'aaaaaa',
                     //     price: 0.00
