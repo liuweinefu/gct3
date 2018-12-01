@@ -97,9 +97,12 @@ module.exports = app => {
   router.post('/mix/searchCardNumber', controller.mix.searchCardNumber);
   router.post('/mix/addNewCard', controller.mix.addNewCard);
   router.post('/mix/addNewMerber', controller.mix.addNewMerber);
+  router.get('/mix/getConsumptionCount', controller.consumption.getConsumptionCount);
+
 
 
   router.post('/consumption/revoke', controller.consumption.revoke);
+
 
 
   // router.get('/user', controller.user.getTpl);

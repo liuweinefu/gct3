@@ -21,6 +21,13 @@ class ConsumptionController extends Controller {
         ctx.controllerOption.name = controllerName;
         super(ctx);
     }
+    async getConsumptionCount() {
+        const { ctx } = this;
+        let options = {};
+        await ctx.render('ConsumptionCount.Tpl', options);
+        //ctx.body = 'Hello ' + this.ctx.ctlOption.modelName + ':' + this.ctx.ctlOption.modelTpl;
+        //ctx.body = await ctx.service.normalTable.selectCondition();
+    }
     async revoke() {
         const { ctx } = this;
         const B = ctx.request.body;
