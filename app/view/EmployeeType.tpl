@@ -66,7 +66,7 @@
                 return {
                     name: '技师类型 ' + Math.round(Math.random() * 1000),
                     wage: 0,
-                    remark: '备注' + Math.round(Math.random() * 1000),
+                    remark: '',
                     sn: newRowIndex ? newRowIndex : 0,
                 };
             };

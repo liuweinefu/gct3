@@ -66,7 +66,7 @@
                     name: '新商品 ' + Math.round(Math.random() * 1000),
                     price: 10000,
                     stocks: 10000,
-                    remark: '备注' + Math.round(Math.random() * 1000),
+                    remark: '',
                     sn: newRowIndex ? newRowIndex : 0,
                     //commodity_type_id: 1
                 };

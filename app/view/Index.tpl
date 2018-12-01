@@ -12,7 +12,7 @@
     若页面需默认用ie标准内核，增加标签：
     <meta name="renderer" content="ie-stand"> -->
 
-    <title>东北林业大学就业管理系统</title>
+    <title>关承堂管理系统3.0</title>
     <!-- <link rel="stylesheet" type="text/css" href="./dropify/css/dropify.min.css"> -->
     <link rel="stylesheet" type="text/css" href="/public/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="/public/easyui/themes/icon.css">

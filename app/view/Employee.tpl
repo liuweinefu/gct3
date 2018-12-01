@@ -602,7 +602,7 @@
                 return {
                     name: '新员工 ' + Math.round(Math.random() * 1000),
                     phone: '00000000000',
-                    remark: '备注' + Math.round(Math.random() * 1000),
+                    remark: '',
                     sn: newRowIndex ? newRowIndex : 0,
                 };
             };

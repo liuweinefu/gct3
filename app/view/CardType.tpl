@@ -66,7 +66,7 @@
                     name: '会员卡类型 ' + Math.round(Math.random() * 1000),
                     discount: 1,
                     sn: newRowIndex ? newRowIndex : 9999,
-                    remark: '备注' + Math.round(Math.random() * 1000),
+                    remark: '',
                 };
             };
 

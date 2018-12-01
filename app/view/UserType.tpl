@@ -65,7 +65,7 @@
             view.makeNewRow = (newRowIndex) => {
                 return {
                     name: '新用户类型 ' + Math.round(Math.random() * 1000),
-                    remark: '备注' + Math.round(Math.random() * 1000),
+                    remark: '',
                     sn: newRowIndex ? newRowIndex : 0,
                 };
             };

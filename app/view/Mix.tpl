@@ -941,7 +941,7 @@
                     labelPosition: 'before',
                     labelAlign: 'left',
                     required: true,
-                    validType: ['length[3,20]'],
+                    validType: ['length[2,20]'],
                     latipPosition: 'right',
                     labelWidth: '120',
                     disabled: true,

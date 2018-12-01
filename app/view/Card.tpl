@@ -93,7 +93,7 @@
                     balance: 0,
                     phone: '00000000000',
                     otherphone: '0000',
-                    remark: '备注' + Math.round(Math.random() * 1000),
+                    remark: '',
                 };
             };
 

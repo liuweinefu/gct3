@@ -64,7 +64,7 @@
             // view.makeNewRow = (newRowIndex) => {
             //     return {
             //         name: '新登录用户 ' + Math.round(Math.random() * 1000),
-            //         remark: '备注' + Math.round(Math.random() * 1000),
+            //         remark: '',
             //         sn: newRowIndex ? newRowIndex : 0,
             //     };
             // };
