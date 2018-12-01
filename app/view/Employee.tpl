@@ -1,6 +1,6 @@
 <div id='employee' style="height: 100%;"></div>
 <script>
-    //@ sourceURL=employee.js
+    //# sourceURL=employee.js
     void function () {
         var anchorDiv = $('#employee');
         var view = new lwTable(anchorDiv);

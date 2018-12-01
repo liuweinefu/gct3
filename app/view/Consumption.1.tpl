@@ -1,8 +1,8 @@
-<div id='consumptionList' style="height: 100%;"></div>
+<div id='consumption' style="height: 100%;"></div>
 <script>
-    //# sourceURL=ConsumptionList.js
+    //# sourceURL=Consumption.js
     void function () {
-        var anchorDiv = $('#consumptionList');
+        var anchorDiv = $('#consumption');
         var view = new lwTable(anchorDiv);
 
         // var userType = null;
@@ -94,43 +94,43 @@
             // };
             view.currentRow = null;
             op.tableOption = {
-                // onClickCell: function (index, field, value) {
-                //     if (field !== 'action_revoke') { return; }
-                //     view.currentRow = view.getTableDiv().datagrid('getRows')[index];
-                //     if (!view.currentRow || !view.currentRow.id) {
-                //         $.messager.alert('提示', '当前行出错', 'warning');
-                //         return;
-                //     }
-                //     var revoke = function () {
-                //         $.post('consumption/revoke', { id: view.currentRow.id })
-                //             .done(function (data) {
-                //                 if (data.message) {
-                //                     $.messager.alert('警告', data.message, 'warning',
-                //                         function () {
-                //                             view.getTableDiv().datagrid('reload');
-                //                         });
-                //                 } else {
-                //                     $.messager.alert('撤销成功！',
-                //                         `商品名称：${data.commdityName}</br>
-                //                                 商品库存：${data.commdityNowQuantity}(撤销前：${data.commdityLastQuantity})</br ></br >
-                //                                 会员名称：${data.memberName}(卡号：${data.card_number})</br >
-                //                                 当前余额：￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}</br >
-                //                                 撤销前余额：￥${Number.parseFloat(data.cardLastBalance).toFixed(2)}`,
-                //                         'info',
-                //                         function () {
-                //                             view.getTableDiv().datagrid('reload');
-                //                         });
-                //                 };
-                //             });
-                //     }
+                onClickCell: function (index, field, value) {
+                    if (field !== 'action_revoke') { return; }
+                    view.currentRow = view.getTableDiv().datagrid('getRows')[index];
+                    if (!view.currentRow || !view.currentRow.id) {
+                        $.messager.alert('提示', '当前行出错', 'warning');
+                        return;
+                    }
+                    var revoke = function () {
+                        $.post('consumption/revoke', { id: view.currentRow.id })
+                            .done(function (data) {
+                                if (data.message) {
+                                    $.messager.alert('警告', data.message, 'warning',
+                                        function () {
+                                            view.getTableDiv().datagrid('reload');
+                                        });
+                                } else {
+                                    $.messager.alert('撤销成功！',
+                                        `商品名称：${data.commdityName}</br>
+                                                商品库存：${data.commdityNowQuantity}(撤销前：${data.commdityLastQuantity})</br ></br >
+                                                会员名称：${data.memberName}(卡号：${data.card_number})</br >
+                                                当前余额：￥${Number.parseFloat(data.cardNowBalance).toFixed(2)}</br >
+                                                撤销前余额：￥${Number.parseFloat(data.cardLastBalance).toFixed(2)}`,
+                                        'info',
+                                        function () {
+                                            view.getTableDiv().datagrid('reload');
+                                        });
+                                };
+                            });
+                    }
 
-                //     $.messager.confirm('是否继续撤销', '是否撤销当前消费记录？', function (r) {
-                //         if (r) {
-                //             revoke();
-                //         }
-                //     });
-                // },
-                // singleSelect: true,
+                    $.messager.confirm('是否继续撤销', '是否撤销当前消费记录？', function (r) {
+                        if (r) {
+                            revoke();
+                        }
+                    });
+                },
+                singleSelect: true,
                 //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
                 listOnly: true,
 
@@ -144,15 +144,15 @@
             var combogridOnShowPanel = combogridEvents(view).onShowPanel;
 
             op.tableOption.columns = [[
-                // {
-                //     field: 'action_revoke',
-                //     title: '撤销结算',
-                //     //width: 90,
-                //     formatter: function (value, row, index) {
-                //         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                //         return '<button>撤销结算</button>';
-                //     },
-                // },
+                {
+                    field: 'action_revoke',
+                    title: '撤销结算',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        return '<button>撤销结算</button>';
+                    },
+                },
                 {
                     field: 'id',
                     title: '消费记录ID',
@@ -202,13 +202,7 @@
                         }
                     },
                     formatter: function (value, row, index) {
-                        switch (value) {
-                            case true:
-                            case '1': return '是';
-                            case false:
-                            case '0': return '否';
-                            default: return '';
-                        }
+                        return value ? '是' : '否'
                     },
                 }, {
                     field: 'is_close',
@@ -234,13 +228,7 @@
                         }
                     },
                     formatter: function (value, row, index) {
-                        switch (value) {
-                            case true:
-                            case '1': return '是';
-                            case false:
-                            case '0': return '否';
-                            default: return '';
-                        }
+                        return value ? '是' : '否'
                     },
                 }, {
                     field: 'remark',

@@ -1,6 +1,6 @@
 <div id='cardRecharge' style="height: 100%;"></div>
 <script>
-    //@ sourceURL=cardRecharge.js
+    //# sourceURL=cardRecharge.js
     void function () {
         var anchorDiv = $('#cardRecharge');
         var view = new lwTable(anchorDiv);

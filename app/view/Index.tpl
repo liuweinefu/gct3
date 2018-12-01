@@ -39,7 +39,7 @@
 <body>
 
     <script>
-        //@ sourceURL=index.js
+        //# sourceURL=index.js
         void function () {
             //主页面
             var mainDiv = null;

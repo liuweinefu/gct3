@@ -1,8 +1,9 @@
-<div id='ConsumptionCount' style="height: 100%;"></div>
+<div id='consumption' style="height: 100%;"></div>
 <script>
-    //@ sourceURL=Consumption.js
+
+    //# sourceURL=consumption.js
     void function () {
-        var anchorDiv = $('#ConsumptionCount');
+        var anchorDiv = $('#consumption');
         var view = new lwTable(anchorDiv);
 
         // var userType = null;

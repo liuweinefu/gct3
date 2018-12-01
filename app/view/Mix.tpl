@@ -1,6 +1,6 @@
 <div id='mix' style="height: 100%;"></div>
 <script>
-    //@ sourceURL=mix.js
+    //# sourceURL=mix.js
     void function () {
         var anchorDiv = $('#mix');
         var view = new lwTable(anchorDiv);
