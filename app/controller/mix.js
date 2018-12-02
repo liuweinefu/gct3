@@ -431,7 +431,7 @@ class MixController extends Controller {
             };
             return;
         };
-        if (typeof B.name != 'string' || B.name.length < 3 || B.name.length > 20) {
+        if (typeof B.name != 'string' || B.name.length < 2 || B.name.length > 20) {
             ctx.response.body = {
                 message: '用户名错误'
             };
