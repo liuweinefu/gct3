@@ -296,8 +296,11 @@
                             .toFixed(2);
                     }
 
-                    // obj.footer[0] = { price: 1000 };
-                    tableDiv.datagrid('loadData', gridData);
+
+                    // tableDiv.datagrid('loadData', gridData);
+                    tableDiv.datagrid('reloadFooter', gridData.footer);
+
+
                 };
 
                 var payViewOp = {};
@@ -961,7 +964,7 @@
                     required: true,
                     latipPosition: 'right',
                     labelWidth: '120',
-                    validType: ['isNumber', 'length[11,11]'],
+                    validType: ['isNumber', 'length[8,11]'],
                     disabled: true,
                 });
 
@@ -1138,7 +1141,7 @@
                     required: true,
                     latipPosition: 'right',
                     labelWidth: '120',
-                    validType: ['isNumber', 'length[11,11]'],
+                    validType: ['isNumber', 'length[8,11]'],
                 });
 
                 memberOtherPhoneDiv.textbox({
