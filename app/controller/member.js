@@ -40,7 +40,7 @@ class MemberController extends Controller {
             phone: member.phone,
             created_at: (new Date(Date.parse(member.created_at)).toLocaleString()).split(' ')[0],
             case: member.case,
-            case_remark: member.case_remark,
+            case_remark: JSON.parse(member.case_remark),
         };
 
         await ctx.render('listCase.tpl', options);

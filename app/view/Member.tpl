@@ -226,7 +226,7 @@
 
                 caseDiv.textbox({
                     label: '身体状态描述:',
-                    // //prompt: 'Ent',
+                    prompt: '200以内',
                     width: '100%',
                     labelPosition: 'top',
                     labelAlign: 'left',
@@ -239,21 +239,34 @@
                     height: 180,
                     // value: view.currentRow.Card.CardType.name,
                 });
-                caseRemarkDiv.textbox({
-                    label: '诊疗步骤:',
-                    // //prompt: 'Ent',
+                // caseRemarkDiv.textbox({
+                //     label: '诊疗步骤:',
+                //     // //prompt: 'Ent',
+                //     width: '100%',
+                //     labelPosition: 'top',
+                //     labelAlign: 'left',
+                //     // required: true,
+                //     latipPosition: 'right',
+                //     labelWidth: '200',
+                //     // validType: ['isNumber', 'length[8,11]'],
+                //     // disabled: true,
+                //     multiline: true,
+                //     height: 180,
+                //     // value: view.currentRow.Card.CardType.name,
+                // });
+                caseRemarkDiv.datagrid({
+                    title: '诊疗步骤',
                     width: '100%',
-                    labelPosition: 'top',
-                    labelAlign: 'left',
-                    // required: true,
-                    latipPosition: 'right',
-                    labelWidth: '200',
-                    // validType: ['isNumber', 'length[8,11]'],
-                    // disabled: true,
-                    multiline: true,
-                    height: 180,
-                    // value: view.currentRow.Card.CardType.name,
-                });
+                    columns: [[
+                        { field: 'zero', title: '分组', width: 100, editor: { type: 'textbox', options: {} } },
+                        { field: 'one', title: '一', width: 100, editor: { type: 'textbox', options: {} } },
+                        { field: 'two', title: '二', width: 100, editor: { type: 'textbox', options: {} } },
+                        { field: 'three', title: '三', width: 100, editor: { type: 'textbox', options: {} } },
+                        { field: 'four', title: '四', width: 100, editor: { type: 'textbox', options: {} } },
+                        { field: 'five', title: '五', width: 100, editor: { type: 'textbox', options: {} } },
+                        { field: 'six', title: '六', width: 100, editor: { type: 'textbox', options: {} } },
+                    ]],
+                }).datagrid('enableCellEditing');
 
 
 
@@ -290,7 +303,26 @@
                         remarkDiv.textbox('setText', view.currentRow.remark);
 
                         caseDiv.textbox('setText', view.currentRow.case);
-                        caseRemarkDiv.textbox('setText', view.currentRow.case_remark);
+
+
+                        let caseRemarkArray = [];
+                        try {
+                            caseRemarkArray = JSON.parse(view.currentRow.case_remark);
+                        } catch (e) {
+                            // console.log(e);
+                        }
+                        caseRemarkArray = caseRemarkArray ? caseRemarkArray : [
+                            { zero: '第一组', one: '', two: '', three: '', four: '', five: '', six: '' },
+                            { zero: '第二组', one: '', two: '', three: '', four: '', five: '', six: '' },
+                            { zero: '第三组', one: '', two: '', three: '', four: '', five: '', six: '' },
+                            { zero: '第四组', one: '', two: '', three: '', four: '', five: '', six: '' },
+                        ];
+
+                        caseRemarkDiv.datagrid('loadData', caseRemarkArray);
+                        // if (Array.isArray(caseRemarkArray) && caseRemarkArray.length === 4) {
+                        //     caseRemarkDiv.datagrid('loadData', caseRemarkArray);
+                        // };
+                        // caseRemarkDiv.textbox('setText', view.currentRow.case_remark);
 
 
 
@@ -301,7 +333,13 @@
                         text: '保存',
                         handler: function () {
                             var caseValue = caseDiv.textbox('getValue');
-                            var caseRemarkValue = caseRemarkDiv.textbox('getValue');
+                            // var caseRemarkValue = caseRemarkDiv.textbox('getValue');
+
+                            //结束当前编辑
+                            if (caseRemarkDiv.datagrid('cell')) {
+                                caseRemarkDiv.datagrid('endEdit', caseRemarkDiv.datagrid('cell').index);
+                            }
+                            var caseRemarkValue = JSON.stringify(caseRemarkDiv.datagrid('getRows'));
                             $.post('member/saveCase', {
                                 id: view.currentRow.id,
                                 name: view.currentRow.name,
