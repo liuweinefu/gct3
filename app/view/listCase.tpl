@@ -6,37 +6,39 @@
     <meta charset="UTF-8">
 </head>
 
-<body>
+<body style="width:215mm;margin:0 auto;border-style:solid  solid none solid;">
+
+    <!-- <body style="width:215mm;margin:0 auto;border-style:solid  solid solid solid;"> -->
 
     <table style="width:210mm;margin:0 auto;">
         <tr>
-            <td style="width:50mm;">卡号：
-                {{ cardNumber }}
-            </td>
-            <td>电话：
-                {{ phone}}
-
-            </td>
-            <td rowspan="3"> <img src="/public/LOGO.jpg" alt="logo" style="width:30mm;height:20mm;clear:both;display:block; margin:auto;padding-bottom:2mm;padding-top:2mm"></td>
-        </tr>
-        <tr>
-            <td>姓名：
-                {{ name }}
-            </td>
-            <td rowspan="2">描述：
-                {{ case }}
+            <td style="width:50mm;">卡号： {{ cardNumber }} </td>
+            <td rowspan="4">
+                <img src="/public/LOGO.jpg" alt="logo" style="width:120mm;height:25mm;clear:both;display:block; margin:auto;padding-bottom:2mm;padding-top:2mm">
             </td>
 
         </tr>
         <tr>
-            <td> 日期：
-                {{ created_at }}
-            </td>
+            <td>电话： {{ phone}} </td>
 
+        </tr>
+        <tr>
+            <td>姓名： {{ name }} </td>
+        </tr>
+        <tr>
+            <td>日期： {{ created_at }} </td>
         </tr>
     </table>
     <hr>
-    <table style="width:210mm;margin:0 auto;">
+
+    <table style="width:210mm;height:10mm;margin:0 auto;">
+        <tr>
+            <td>描述：
+                {{ case }} </td>
+        </tr>
+    </table>
+
+    <table style="width:210mm;height:230mm;margin:0 auto;">
 
         <tr>
             <td>
@@ -58,7 +60,7 @@
         </tr>
     </table>
     <hr>
-    <table style="width:210mm;margin:0 auto;">
+    <table style="width:210mm;height:40mm;margin:0 auto;">
         <tr>
             <td>
                 治疗方案:
@@ -66,6 +68,7 @@
             </td>
         </tr>
     </table>
+
 
     <script>
         // window.print(); 

@@ -142,6 +142,34 @@
                         return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
+                    //field: 'commodityType.name',commodity_type_id
+                    field: 'commodity_type_id',
+                    title: '商品类型',
+                    width: 80,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        //return row['commodityType']['name'];
+                        return row.CommodityType ? row.CommodityType.name : '';
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: commodityType,
+                            panelMaxHeight: 265,
+                            panelHeight: commodityType.length * 30 + 15,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', commodityType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: commodityType.length * 20 + 15
+                            //     });
+                            // }
+                        }
+                    }
+                }, {
                     field: 'stocks',
                     title: '库存',
                     sortable: true,
@@ -182,34 +210,6 @@
                         type: 'datetimebox',
                         options: {}
                     },
-                }, {
-                    //field: 'commodityType.name',commodity_type_id
-                    field: 'commodity_type_id',
-                    title: '商品类型',
-                    width: 80,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        //return row['commodityType']['name'];
-                        return row.CommodityType ? row.CommodityType.name : '';
-                    },
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            //panelWidth: 160,                    
-                            editable: false,
-                            valueField: 'id',
-                            textField: 'name',
-                            data: commodityType,
-                            panelMaxHeight: 265,
-                            panelHeight: commodityType.length * 30 + 15,
-                            // onShowPanel: function () {
-                            //     $(this).combobox('loadData', commodityType);
-                            //     $(this).combobox('panel').panel('resize', {
-                            //         height: commodityType.length * 20 + 15
-                            //     });
-                            // }
-                        }
-                    }
                 },
             ]];
 
