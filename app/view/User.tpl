@@ -202,6 +202,15 @@
                         options: {}
                     }
                 }, {
+                    field: 'action_pass',
+                    title: '密码',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        return '<button>修改密码</button>';
+
+                    },
+                }, {
                     field: 'location',
                     title: '店铺',
                     width: 60,
@@ -209,6 +218,34 @@
                     editor: {
                         type: 'textbox',
                         options: {}
+                    }
+                }, {
+                    //field: 'UserType.name',user_type_id
+                    field: 'user_type_id',
+                    title: '用户类型',
+                    width: 80,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        //return row['UserType']['name'];
+                        return row.UserType ? row.UserType.name : '';
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: userType,
+                            panelMaxHeight: 265,
+                            panelHeight: userType.length * 30 + 15,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', userType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: userType.length * 20 + 15
+                            //     });
+                            // }
+                        }
                     }
                 }, {
                     field: 'phone',
@@ -259,43 +296,6 @@
                     editor: {
                         type: 'datetimebox',
                         options: {}
-                    },
-                }, {
-                    //field: 'UserType.name',user_type_id
-                    field: 'user_type_id',
-                    title: '用户类型',
-                    width: 80,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        //return row['UserType']['name'];
-                        return row.UserType ? row.UserType.name : '';
-                    },
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            //panelWidth: 160,                    
-                            editable: false,
-                            valueField: 'id',
-                            textField: 'name',
-                            data: userType,
-                            panelMaxHeight: 265,
-                            panelHeight: userType.length * 30 + 15,
-                            // onShowPanel: function () {
-                            //     $(this).combobox('loadData', userType);
-                            //     $(this).combobox('panel').panel('resize', {
-                            //         height: userType.length * 20 + 15
-                            //     });
-                            // }
-                        }
-                    }
-                }, {
-                    field: 'action_pass',
-                    title: '密码',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>修改密码</button>';
-
                     },
                 },
 

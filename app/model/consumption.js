@@ -40,6 +40,11 @@ module.exports = app => {
             allowNull: false,
             defaultValue: false,
         },
+        is_discount: {
+            type: BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
         remark: {
             type: STRING(255)
         }

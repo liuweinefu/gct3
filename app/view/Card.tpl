@@ -221,7 +221,7 @@
                     }
                 }, {
                     field: 'name',
-                    title: '主会员名',
+                    title: '会员卡名',
                     sortable: true,
                     width: 30,
                     editor: {
@@ -245,49 +245,6 @@
                         return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
-                    field: 'phone',
-                    title: '卡电话',
-                    width: 35,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'otherphone',
-                    title: '卡其他电话',
-                    width: 35,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'remark',
-                    title: '备注',
-                    width: 50,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'updated_at',
-                    title: '最后更新时间',
-                    //width: 100,
-                    sortable: true,
-                    editor: {
-                        type: 'datetimebox',
-                        options: {}
-                    },
-                    formatter: function (value, row, index) {
-                        if (!Number.isNaN(Date.parse(value))) {
-                            return new Date(Date.parse(value)).toLocaleString();
-                        } else {
-                            return '';
-                        }
-                    },
-                }, {
                     //field: 'UserType.name',user_type_id
                     field: 'card_type_id',
                     title: '会员类型',
@@ -302,7 +259,7 @@
                         type: 'combobox',
                         options: {
                             queryParams: { sort: 'sn', order: 'asc' },
-                            panelWidth: 160,
+                            // panelWidth: 160,
                             // editable: false,
                             editable: true,
                             valueField: 'id',
@@ -332,6 +289,15 @@
                         }
                     }
                 }, {
+                    field: 'phone',
+                    title: '卡电话',
+                    width: 35,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
                     field: 'action_pass',
                     title: '密码',
                     //width: 90,
@@ -339,6 +305,40 @@
                         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
                         return '<button>修改密码</button>';
 
+                    },
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    width: 50,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'otherphone',
+                    title: '卡其他电话',
+                    width: 35,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'updated_at',
+                    title: '最后更新时间',
+                    //width: 100,
+                    sortable: true,
+                    editor: {
+                        type: 'datetimebox',
+                        options: {}
+                    },
+                    formatter: function (value, row, index) {
+                        if (!Number.isNaN(Date.parse(value))) {
+                            return new Date(Date.parse(value)).toLocaleString();
+                        } else {
+                            return '';
+                        }
                     },
                 },
 

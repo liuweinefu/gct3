@@ -116,7 +116,7 @@ class MixController extends Controller {
             };
 
             let unitPriceErr = DbCommodity.price != c.unitPrice;
-            let totalPriceErr = c.whetherDiscount === '1'
+            let totalPriceErr = c.is_discount === '1'
                 ? Number.parseFloat(DbCommodity.price * DbCard.CardType.discount * c.quantity).toFixed(2) != Number.parseFloat(c.price).toFixed(2)
                 : Number.parseFloat(DbCommodity.price * c.quantity).toFixed(2) != Number.parseFloat(c.price).toFixed(2);
 
@@ -134,6 +134,7 @@ class MixController extends Controller {
                 is_close: 0,
                 price: c.price,
                 quantity: c.quantity,
+                is_discount: c.is_discount,
                 is_cash: c.is_cash,
                 employee_id: c.employee_id,
                 commodity_id: DbCommodity.id,

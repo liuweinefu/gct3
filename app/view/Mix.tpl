@@ -240,7 +240,7 @@
                             // commodity_id: 1,
                             // unitPrice: 100,
                             quantity: 1,
-                            whetherDiscount: '1',
+                            is_discount: '1',
                             is_cash: '0',
                             Employee: {
                                 name: '<div style="color:red">请选择技师</div>',
@@ -258,7 +258,7 @@
                             employee_id: lastRow.employee_id,
                             Employee: Object.assign({}, lastRow.Employee),
                             quantity: 1,
-                            whetherDiscount: '1',
+                            is_discount: '1',
                             is_cash: '0',
                             id: Math.random(),
                         }
@@ -386,7 +386,7 @@
                         };
 
                         //重置价格
-                        row.price = row.whetherDiscount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
+                        row.price = row.is_discount === '1' ? row.unitPrice * row.quantity * view.currentRow.Card.CardType.discount : row.unitPrice * row.quantity;
 
                         //重置汇总
                         refreshFooter();
@@ -467,7 +467,7 @@
                             }
                         },
                     }, {
-                        field: 'whetherDiscount',
+                        field: 'is_discount',
                         title: '是否折扣',
                         width: 60,
                         editor: {
@@ -491,6 +491,17 @@
                                 default: return '';
                             }
                         },
+                    }, {
+                        field: 'price',
+                        title: '实收价格',
+                        width: 100,
+                        formatter: function (value, row, index) {
+                            if (value) {
+                                return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                            } else {
+                                return '';
+                            }
+                        }
                     }, {
                         field: 'is_cash',
                         title: '是否现金',
@@ -523,19 +534,8 @@
                             }
                         },
                     }, {
-                        field: 'price',
-                        title: '实收价格',
-                        width: 100,
-                        formatter: function (value, row, index) {
-                            if (value) {
-                                return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
-                            } else {
-                                return '';
-                            }
-                        }
-                    }, {
                         field: 'employee_id',
-                        title: '技师',
+                        title: '治疗师',
                         width: 100,
                         formatter: function (value, row, index) {
                             return row.Employee ? row.Employee.name : '';
@@ -1392,60 +1392,10 @@
                     title: '会员ID',
                     hidden: true,
                 }, {
-                    field: 'action_pay',
-                    title: '结账',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
-                        return '<button>结账</button>';
-                    },
-                }, {
-                    field: 'action_recharge',
-                    title: '充值',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
-                        return '<button>充值</button>';
-                    },
-                }, {
-                    field: 'action_addMember',
-                    title: '增户',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
-                        return '<button>增户</button>';
-                    },
-                }, {
-                    field: 'action_changePass',
-                    title: '密码',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>修改密码</button>';
-
-                    },
-                }, {
-                    field: 'action_print',
-                    title: '打印',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button >`;
-                        return '<button>打印</button>';
-                    },
-                }, {
-                    field: 'name',
-                    title: '会员名',
-                    sortable: true,
-                    width: 60,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
                     //field: 'UserType.name',user_type_id
                     field: 'card_id',
                     title: '会员卡号',
-                    width: 80,
+                    width: 30,
                     sortable: true,
                     formatter: function (value, row, index) {
                         return row.Card ? row.Card.card_number : '';
@@ -1482,11 +1432,52 @@
                 }, {
                     field: 'Card.name',
                     title: '会员卡主名',
-                    width: 100,
+                    width: 60,
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];        
                         return row.Card ? row.Card.name : '';
+                    },
+                }, {
+                    field: 'action_addMember',
+                    title: '增户',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>增户</button>';
+                    },
+                }, {
+                    field: 'name',
+                    title: '会员名',
+                    sortable: true,
+                    width: 60,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'action_pay',
+                    title: '结账',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>结账</button>';
+                    },
+                }, {
+                    field: 'action_recharge',
+                    title: '充值',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>充值</button>';
+                    },
+                }, {
+                    field: 'action_print',
+                    title: '打印',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button >`;
+                        return '<button>打印</button>';
                     },
                 }, {
                     field: 'phone',
@@ -1498,18 +1489,27 @@
                         options: {}
                     }
                 }, {
-                    field: 'otherphone',
-                    title: '其他电话',
-                    width: 80,
+                    field: 'action_changePass',
+                    title: '密码',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
+                        return '<button>修改密码</button>';
+
+                    },
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    width: 100,
                     sortable: true,
                     editor: {
                         type: 'textbox',
                         options: {}
                     }
                 }, {
-                    field: 'remark',
-                    title: '备注',
-                    width: 100,
+                    field: 'otherphone',
+                    title: '其他电话',
+                    width: 60,
                     sortable: true,
                     editor: {
                         type: 'textbox',

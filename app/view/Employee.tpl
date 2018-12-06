@@ -657,7 +657,7 @@
                     },
                 }, {
                     field: 'sn',
-                    title: '排序号',
+                    title: '牌号',
                     width: 20,
                     sortable: true,
                     editor: {
@@ -666,7 +666,7 @@
                     }
                 }, {
                     field: 'name',
-                    title: '技师名',
+                    title: '治疗师',
                     sortable: true,
                     width: 60,
                     editor: {
@@ -674,52 +674,9 @@
                         options: {}
                     }
                 }, {
-                    field: 'phone',
-                    title: '电话',
-                    width: 80,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'otherphone',
-                    title: '其他电话',
-                    width: 80,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'remark',
-                    title: '备注',
-                    width: 100,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'updated_at',
-                    title: '最后更新时间',
-                    //width: 100,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        if (!Number.isNaN(Date.parse(value))) {
-                            return new Date(Date.parse(value)).toLocaleString();
-                        } else {
-                            return '';
-                        }
-                    },
-                    editor: {
-                        type: 'datetimebox',
-                        options: {}
-                    },
-                }, {
                     //field: 'employeeType.name',employee_type_id
                     field: 'employee_type_id',
-                    title: '员工类型',
+                    title: '治疗师类型',
                     width: 80,
                     sortable: true,
                     formatter: function (value, row, index) {
@@ -744,6 +701,49 @@
                             // }
                         }
                     }
+                }, {
+                    field: 'phone',
+                    title: '电话',
+                    width: 80,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    width: 100,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'otherphone',
+                    title: '其他电话',
+                    width: 80,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'updated_at',
+                    title: '最后更新时间',
+                    //width: 100,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (!Number.isNaN(Date.parse(value))) {
+                            return new Date(Date.parse(value)).toLocaleString();
+                        } else {
+                            return '';
+                        }
+                    },
+                    editor: {
+                        type: 'datetimebox',
+                        options: {}
+                    },
                 },
             ]];
 

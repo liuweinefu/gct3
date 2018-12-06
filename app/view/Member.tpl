@@ -398,73 +398,9 @@
                     field: 'ck',
                     checkbox: true
                 }, {
-                    field: 'action_case',
-                    title: '方案',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
-                        return '<button>调整</button>';
-                    },
-                }, {
-                    field: 'action_print',
-                    title: '方案',
-                    //width: 90,
-                    formatter: function (value, row, index) {
-                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
-                        return '<button>打印</button>';
-                    },
-                }, {
                     field: 'id',
                     title: '会员ID',
                     hidden: true,
-                }, {
-                    field: 'name',
-                    title: '会员名',
-                    sortable: true,
-                    width: 60,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'phone',
-                    title: '电话',
-                    width: 80,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'otherphone',
-                    title: '其他电话',
-                    width: 80,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'remark',
-                    title: '备注',
-                    width: 100,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    field: 'updated_at',
-                    title: '最后更新时间',
-                    //width: 100,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        if (!Number.isNaN(Date.parse(value))) {
-                            return new Date(Date.parse(value)).toLocaleString();
-                        } else {
-                            return '';
-                        }
-                    },
                 }, {
                     //field: 'UserType.name',user_type_id
                     field: 'card_id',
@@ -512,7 +448,71 @@
                         //return row['UserType']['name'];        
                         return row.Card ? row.Card.name : '';
                     },
-                }
+                }, {
+                    field: 'name',
+                    title: '会员名',
+                    sortable: true,
+                    width: 60,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'action_print',
+                    title: '方案',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>打印</button>';
+                    },
+                }, {
+                    field: 'action_case',
+                    title: '方案',
+                    //width: 90,
+                    formatter: function (value, row, index) {
+                        // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
+                        return '<button>调整</button>';
+                    },
+                }, {
+                    field: 'phone',
+                    title: '电话',
+                    width: 80,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    width: 100,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'otherphone',
+                    title: '其他电话',
+                    width: 80,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'updated_at',
+                    title: '最后更新时间',
+                    //width: 100,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (!Number.isNaN(Date.parse(value))) {
+                            return new Date(Date.parse(value)).toLocaleString();
+                        } else {
+                            return '';
+                        }
+                    },
+                },
 
             ]];
 

@@ -209,7 +209,7 @@
                     }
                 }, {
                     field: 'remark',
-                    title: '备注(会员名)',
+                    title: '充值会员名',
                     width: 50,
                     sortable: true,
                     editor: {

@@ -159,141 +159,10 @@
                     title: '消费记录ID',
                     hidden: true,
                 }, {
-                    field: 'price',
-                    title: '消费金额',
-                    width: 100,
-                    sortable: true,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            prefix: '￥',
-                            max: 100000000,
-                            precision: 2
-                        }
-                    },
-                    formatter: function (value, row, index) {
-                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
-                    }
-                }, {
-                    field: 'quantity',
-                    title: '数量',
-                    sortable: true,
-                    width: 60,
-                }, {
-                    field: 'is_cash',
-                    title: '是否现金',
-                    sortable: true,
-                    width: 60,
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            //panelWidth: 160,                    
-                            editable: false,
-                            valueField: 'id',
-                            textField: 'name',
-                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
-                            panelMaxHeight: 265,
-                            panelHeight: 75,
-                            // onShowPanel: function () {
-                            //     $(this).combobox('loadData', userType);
-                            //     $(this).combobox('panel').panel('resize', {
-                            //         height: userType.length * 20 + 15
-                            //     });
-                            // }
-                        }
-                    },
-                    formatter: function (value, row, index) {
-                        switch (value) {
-                            case true:
-                            case '1': return '是';
-                            case false:
-                            case '0': return '否';
-                            default: return '';
-                        }
-                    },
-                }, {
-                    field: 'is_close',
-                    title: '是否已结算',
-                    sortable: true,
-                    width: 60,
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            //panelWidth: 160,                    
-                            editable: false,
-                            valueField: 'id',
-                            textField: 'name',
-                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
-                            panelMaxHeight: 265,
-                            panelHeight: 75,
-                            // onShowPanel: function () {
-                            //     $(this).combobox('loadData', userType);
-                            //     $(this).combobox('panel').panel('resize', {
-                            //         height: userType.length * 20 + 15
-                            //     });
-                            // }
-                        }
-                    },
-                    formatter: function (value, row, index) {
-                        switch (value) {
-                            case true:
-                            case '1': return '是';
-                            case false:
-                            case '0': return '否';
-                            default: return '';
-                        }
-                    },
-                }, {
-                    field: 'remark',
-                    title: '备注',
-                    width: 100,
-                    sortable: true,
-                    editor: {
-                        type: 'textbox',
-                        options: {}
-                    }
-                }, {
-                    //field: 'UserType.name',user_type_id
-                    field: 'commodity_id',
-                    title: '商品名',
-                    width: 80,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        return row.Commodity ? row.Commodity.name : '';
-                    },
-                    editor: {
-                        type: 'combogrid',
-                        options: {
-                            //queryParams: { findBy: ['card_number', 'name'] },
-                            mode: 'remote',
-                            url: '/commodity/findAll',
-                            panelWidth: 300,
-                            //panelMaxHeight: 265,
-                            //panelHeight: 200,
-                            idField: 'id',
-                            textField: 'name',
-                            columns: [[
-                                // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                                
-                                { field: 'name', title: '商品名', width: 165 },
-                            ]],
-                            //reversed: true,
-                            sortName: 'sn',
-                            //避免出现滑条，造成选择的时候无法选中
-                            pagination: true,
-                            pageSize: 6,
-                            pageList: [6],
-                            //pagePosition: 'top',
-
-                            rownumbers: true,
-                            onLoadSuccess: combogridOnLoadSuccess,
-                            onShowPanel: combogridOnShowPanel,
-                        }
-                    }
-                }, {
                     //field: 'UserType.name',user_type_id
                     field: 'card_id',
                     title: '会员卡号',
-                    width: 50,
+                    width: 60,
                     sortable: true,
                     formatter: function (value, row, index) {
                         return row.Card ? row.Card.card_number : '';
@@ -366,8 +235,150 @@
                     }
                 }, {
                     //field: 'UserType.name',user_type_id
+                    field: 'commodity_id',
+                    title: '商品名',
+                    width: 80,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        return row.Commodity ? row.Commodity.name : '';
+                    },
+                    editor: {
+                        type: 'combogrid',
+                        options: {
+                            //queryParams: { findBy: ['card_number', 'name'] },
+                            mode: 'remote',
+                            url: '/commodity/findAll',
+                            panelWidth: 300,
+                            //panelMaxHeight: 265,
+                            //panelHeight: 200,
+                            idField: 'id',
+                            textField: 'name',
+                            columns: [[
+                                // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                                
+                                { field: 'name', title: '商品名', width: 165 },
+                            ]],
+                            //reversed: true,
+                            sortName: 'sn',
+                            //避免出现滑条，造成选择的时候无法选中
+                            pagination: true,
+                            pageSize: 6,
+                            pageList: [6],
+                            //pagePosition: 'top',
+
+                            rownumbers: true,
+                            onLoadSuccess: combogridOnLoadSuccess,
+                            onShowPanel: combogridOnShowPanel,
+                        }
+                    }
+                }, {
+                    field: 'commodity_price',
+                    title: '商品单价',
+                    width: 60,
+                    sortable: true,
+                    editor: {
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        if (row.Commodity && row.Commodity.price) {
+                            return `￥${Number.parseFloat(row.Commodity.price).toFixed(2)}`;
+                        } else {
+                            return '￥0.00';
+                        }
+                    }
+                }, {
+                    field: 'quantity',
+                    title: '数量',
+                    sortable: true,
+                    width: 60,
+                }, {
+                    field: 'is_discount',
+                    title: '是否打折',
+                    sortable: true,
+                    width: 60,
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                            panelMaxHeight: 265,
+                            panelHeight: 75,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', userType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: userType.length * 20 + 15
+                            //     });
+                            // }
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        switch (value) {
+                            case true:
+                            case '1': return '是';
+                            case false:
+                            case '0': return '否';
+                            default: return '';
+                        }
+                    },
+                }, {
+                    field: 'price',
+                    title: '消费金额',
+                    width: 100,
+                    sortable: true,
+                    editor: {
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                    }
+                }, {
+                    field: 'is_cash',
+                    title: '是否现金',
+                    sortable: true,
+                    width: 60,
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                            panelMaxHeight: 265,
+                            panelHeight: 75,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', userType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: userType.length * 20 + 15
+                            //     });
+                            // }
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        switch (value) {
+                            case true:
+                            case '1': return '是';
+                            case false:
+                            case '0': return '否';
+                            default: return '';
+                        }
+                    },
+                }, {
+                    //field: 'UserType.name',user_type_id
                     field: 'employee_id',
-                    title: '雇员名',
+                    title: '治疗师',
                     width: 80,
                     sortable: true,
                     formatter: function (value, row, index) {
@@ -402,6 +413,47 @@
                             onShowPanel: combogridOnShowPanel,
                         }
                     }
+                }, {
+                    field: 'remark',
+                    title: '备注',
+                    width: 100,
+                    sortable: true,
+                    editor: {
+                        type: 'textbox',
+                        options: {}
+                    }
+                }, {
+                    field: 'is_close',
+                    title: '是否已结算',
+                    sortable: true,
+                    width: 60,
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            //panelWidth: 160,                    
+                            editable: false,
+                            valueField: 'id',
+                            textField: 'name',
+                            data: [{ id: '0', name: '否' }, { id: '1', name: '是' }],
+                            panelMaxHeight: 265,
+                            panelHeight: 75,
+                            // onShowPanel: function () {
+                            //     $(this).combobox('loadData', userType);
+                            //     $(this).combobox('panel').panel('resize', {
+                            //         height: userType.length * 20 + 15
+                            //     });
+                            // }
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        switch (value) {
+                            case true:
+                            case '1': return '是';
+                            case false:
+                            case '0': return '否';
+                            default: return '';
+                        }
+                    },
                 }, {
                     //field: 'UserType.name',user_type_id
                     field: 'user_id',

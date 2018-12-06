@@ -599,34 +599,32 @@
                     hidden: true,
                 }, {
                     field: 'action_listWage',
-                    title: '查看消费记录',
+                    title: '结算的消费记录',
                     //width: 90,
                     formatter: function (value, row, index) {
                         // return `< button onclick = 'actionButton.resetPass(${JSON.stringify(row)})' > 修改密码</button > `;
-                        return '<button>查看消费记录</button>';
+                        return '<button>结算的消费记录</button>';
                     },
                 },
-                //  {
-                //     field: 'action_list',
-                //     title: '结算记录',
-                //     //width: 90,
-                //     formatter: function (value, row, index) {
-                //         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                //         return '<button>结算记录</button>';
-                //     },
-                // }, {
-                //     field: 'action_delete',
-                //     title: '撤销结算',
-                //     //width: 90,
-                //     formatter: function (value, row, index) {
-                //         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                //         return '<button>撤销结算</button>';
-                //     },
-                // },
+                {
+                    //field: 'UserType.name',wage_type_id
+                    field: 'Employee.sn',
+                    title: '牌号',
+                    width: 30,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        //return row['UserType']['name'];
+                        return row.Employee ? row.Employee.sn : '';
+                    },
+                    // editor: {
+                    //     type: 'textbox',
+                    // }
+
+                },
                 {
                     //field: 'UserType.name',wage_type_id
                     field: 'employee_id',
-                    title: '雇员名',
+                    title: '治疗师',
                     width: 80,
                     sortable: true,
                     formatter: function (value, row, index) {
@@ -661,6 +659,38 @@
                             onLoadSuccess: combogridOnLoadSuccess,
                             onShowPanel: combogridOnShowPanel,
                         }
+                    }
+                }, {
+                    field: 'wage',
+                    title: '基础工资',
+                    width: 60,
+                    sortable: true,
+                    editor: {
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
+                    }
+                }, {
+                    field: 'bonus',
+                    title: '奖金提成',
+                    sortable: true,
+                    width: 60,
+                    editor: {
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
                     //field: 'UserType.name',wage_type_id
@@ -700,38 +730,6 @@
                             onLoadSuccess: combogridOnLoadSuccess,
                             onShowPanel: combogridOnShowPanel,
                         }
-                    }
-                }, {
-                    field: 'wage',
-                    title: '基础工资',
-                    width: 60,
-                    sortable: true,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            prefix: '￥',
-                            max: 100000000,
-                            precision: 2
-                        }
-                    },
-                    formatter: function (value, row, index) {
-                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
-                    }
-                }, {
-                    field: 'bonus',
-                    title: '奖金',
-                    sortable: true,
-                    width: 60,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            prefix: '￥',
-                            max: 100000000,
-                            precision: 2
-                        }
-                    },
-                    formatter: function (value, row, index) {
-                        return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                     }
                 }, {
                     field: 'created_at',
