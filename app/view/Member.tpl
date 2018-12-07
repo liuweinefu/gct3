@@ -226,7 +226,7 @@
 
                 caseDiv.textbox({
                     label: '身体状态描述:',
-                    prompt: '200以内',
+                    prompt: '70字',
                     width: '100%',
                     labelPosition: 'top',
                     labelAlign: 'left',
@@ -236,7 +236,7 @@
                     // validType: ['isNumber', 'length[8,11]'],
                     // disabled: true,
                     multiline: true,
-                    height: 180,
+                    height: 80,
                     // value: view.currentRow.Card.CardType.name,
                 });
                 // caseRemarkDiv.textbox({

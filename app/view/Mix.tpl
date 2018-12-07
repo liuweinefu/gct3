@@ -5,18 +5,52 @@
         var anchorDiv = $('#mix');
         var view = new lwTable(anchorDiv);
 
-        // var userType = null;
-        // $.post('/userType/findAll', {
-        //     sort: 'sn',
-        //     order: 'asc',
-        //     originalModel: true,
-        // })
-        //     .done(function (data) {
-        //         userType = data.rows;
-        //         init();
-        //     })
-        //     .fail(function () {
+        var commodityData = null;
+        var employeeData = null;
 
+        var commodityPromise = $.post('/commodity/findAll', {
+            sort: 'sn',
+            order: 'asc',
+            originalModel: true,
+        }).promise();
+
+        var employeePromise = $.post('/employee/findAll', {
+            sort: 'sn',
+            order: 'asc',
+            originalModel: true,
+        }).promise();
+
+        commodityPromise.done((c) => {
+            commodityData = c.rows;
+            employeePromise.done((e) => {
+                employeeData = e.rows;
+                init();
+            });
+        });
+
+
+
+
+        // $.
+        //     post('/commodity/findAll', {
+        //         sort: 'sn',
+        //         order: 'asc',
+        //         originalModel: true,
+        //     }).
+        //     done(function (data) {
+        //         commodityData = data.rows;
+        //         return $.
+        //             post('/employee/findAll', {
+        //                 sort: 'sn',
+        //                 order: 'asc',
+        //                 originalModel: true,
+        //             })
+        //     }).
+        //     done(function (data) {
+        //         employeeData = data.rows;
+        //         console.log(commodityData);
+        //         console.log(employeeData);
+        //         init();
         //     });
 
 
@@ -103,8 +137,12 @@
             view.currentRow = null;
             var empower = function () {
                 //检测是否已授权
-                if (view.currentRow.passed === true) {
-                    view.currentRow.actionFunc();
+                // if (view.currentRow.passed === true) {
+                //     view.actionFunc();
+                //     return;
+                // }
+                if (view.powerCardId == view.currentRow.Card.id) {
+                    view.actionFunc();
                     return;
                 }
 
@@ -129,14 +167,15 @@
                     }).done(function (data) {
                         if (data.passed) {
                             dialogDiv.dialog('close');
-                            view.currentRow.passed = true;
-                            view.currentRow.actionFunc();
+                            // view.currentRow.passed = true;
+                            view.powerCardId = view.currentRow.Card.id;
+                            view.actionFunc();
 
-                            // view.currentRow.actionFunc();
+                            // view.actionFunc();
                         } else {
                             $.messager.alert('提示', '密码错误请重新输入', 'info', function () {
                                 //passwordboxDiv.textbox('textbox').focus();
-                                view.currentRow.passed = false;
+                                view.powerCardId = 999999;
                                 passwordboxDiv.textbox('textbox').select();
                             });
                         }
@@ -187,20 +226,21 @@
                 dialogDiv.dialog(dialogOp);
             };
             var _clearCurrentCardId = function (dialogDiv) {
-                $.post('mix/clearCurrentCard')
-                    .done(function (data) {
-                        if (data.cleared) {
-                            view.currentRow.passed = false;
-                            dialogDiv.dialog('close');
-                        } else {
-                            $.messager.alert('提示', '系统内部错误', 'info', function () {
-                                $.get('logout');
-                            });
-                        }
-                    });
+                dialogDiv.dialog('close');
+                // $.post('mix/clearCurrentCard')
+                //     .done(function (data) {
+                //         if (data.cleared) {
+                //             view.currentRow.passed = false;
+                //             dialogDiv.dialog('close');
+                //         } else {
+                //             $.messager.alert('提示', '系统内部错误', 'info', function () {
+                //                 $.get('logout');
+                //             });
+                //         }
+                //     });
             }
             var pay = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
+                if (!view.currentRow || !view.currentRow.Card || view.powerCardId != view.currentRow.Card.id) {
                     return;
                 }
                 var memberName = view.currentRow.name;
@@ -232,22 +272,21 @@
 
                 payView.makeNewRow = () => {
                     var rows = payView.getTableDiv().datagrid('getRows');
-                    //console.log(rows);
+                    // console.log(rows);
                     if (rows.length == 0) {
                         return {
                             employee_id: '',
-                            Employee: {},
-                            // commodity_id: 1,
+                            Employee: {
+                                name: '<div style="color:red">请选择技师</div>',
+                            },
+                            commodity_id: '',
+                            Commodity: {
+                                name: '<div style="color:red">请选择商品</div>',
+                            },
                             // unitPrice: 100,
                             quantity: 1,
                             is_discount: '1',
                             is_cash: '0',
-                            Employee: {
-                                name: '<div style="color:red">请选择技师</div>',
-                            },
-                            Commodity: {
-                                name: '<div style="color:red">请选择商品</div>',
-                            },
                             id: Math.random(),
                             // is_cash: 1,
                             // price: 1,
@@ -366,8 +405,11 @@
                                 index: index,
                                 field: key
                             });
-                            var selectedRow = $(ed.target).combogrid('grid').datagrid('getSelected');
+                            // var selectedRow = $(ed.target).combogrid('grid').datagrid('getSelected');
+                            var selectID = $(ed.target).combobox('getValues');
+                            var selectedRow = null;
                             if (key === 'employee_id') {
+                                selectedRow = employeeData.find((c) => c.id == selectID);
                                 if (!selectedRow) {
                                     row.employee_id = null;
                                     row.Employee = { name: '<div style="color:red">请选择技师</div>' };
@@ -375,6 +417,7 @@
                                     row.Employee = { name: selectedRow.name };
                                 }
                             } else if (key === 'commodity_id') {
+                                selectedRow = commodityData.find((c) => c.id == selectID);
                                 if (!selectedRow) {
                                     row.commodity_id = null;
                                     row.Commodity = { name: '<div style="color:red">请选择商品</div>' };
@@ -383,6 +426,7 @@
                                     row.Commodity = { name: selectedRow.name };
                                 }
                             }
+
                         };
 
                         //重置价格
@@ -396,6 +440,7 @@
                 var combogridOnLoadSuccess = combogridEvents(payView).onLoadSuccess;
                 var combogridOnShowPanel = combogridEvents(payView).onShowPanel;
 
+
                 payViewOp.tableOption.columns = [[
                     {
                         field: 'ck',
@@ -408,39 +453,57 @@
                     {
                         field: 'commodity_id',
                         title: '商品名',
-                        width: 100,
+                        width: 120,
                         formatter: function (value, row, index) {
                             return row.Commodity ? row.Commodity.name : '';
                         },
                         editor: {
-                            type: 'combogrid',
+                            type: 'combobox',
                             options: {
-                                //queryParams: { findBy: ['card_number', 'name'] },
-                                mode: 'remote',
-                                url: '/commodity/findAll',
-                                panelWidth: 300,
-                                //panelMaxHeight: 265,
-                                //panelHeight: 200,
-                                idField: 'id',
+                                //panelWidth: 160,                    
+                                editable: false,
+                                valueField: 'id',
                                 textField: 'name',
-                                columns: [[
-                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                               
-                                    { field: 'name', title: '商品名', width: 165 },
-                                    { field: 'price', title: '售价', width: 65 },
-                                ]],
-                                //reversed: true,
-                                sortName: 'sn',
-                                //避免出现滑条，造成选择的时候无法选中
-                                pagination: true,
-                                pageSize: 6,
-                                pageList: [6],
-                                //pagePosition: 'top',
-
-                                rownumbers: true,
-                                onLoadSuccess: combogridOnLoadSuccess,
-                                onShowPanel: combogridOnShowPanel,
+                                data: commodityData,
+                                panelMaxHeight: 265,
+                                panelHeight: commodityData.length * 30 + 15,
+                                // onShowPanel: function () {
+                                //     $(this).combobox('loadData', userType);
+                                //     $(this).combobox('panel').panel('resize', {
+                                //         height: userType.length * 20 + 15
+                                //     });
+                                // }
                             }
                         }
+                        // editor: {
+                        //     type: 'combogrid',
+                        //     options: {
+                        //         //queryParams: { findBy: ['card_number', 'name'] },
+                        //         mode: 'remote',
+                        //         url: '/commodity/findAll',
+                        //         panelWidth: 300,
+                        //         //panelMaxHeight: 265,
+                        //         //panelHeight: 200,
+                        //         idField: 'id',
+                        //         textField: 'name',
+                        //         columns: [[
+                        //             // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },                               
+                        //             { field: 'name', title: '商品名', width: 165 },
+                        //             { field: 'price', title: '售价', width: 65 },
+                        //         ]],
+                        //         //reversed: true,
+                        //         sortName: 'sn',
+                        //         //避免出现滑条，造成选择的时候无法选中
+                        //         pagination: true,
+                        //         pageSize: 6,
+                        //         pageList: [6],
+                        //         //pagePosition: 'top',
+
+                        //         rownumbers: true,
+                        //         onLoadSuccess: combogridOnLoadSuccess,
+                        //         onShowPanel: combogridOnShowPanel,
+                        //     }
+                        // }
 
                     }, {
                         field: 'unitPrice',
@@ -456,7 +519,7 @@
                     }, {
                         field: 'quantity',
                         title: '数量',
-                        width: 100,
+                        width: 60,
                         editor: {
                             type: 'numberbox',
                             options: {
@@ -469,7 +532,7 @@
                     }, {
                         field: 'is_discount',
                         title: '是否折扣',
-                        width: 60,
+                        width: 80,
                         editor: {
                             type: 'combobox',
                             options: {
@@ -505,7 +568,7 @@
                     }, {
                         field: 'is_cash',
                         title: '是否现金',
-                        width: 60,
+                        width: 80,
                         editor: {
                             type: 'combobox',
                             options: {
@@ -536,39 +599,57 @@
                     }, {
                         field: 'employee_id',
                         title: '治疗师',
-                        width: 100,
+                        width: 120,
                         formatter: function (value, row, index) {
                             return row.Employee ? row.Employee.name : '';
                         },
                         editor: {
-                            type: 'combogrid',
+                            type: 'combobox',
                             options: {
-                                // queryParams: { findBy: ['card_number', 'name'] },
-                                mode: 'remote',
-                                url: '/employee/findAll',
-                                panelWidth: 300,
-                                //panelMaxHeight: 265,
-                                //panelHeight: 200,
-                                idField: 'id',
+                                //panelWidth: 160,                    
+                                editable: false,
+                                valueField: 'id',
                                 textField: 'name',
-                                columns: [[
-                                    // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
-                                    // { field: 'card_number', title: '会员卡号', width: 100 },
-                                    { field: 'name', title: '雇员名', width: 165 },
-                                ]],
-                                //reversed: true,
-                                sortName: 'sn',
-                                //避免出现滑条，造成选择的时候无法选中
-                                pagination: true,
-                                pageSize: 6,
-                                pageList: [6],
-                                //pagePosition: 'top',
-
-                                rownumbers: true,
-                                onLoadSuccess: combogridOnLoadSuccess,
-                                onShowPanel: combogridOnShowPanel
+                                data: employeeData,
+                                panelMaxHeight: 265,
+                                panelHeight: commodityData.length * 30 + 15,
+                                // onShowPanel: function () {
+                                //     $(this).combobox('loadData', userType);
+                                //     $(this).combobox('panel').panel('resize', {
+                                //         height: userType.length * 20 + 15
+                                //     });
+                                // }
                             }
                         }
+                        // editor: {
+                        //     type: 'combogrid',
+                        //     options: {
+                        //         // queryParams: { findBy: ['card_number', 'name'] },
+                        //         mode: 'remote',
+                        //         url: '/employee/findAll',
+                        //         panelWidth: 300,
+                        //         //panelMaxHeight: 265,
+                        //         //panelHeight: 200,
+                        //         idField: 'id',
+                        //         textField: 'name',
+                        //         columns: [[
+                        //             // { field: 'id', title: '会员卡ID', hidden: true, width: 60 },
+                        //             // { field: 'card_number', title: '会员卡号', width: 100 },
+                        //             { field: 'name', title: '雇员名', width: 165 },
+                        //         ]],
+                        //         //reversed: true,
+                        //         sortName: 'sn',
+                        //         //避免出现滑条，造成选择的时候无法选中
+                        //         pagination: true,
+                        //         pageSize: 6,
+                        //         pageList: [6],
+                        //         //pagePosition: 'top',
+
+                        //         rownumbers: true,
+                        //         onLoadSuccess: combogridOnLoadSuccess,
+                        //         onShowPanel: combogridOnShowPanel
+                        //     }
+                        // }
                     }, {
                         field: 'remark',
                         title: '备注',
@@ -674,6 +755,7 @@
                     },
                     onOpen: function () {
                         // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
+                        payView.getTableDiv().datagrid('loadData', { footer: [], rows: [], total: 0 });
                         payView.getTableDiv().datagrid('loadData', {
                             footer: [
                                 { Commodity: { name: '现金应收：' }, price: 0 },
@@ -709,7 +791,7 @@
                 dialogDiv.dialog(dialogOp);
             }
             var recharge = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
+                if (!view.currentRow || !view.currentRow.Card || view.powerCardId != view.currentRow.Card.id) {
                     return;
                 }
                 // view.currentRow = view.getTableDiv().datagrid('getRows')[index];
@@ -1094,7 +1176,7 @@
                 dialogDiv.dialog(dialogOp);
             };
             var addMember = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
+                if (!view.currentRow || !view.currentRow.Card || view.powerCardId != view.currentRow.Card.id) {
                     return;
                 }
                 var dialogTitle = `为${view.currentRow.Card.card_number}号会员卡增户(当前用户：${view.currentRow.name})`;
@@ -1257,7 +1339,7 @@
 
             }
             var changePass = function () {
-                if (!view.currentRow || !view.currentRow.passed) {
+                if (!view.currentRow || !view.currentRow.Card || view.powerCardId != view.currentRow.Card.id) {
                     return;
                 }
                 if (view.dialogPage.resetPassDiv) {
@@ -1358,20 +1440,23 @@
                     }
                     switch (field) {
                         case 'action_pay':
-                            view.currentRow.actionFunc = pay;
+                            view.actionFunc = pay;
                             break;
                         case 'action_recharge':
-                            view.currentRow.actionFunc = recharge;
+                            view.actionFunc = recharge;
                             break;
                         case 'action_addMember':
-                            view.currentRow.actionFunc = addMember;
+                            view.actionFunc = addMember;
                             break;
                         case 'action_changePass':
-                            view.currentRow.actionFunc = changePass;
+                            view.actionFunc = changePass;
                             break;
                         // case 'action_print':
-                        //     view.currentRow.actionFunc = printCase;
+                        //     view.actionFunc = printCase;
                         //     break;
+                        default:
+                            view.actionFunc = null;
+                            break;
                     }
                     empower();
                 },
@@ -1438,6 +1523,45 @@
                         //return row['UserType']['name'];        
                         return row.Card ? row.Card.name : '';
                     },
+                }, {
+                    field: 'Card.balance',
+                    title: '余额',
+                    sortable: true,
+                    width: 40,
+                    editor: {
+                        type: 'numberbox',
+                        options: {
+                            prefix: '￥',
+                            max: 100000000,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        var balance = row.Card ? row.Card.balance : '';
+                        return Number.isNaN(Number.parseFloat(balance)) ? '￥0.00' : '￥' + Number.parseFloat(balance).toFixed(2);
+
+                    }
+                }, {
+                    field: 'Card.CardType.discount',
+                    title: '折扣',
+                    sortable: true,
+                    width: 40,
+                    editor: {
+                        type: 'numberbox',
+                        options: {
+                            //suffix: '折',
+                            min: 0.1,
+                            max: 1,
+                            precision: 2
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        var discount = 1;
+                        if (row.Card && row.Card.CardType) {
+                            discount = row.Card.CardType.discount;
+                        };
+                        return Number.parseInt(discount * 100) + '折';
+                    }
                 }, {
                     field: 'action_addMember',
                     title: '增户',
@@ -1535,7 +1659,7 @@
             view.build(op);
         };
 
-        init();
+        // init();
 
     }();
 </script>
