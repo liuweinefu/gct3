@@ -119,7 +119,7 @@
 
                         var message = '';
 
-                        var commodityName = rows[0].Commodity.name;
+                        var commodityName = rows[0].Commodity ? rows[0].Commodity.name : '已删除商品';
                         message += `（商品：${commodityName}）`.padEnd(20, '_');
 
                         var count = rows.reduce((prev, curr) => {
@@ -153,6 +153,7 @@
                         // return `商品：${commodityName}_________${count.toString().padEnd(3, '0')}次------总价：${price}`;
                         // return `（商品：${commodityName})------(${count}次)------(总价：￥${allprice.toFixed(2)})---[现金:￥${cash.toFixed(2)}]---[卡刷:￥${noCash.toFixed(2)}]`;
                         return message;
+
                     },
                     // onLoadSuccess: function () {
 

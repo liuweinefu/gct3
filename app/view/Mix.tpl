@@ -107,7 +107,15 @@
                 //     onClick: function () {
                 //         console.log(view);
                 //     }
-                // },
+                // },         
+                closeSearch: {
+                    text: '清空查询(<ins>N</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
+                    iconCls: 'icon-search',
+                    onClick: function () {
+                        view.getTableDiv().datagrid('loadData', []);
+                    },
+
+                },
                 addNewMember: {
                     text: '添加新会员(<ins>N</ins>)',//alt+d QQ浏览器拦截 考虑换其他快捷键
                     iconCls: 'icon-search',
@@ -755,7 +763,8 @@
                     },
                     onOpen: function () {
                         // payView.getTableDiv().datagrid('appendRow', payView.makeNewRow());
-                        payView.getTableDiv().datagrid('loadData', { footer: [], rows: [], total: 0 });
+                        // payView.getTableDiv().datagrid('loadData', { footer: [], rows: [], total: 0 });
+                        payView.getTableDiv().datagrid('loadData', []);
                         payView.getTableDiv().datagrid('loadData', {
                             footer: [
                                 { Commodity: { name: '现金应收：' }, price: 0 },

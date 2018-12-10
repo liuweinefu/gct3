@@ -150,12 +150,48 @@
                     groupField: 'commodity_id',
                     view: groupview,
                     groupFormatter: function (value, rows) {
-                        //return '(' + rows[0].Commodity.name + '): ' + rows.length + '次';                        
-                        // var name = rows[0].Commodity.name;
-                        // if (name.length < 30) {
-                        //     let l = 30 - name.length
-                        // }
-                        return `${rows.length.toString().padStart(3, '0')}次---商品：${rows[0].Commodity.name}`;
+                        if (!Array.isArray(rows) && rows.length === 0) {
+                            return;
+                        };
+
+
+                        var message = '';
+
+                        var commodityName = rows[0].Commodity ? rows[0].Commodity.name : '已删除商品';
+                        message += `（商品：${commodityName}）`.padEnd(20, '_');
+
+                        var count = rows.reduce((prev, curr) => {
+                            return prev - (-curr.quantity);
+                        }, 0);
+                        message += `（${count}次）`.padEnd(10, '_');
+
+                        var allprice = rows.reduce((prev, curr) => {
+                            return prev - (-curr.price);
+                        }, 0);
+                        message += `（总价${allprice.toFixed(2)}）`.padEnd(20, '_')
+
+
+                        var cash = rows.reduce((prev, curr) => {
+                            if (curr.is_cash) {
+                                return prev - (-curr.price);
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                        message += `[现金:￥${cash.toFixed(2)}]`.padEnd(20, '_');
+                        var noCash = rows.reduce((prev, curr) => {
+                            if (curr.is_cash) {
+                                return prev;
+                            } else {
+                                return prev - (-curr.price);
+                            }
+                        }, 0);
+                        message += `[卡刷:￥${noCash.toFixed(2)}]`;
+                        // return `商品：${commodityName}_________${count.toString().padEnd(3, '0')}次------总价：${price}`;
+                        // return `（商品：${commodityName})------(${count}次)------(总价：￥${allprice.toFixed(2)})---[现金:￥${cash.toFixed(2)}]---[卡刷:￥${noCash.toFixed(2)}]`;
+                        return message;
+
                     },
                     onLoadSuccess: function () {
 
