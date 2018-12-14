@@ -470,6 +470,7 @@
                             type: 'combobox',
                             options: {
                                 // panelWidth: 160,
+                                panelMinWidth: 120,
                                 panelWidth: Math.max(...commodityData.map(c => c.name ? c.name.length : 0)) * 18,
                                 editable: false,
                                 valueField: 'id',
@@ -616,13 +617,15 @@
                         editor: {
                             type: 'combobox',
                             options: {
-                                //panelWidth: 160,                    
+                                // panelMinWidth: 120,
+                                //panelWidth: 160,  
+                                // panelWidth: Math.max(...employeeData.map(c => c.name ? c.name.length : 0)) * 18,
                                 editable: false,
                                 valueField: 'id',
                                 textField: 'name',
                                 data: employeeData,
                                 panelMaxHeight: 265,
-                                panelHeight: commodityData.length * 30 + 15,
+                                panelHeight: employeeData.length * 30 + 15,
                                 // onShowPanel: function () {
                                 //     $(this).combobox('loadData', userType);
                                 //     $(this).combobox('panel').panel('resize', {
