@@ -448,7 +448,8 @@
                 var combogridOnLoadSuccess = combogridEvents(payView).onLoadSuccess;
                 var combogridOnShowPanel = combogridEvents(payView).onShowPanel;
 
-
+                // let commodityIdColumnPanelWidth = Math.max(...commodityData.map(c => c.name ? c.name.length : 0)) * 18;
+                // console.log(commodityIdColumnPanelWidth);
                 payViewOp.tableOption.columns = [[
                     {
                         field: 'ck',
@@ -468,7 +469,8 @@
                         editor: {
                             type: 'combobox',
                             options: {
-                                //panelWidth: 160,                    
+                                // panelWidth: 160,
+                                panelWidth: Math.max(...commodityData.map(c => c.name ? c.name.length : 0)) * 18,
                                 editable: false,
                                 valueField: 'id',
                                 textField: 'name',
