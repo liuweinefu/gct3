@@ -141,6 +141,7 @@ class MixController extends Controller {
                 card_id: DbCard.id,
                 member_id: DbMember.id,
                 user_id: SS.user.id,
+                remark: c.remark,
             });
             DbConsumptions.push(DbConsumption);
 
