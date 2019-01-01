@@ -505,7 +505,7 @@
                         }
                     },
                     editor: {
-                        type: 'datetimebox',
+                        type: 'datebox',
                         options: {}
                     },
                 },
