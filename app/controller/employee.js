@@ -77,7 +77,8 @@ class EmployeeController extends Controller {
             await wage.save({ transaction: t });
             if (consumptionIdArrray.length != 0) {
                 consumptionIdArrray.forEach(c => { c.is_close = true; c.wage_id = wage.id });
-                await Promise.all(consumptionIdArrray.map(c => c.save({ transaction: t })));
+                //不让消费记录更新 最后更新时间 silent: true
+                await Promise.all(consumptionIdArrray.map(c => c.save({ silent: true, transaction: t })));
             }
 
         } catch (e) {
