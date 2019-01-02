@@ -580,7 +580,7 @@
                         // });
                     },
                     buttons: [{
-                        text: '保存',
+                        text: '结算',
                         handler: function () {
                             $.messager.confirm('确认对话框', '是否继续结算？', function (r) {
                                 if (r) {
