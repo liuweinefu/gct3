@@ -154,7 +154,7 @@
 
                 queryParams: {
                     where: JSON.stringify([{
-                        "leftBracket": "", "field": "updated_at", "compareSymbol": "gt", "value": new Date(Date.now() - 86400000 * 30), "rightBracket": "", "logicalSymbol": "and", "viewValue": null
+                        "leftBracket": "", "field": "updated_at", "compareSymbol": "gt", "value": new Date(Date.now() - 86400000 * 1), "rightBracket": "", "logicalSymbol": "and", "viewValue": null
                     }])
                 },
                 // queryParams: {
@@ -262,6 +262,22 @@
                         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
                         if (value) { return }
                         return '<button>撤销结算</button>';
+                    },
+                }, {
+                    field: 'updated_at',
+                    title: '最后更新时间',
+                    //width: 100,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (!Number.isNaN(Date.parse(value))) {
+                            return new Date(Date.parse(value)).toLocaleString();
+                        } else {
+                            return '';
+                        }
+                    },
+                    editor: {
+                        type: 'datebox',
+                        options: {}
                     },
                 },
                 {
@@ -598,22 +614,6 @@
                             onShowPanel: combogridOnShowPanel,
                         }
                     }
-                }, {
-                    field: 'updated_at',
-                    title: '最后更新时间',
-                    //width: 100,
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        if (!Number.isNaN(Date.parse(value))) {
-                            return new Date(Date.parse(value)).toLocaleString();
-                        } else {
-                            return '';
-                        }
-                    },
-                    editor: {
-                        type: 'datebox',
-                        options: {}
-                    },
                 },
 
             ]];
