@@ -108,12 +108,14 @@
                 //     // }
                 // },
 
+
                 singleSelect: true,
                 //自添加属性，用于关闭cell编辑功能，目的是避免搜索框失效。
                 listOnly: true,
                 multiSort: true,
                 remoteSort: true,
-
+                sortName: 'created_at',
+                sortOrder: 'desc',
             };
             var combogridOnLoadSuccess = combogridEvents(view).onLoadSuccess;
             var combogridOnShowPanel = combogridEvents(view).onShowPanel;
