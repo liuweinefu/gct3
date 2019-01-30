@@ -524,7 +524,7 @@
                             if (value) {
                                 return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                             } else {
-                                return '';
+                                return '￥0.00';
                             }
                         }
                     }, {
@@ -573,7 +573,7 @@
                             if (value) {
                                 return Number.isNaN(Number.parseFloat(value)) ? '￥0.00' : '￥' + Number.parseFloat(value).toFixed(2);
                             } else {
-                                return '';
+                                return '￥0.00';
                             }
                         }
                     }, {
