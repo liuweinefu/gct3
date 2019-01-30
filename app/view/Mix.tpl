@@ -1531,7 +1531,7 @@
                 }, {
                     field: 'Card.name',
                     title: '会员卡主名',
-                    width: 120,
+                    width: 150,
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];        
@@ -1541,7 +1541,7 @@
                     field: 'Card.balance',
                     title: '余额',
                     sortable: true,
-                    width: 150,
+                    width: 200,
                     editor: {
                         type: 'numberbox',
                         options: {
@@ -1559,7 +1559,7 @@
                     field: 'Card.CardType.discount',
                     title: '折扣',
                     sortable: true,
-                    width: 90,
+                    width: 100,
                     editor: {
                         type: 'numberbox',
                         options: {
@@ -1588,7 +1588,7 @@
                     field: 'name',
                     title: '会员名',
                     sortable: true,
-                    width: 100,
+                    width: 150,
                     editor: {
                         type: 'textbox',
                         options: {}
