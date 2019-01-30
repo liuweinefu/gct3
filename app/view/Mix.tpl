@@ -1494,7 +1494,7 @@
                     //field: 'UserType.name',user_type_id
                     field: 'card_id',
                     title: '会员卡号',
-                    width: 30,
+                    width: 100,
                     sortable: true,
                     formatter: function (value, row, index) {
                         return row.Card ? row.Card.card_number : '';
@@ -1531,7 +1531,7 @@
                 }, {
                     field: 'Card.name',
                     title: '会员卡主名',
-                    width: 60,
+                    width: 120,
                     sortable: true,
                     formatter: function (value, row, index) {
                         //return row['UserType']['name'];        
@@ -1541,7 +1541,7 @@
                     field: 'Card.balance',
                     title: '余额',
                     sortable: true,
-                    width: 40,
+                    width: 150,
                     editor: {
                         type: 'numberbox',
                         options: {
@@ -1559,7 +1559,7 @@
                     field: 'Card.CardType.discount',
                     title: '折扣',
                     sortable: true,
-                    width: 40,
+                    width: 90,
                     editor: {
                         type: 'numberbox',
                         options: {
@@ -1588,7 +1588,7 @@
                     field: 'name',
                     title: '会员名',
                     sortable: true,
-                    width: 60,
+                    width: 100,
                     editor: {
                         type: 'textbox',
                         options: {}
@@ -1620,7 +1620,7 @@
                 }, {
                     field: 'phone',
                     title: '电话',
-                    width: 80,
+                    width: 120,
                     sortable: true,
                     editor: {
                         type: 'textbox',
@@ -1647,7 +1647,7 @@
                 }, {
                     field: 'otherphone',
                     title: '其他电话',
-                    width: 60,
+                    width: 100,
                     sortable: true,
                     editor: {
                         type: 'textbox',
@@ -1656,7 +1656,7 @@
                 }, {
                     field: 'updated_at',
                     title: '最后更新时间',
-                    //width: 100,
+                    width: 200,
                     sortable: true,
                     formatter: function (value, row, index) {
                         // console.log(row);

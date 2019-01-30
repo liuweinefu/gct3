@@ -1104,7 +1104,7 @@ var lwTable = function (anchorDiv) {
         idField: 'id',
         //loadMsg: '数据加载中,请稍后',
         fit: true,
-        fitColumns: true,
+        fitColumns: false,
         singleSelect: false,
         //url: '/' + divID + '/findAll',
         //method: 'post',
