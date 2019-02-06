@@ -35,12 +35,12 @@
             //     menu: '#abc'
             // };
             op.searchBoxOption.menu = [
-                { name: 'name', text: '技师名' },
-                { name: 'phone', text: '技师电话' },
-                { name: 'otherphone', text: '技师其他电话' },
+                { name: 'name', text: '治疗师名' },
+                { name: 'phone', text: '治疗师电话' },
+                { name: 'otherphone', text: '治疗师其他电话' },
                 { name: 'remark', text: '备注' },
                 { name: 'sn', text: '序号' },
-                { name: 'EmployeeType.name', text: '技师类型' },
+                { name: 'EmployeeType.name', text: '治疗师类型' },
             ];
             view.currentRow = null;
             var payWage = function () {
@@ -525,7 +525,7 @@
                                 $.messager.alert('错误', data.message, 'info');
                                 return;
                             }
-                            $.messager.alert('工资结算完成', `技师：${data.employeeName}</br>
+                            $.messager.alert('工资结算完成', `治疗师：${data.employeeName}</br>
                                                              实发工资:￥${Number.parseFloat(data.wage).toFixed(2)}`,
                                 'info', function () {
                                     //清空已结算信息                                        
@@ -681,7 +681,7 @@
                     checkbox: true
                 }, {
                     field: 'id',
-                    title: '技师ID',
+                    title: '治疗师ID',
                     hidden: true,
                 }, {
                     field: 'action_payWage',

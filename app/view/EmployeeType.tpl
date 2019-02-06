@@ -35,7 +35,7 @@
             //     menu: '#abc'
             // };
             op.searchBoxOption.menu = [
-                { name: 'name', text: '技师类型' },
+                { name: 'name', text: '治疗师类型' },
                 { name: 'sn', text: '序号' },
                 { name: 'remark', text: '备注' },
             ];
@@ -64,7 +64,7 @@
             //表格设置**************************************************
             view.makeNewRow = (newRowIndex) => {
                 return {
-                    name: '技师类型 ' + Math.round(Math.random() * 1000),
+                    name: '治疗师类型 ' + Math.round(Math.random() * 1000),
                     wage: 0,
                     remark: '',
                     sn: newRowIndex ? newRowIndex : 0,
@@ -105,7 +105,7 @@
                 },
                 {
                     field: 'id',
-                    title: '技师类型ID',
+                    title: '治疗师类型ID',
                     hidden: true,
                 }, {
                     field: 'sn',

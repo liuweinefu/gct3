@@ -103,14 +103,14 @@ class MixController extends Controller {
             DbCommodities.push(DbCommodity);
             if (!c.employee_id) {
                 ctx.response.body = {
-                    message: '技师信息出错'
+                    message: '治疗师信息出错'
                 };
                 return;
             };
             let employee = await M.Employee.findById(c.employee_id);
             if (!employee) {
                 ctx.response.body = {
-                    message: '技师信息出错'
+                    message: '治疗师信息出错'
                 };
                 return;
             };
