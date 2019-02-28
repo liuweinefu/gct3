@@ -193,7 +193,7 @@
 
                 },
 
-
+                showFooter: true,
                 multiSort: true,
                 remoteSort: true,
 

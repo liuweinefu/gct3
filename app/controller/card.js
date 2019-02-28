@@ -23,7 +23,27 @@ class CardController extends Controller {
         super(ctx);
     }
 
+    //查询数据
+    async findAll() {
 
+
+        const { ctx } = this;
+        const S = ctx.service;
+        const M = ctx.model;
+        let result = await S.normalTableService.findAll();
+
+        let balance = (await M.Card.sequelize.query('SELECT SUM(balance) as total FROM card'))[0][0].total;
+
+        ctx.response.body = {
+            total: result.count,
+            rows: result.rows,
+            footer: [{ name: '会员总余额', balance: balance }]
+        };
+
+
+
+
+    }
 
     // async resetPass() {
 
