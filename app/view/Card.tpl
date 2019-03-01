@@ -303,7 +303,8 @@
                     //width: 90,
                     formatter: function (value, row, index) {
                         // return `<button onclick='actionButton.resetPass(${JSON.stringify(row)})'>修改密码</button>`;
-                        return '<button>修改密码</button>';
+                        // console.log(row);
+                        return row.id ? '<button>修改密码</button>' : '';
 
                     },
                 }, {

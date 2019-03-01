@@ -32,7 +32,8 @@ class CardController extends Controller {
         const M = ctx.model;
         let result = await S.normalTableService.findAll();
 
-        let balance = (await M.Card.sequelize.query('SELECT SUM(balance) as total FROM card'))[0][0].total;
+        // let balance = (await M.Card.sequelize.query('SELECT SUM(balance) as total FROM card'))[0][0].total;
+        let balance = await M.Card.sum('balance');
 
         ctx.response.body = {
             total: result.count,
