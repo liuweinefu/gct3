@@ -38,12 +38,12 @@ module.exports = appInfo => {
 
   //关闭csrf防御
   config.security = {
-    // csrf: false,
-    csrf: {
-      useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
-      // cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
-      sessionName: 'csrfToken', // Session 中的字段名，默认为 csrfToken
-    },
+    csrf: false,
+    // csrf: {
+    //   useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
+    //   // cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
+    //   sessionName: 'csrfToken', // Session 中的字段名，默认为 csrfToken
+    // },
   };
 
   config.session = {
